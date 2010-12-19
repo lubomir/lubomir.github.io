@@ -1,67 +1,77 @@
 body {
-  padding: 30px 50px;
-  max-width: 60em;
+    padding: 30px 50px;
+    background-color: #E0E4ED;
 }
+
+#envelope {
+    max-width: 60em;
+    background-color: #ffffff;
+    padding: 1em 2em;
+}
+
 h1, h2, h3 {
-  background-color: #ffffff;
-  color: #5c3566;
+    background-color: #ffffff;
+    color: #5c3566;
 }
+h1 {
+    text-shadow: #cccccc 3px 3px 1px;
+}
+
 a {
-  color: #204a87;
-  background-color: #ffffff;
+    color: #204a87;
+    background-color: #ffffff;
 }
-a:hover { text-decoration: none; }
-li { line-height: 150%; }
+a:hover {
+    text-decoration: none;
+}
+
+li {
+    line-height: 150%;
+}
+
+code {
+    background-color: #eeeeee;
+    color: #000000;
+    padding: .1em;
+}
 
 dt {
-  margin-top: 1em;
-  font-weight: bold;
-}
-
-dl.ordered dl { counter-reset: my_list; }
-
-dl.ordered dt:before {
-  counter-increment: my_list;
-  content: counter(my_list) ". ";
+    margin-top: 1em;
+    font-weight: bold;
 }
 
 a[href$=pdf] {
-    /*
-  content: " PDF";
-  font-size: .6em;
-  position: relative;
-  bottom: .5em;
-  */
-  background: url("../images/pdf.png") center right no-repeat;
-  padding-right: 18px;
+    background: url("../images/pdf.png") center right no-repeat;
+    padding-right: 18px;
 
 }
 
-.box {
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
-    padding: .2em;
-    margin-top: 1em;
-}
-.error {
-    border: 2px solid #ff0000;
-    background-color: #FFECB3;
-}
-
-.notice {
-    background-color: #FFF9E5;
-    margin-left: 4em;
-}
-
-.error + .notice { margin-top: .5em; }
-
-.error span, .notice span {
-    display: block;
-    font-size: 90%;
+.rounded {
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
 }
 
 table td {
     background-color: #f0f0f0;
     color: #000000;
+}
+
+#footer {
+    background-color: #ffffff;
+    max-width: 60em;
+    padding: 1em 2em;
+    margin: 1em 0;
+    list-style-type: none;
+}
+#footer li {
+    display: inline-block;
+    padding: 0 .7em 0 0;
+    border-right: 1px solid #204a87;
+    margin: 0 .5em 0 0;
+    line-height: 100%;
+}
+#footer li:last-child {
+    border-right: none;
+    color: red;
 }
