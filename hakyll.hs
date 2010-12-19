@@ -4,6 +4,7 @@ import Control.Monad
 defaultTitle = "~xsedlar3"
 
 main = hakyll "http://example.com" $ do
+    static "favicon.ico"
     directory css    "css"
     directory static "data"
     directory static "images"
