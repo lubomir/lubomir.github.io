@@ -9,6 +9,7 @@ defaultTitle = "~xsedlar3"
 main = hakyll "http://example.com" $ do
     directory css    "css"
     directory static "data"
+    directory static "images"
 
     pagesPaths <- getRecursiveContents "pages"
     let pagesP = map createPage pagesPaths
