@@ -1,3 +1,62 @@
 body {
-  background-color: #eeeeee;
+  padding: 30px 50px;
+  max-width: 60em;
+}
+h1, h2, h3 {
+  background-color: #ffffff;
+  color: #5c3566;
+}
+a {
+  color: #204a87;
+  background-color: #ffffff;
+}
+a:hover { text-decoration: none; }
+li { line-height: 150%; }
+
+dt {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
+dl.ordered dl { counter-reset: my_list; }
+
+dl.ordered dt:before {
+  counter-increment: my_list;
+  content: counter(my_list) ". ";
+}
+
+a[href$=pdf] {
+    /*
+  content: " PDF";
+  font-size: .6em;
+  position: relative;
+  bottom: .5em;
+  */
+  background: url("images/pdf.png") center right no-repeat;
+  padding-right: 18px;
+
+}
+
+.box {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    padding: .2em;
+    margin-top: 1em;
+}
+.error {
+    border: 2px solid #ff0000;
+    background-color: #FFECB3;
+}
+
+.notice {
+    background-color: #FFF9E5;
+    margin-left: 4em;
+}
+
+.error + .notice { margin-top: .5em; }
+
+.error span, .notice span {
+    display: block;
+    font-size: 90%;
 }
