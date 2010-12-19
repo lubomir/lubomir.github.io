@@ -79,7 +79,7 @@ table td {
 pre.sourceCode {
   background-color: #2e3436;
   color: #eeeeec;
-  padding: 1em;
+  border: 5px solid #2e3436;
 }
 
 pre code {
