@@ -1,0 +1,118 @@
+---
+title: UnitTest v C++
+abstract: jednoduchý úvod do unit testování
+---
+
+Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy
+nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích
+kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód
+okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.
+
+Já používám knihovnu [UnitTest++](http://unittest-cpp.sourceforge.net/), která
+je rozumným kompromisem mezi funkcionalitou a jednoduchostí.
+
+
+## Použití
+
+Testy pomocí UnitTest++ je možné psát do libovolného souboru s příponou `.cpp`
+i `.cc`, jak je komu libo. Pro kompilaci je potřeba kompilátoru předat
+informace o tom, kde najde příslušné hlavičkové soubory a potom i knihovnu.
+Obojí jsem zkompiloval a je na Aise dostupné v adresáři
+`/home/~xsedlar3/include`.
+
+Na začátku testovacího souboru je pochopitelně třeba vložit hlavičky knihovny
+vlastního kódu, který je třeba testovat.
+
+~~~~~~~~~~~~~~ {.cpp}
+#include <unittest++/UnitTest++.h>
+~~~~~~~~~~~~~~~~~~~~~
+
+Ke spouštění testů je třeba přidat i funkci `main`:
+
+~~~~~~~~~~~~~~~~~~~~ {.cpp}
+int main() {
+    return UnitTest::RunAllTests();
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+## Testy
+
+Jednotlivé testy se píšou pomocí maker `TEST`, které má jeden parametr --
+identifikátor, podle kterého půjde dohledávat, který test selhal. Následuje
+blok, ve kterém se provádí test.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+TEST(Addition) {
+    CHECK(someFunction());
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+K usnadnění psaní testů je definováno několik šikovných maker jako je výše
+uvedené `CHECK`. To jednoduše kontroluje, jestli se jeho argument vyhodnotí na
+`true`. Další možnosti jsou třeba `CHECK_EQUAL(co_cekam, testovany_vyraz)`,
+které ověří, že testovaný výraz vrací určenou hodnotu. Pořadí argumentů je tady
+docela důležité, pokud bude očekávaná hodnota jako druhá, případně chyby budou
+hlášené dost chaoticky. Další makra jsou popsána v
+[dokumentaci](http://unittest-cpp.sourceforge.net/UnitTest++.html).
+
+Aby se i ve velkém souboru s testy dalo dobře orientovat, je možné jednotlivé
+testy dělit do sad pomocí makra `SUITE(nazev)`, případně je rozdělit do více
+souborů.
+
+Jednoduchý test tedy může vypadat takto:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+TEST(InsertValueAtStart) {
+    List<int> list;
+    List<int>::ItemType *iter;
+
+    iter = list.push_front(10);
+    CHECK( ! list.empty());
+    CHECK_EQUAL(10, it->getValue());
+    CHECK_EQUAL(10, list.first()->getValue());
+    CHECK_EQUAL(10, list.last()->getValue());
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+## Fixtures
+
+Při psaní testů se dá velice rychle narazit na situaci, že se na začátku
+několika testů opakuje stejná část, která jenom chystá objekt na další
+testovaní, např. plní seznam daty. Toto se dá zjednodušit přesunutím takovéto
+inicializace do tzv. fixture.
+
+V případě knihovny UnitTest++ se jedná o definici třídy, jejíž konstruktor se
+zavolá na začátku testu, kde je použitá, a celý test se potom vykonává tak, že
+má přímo přístup k členským prvkům dané třídy. Místo makra `TEST` se potom
+použije `TEST_FIXTURE` se dvěma argumenty. Prvním je právě název fixture.
+
+Může to tedy vypadat takto:
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.cpp}
+struct LongList {
+    LongList() {
+        it1 = list.push_back(10);
+        it2 = list.push_back(20);
+        it3 = list.push_back(30);
+        it4 = list.push_back(40);
+        it5 = list.push_back(50);
+        it6 = list.push_back(60);
+    }
+
+    std::string to_str() { return list_to_str(list); }
+
+    List<int> list;
+    List<int>::ItemType *it1, *it2, *it3, *it4, *it5, *it6;
+};
+
+TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
+    list.push_back(70);
+    list.swap(it2, it3, it5, it6);
+    CHECK_EQUAL("{ 10, 50, 60, 40, 20, 30, 70 }", to_str());
+    list.swap(it5, it6, it2, it3);
+    CHECK_EQUAL("{ 10, 20, 30, 40, 50, 60, 70 }", to_str());
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
