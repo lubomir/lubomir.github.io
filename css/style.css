@@ -77,30 +77,30 @@ table td {
 }
 
 pre.sourceCode {
-  background-color: #2e3436;
-  color: #eeeeec;
-  border: 5px solid #2e3436;
+    background-color: #2e3436;
+    color: #eeeeec;
+    border: 5px solid #2e3436;
 }
 
 pre code {
-  background: inherit;
-  color: inherit;
+    background: inherit;
+    color: inherit;
 }
 
 pre .ot {
-  color: #ad7fa8;
+    color: #ad7fa8;
 }
 
 pre .dv, pre .st {
-  color: #edd400;
+    color: #edd400;
 }
 
 pre .dt {
-  color: #8ae234;
-  font-weight: bold;
+    color: #8ae234;
+    font-weight: bold;
 }
 
 pre .kw {
-  color: #eeeeec;
-  font-weight: bold;
+    color: #eeeeec;
+    font-weight: bold;
 }
