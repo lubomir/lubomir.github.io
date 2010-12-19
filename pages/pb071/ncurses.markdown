@@ -3,6 +3,10 @@ title: Inicializační funkce NCurses
 abstract: velice krátký překlad části manuálu
 ---
 
+Tato stránka je částečným překladem
+[tutoriálu NCurses](http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/),
+konkrétně [této části](http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html).
+
 ## 4.1 Inicializační funkce
 
 1. **raw() a cbreak()**
