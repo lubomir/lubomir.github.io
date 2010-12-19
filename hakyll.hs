@@ -1,8 +1,5 @@
 import Text.Hakyll
 import Control.Monad
-import Data.List
-import Data.Ord
-import qualified Data.Map as M
 
 defaultTitle = "~xsedlar3"
 
