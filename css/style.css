@@ -60,3 +60,8 @@ a[href$=pdf] {
     display: block;
     font-size: 90%;
 }
+
+table td {
+    background-color: #f0f0f0;
+    color: #000000;
+}

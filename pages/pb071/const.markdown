@@ -1,0 +1,85 @@
+---
+title: Jak se projevuje 'const'
+abstract: různé kombinace modifikátoru <code>const</code>
+---
+
+Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic
+rozumného dělat nebude. Stejně jako `strcpy` se chová i `free`.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.c}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main (void)
+{
+  const char *       str1 = (char*) malloc(10*sizeof(char));
+  char * const       str2 = (char*) malloc(10*sizeof(char));
+  const char * const str3 = (char*) malloc(10*sizeof(char));
+
+  str1 = NULL;
+  str2 = NULL;
+  str3 = NULL;
+
+  strcpy(str1, "a");
+  strcpy(str2, "a");
+  strcpy(str3, "a");
+
+  return 0;
+}
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+## Jak to vidí [GCC](http://gcc.gnu.org/) 4.4.5
+
+<table>
+  <tr>
+    <th></th>
+    <th><code>x = NULL</code></th>
+    <th><code>strcpy(x, "a")</code></th>
+  </tr>
+  <tr>
+    <th><code>const char *</code></th>
+    <td>OK</td>
+    <td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
+  </tr>
+  <tr>
+    <th><code>char * const</code></th>
+    <td><code>error: assignment to read-only variable</code></td>
+    <td>OK</td>
+  </tr>
+  <tr>
+    <th><code>const char * const</code></th>
+    <td><code>error: assignment to read-only variable</code></td>
+    <td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
+  </tr>
+</table>
+
+## Jak to vidí [CLang](http://clang.llvm.org/) 1.1
+
+<table>
+  <tr>
+    <th></th>
+    <th><code>x = NULL</code></th>
+    <th><code>strcpy(x, "a")</code></th>
+  </tr>
+  <tr>
+    <th><code>const char *</code></th>
+    <td>OK</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th><code>char * const</code></th>
+    <td><code>error: read-only variable is not assignable</code></td>
+    <td>OK</td>
+  </tr>
+  <tr>
+    <th><code>const char * const</code></th>
+    <td><code>error: read-only variable is not assignable</code></td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
