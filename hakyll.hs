@@ -6,7 +6,7 @@ import System.Locale
 
 defaultTitle = "~xsedlar3"
 
-main = hakyll "http://example.com" $ do
+main = hakyll "http://fi.muni.cz/~xsedlar3" $ do
     static "favicon.ico"
     directory css    "css"
     directory static "data"
