@@ -1,6 +1,7 @@
 ---
 title: UnitTest v C++
 abstract: jednoduchý úvod do unit testování
+tags: programování, c++, testy
 ---
 
 Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy

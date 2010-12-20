@@ -1,6 +1,7 @@
 ---
 title: Inicializační funkce NCurses
 abstract: velice krátký překlad části manuálu
+tags: c, programování, ncurses
 ---
 
 Tato stránka je částečným překladem
@@ -18,7 +19,7 @@ konkrétně [této části](http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init
     zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou
     tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou
     tyto znaky interpretovány přímo ovladačem terminálu.
-  
+
 2. **echo() a noecho()**
 
     Tyto funkce ovládají, jestli se znaky zadávané uživatelem zobrazují

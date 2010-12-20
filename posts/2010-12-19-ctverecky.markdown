@@ -1,6 +1,7 @@
 ---
 title: Bonusový úkol pro IB000
 abstract: algoritmus pro generování minimálních řešení
+tags: teorie, algoritmus
 ---
 
 V tomto [příkladu](http://www.fi.muni.cz/~hlineny/Vyuka/UINFb/ctverecky2.html)

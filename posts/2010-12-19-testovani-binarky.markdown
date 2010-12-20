@@ -1,6 +1,7 @@
 ---
 title: Testování binárky
 abstract: jednoduchá metoda kontroly spustitelného souboru
+tags: programování, bash, testy
 ---
 
 Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý

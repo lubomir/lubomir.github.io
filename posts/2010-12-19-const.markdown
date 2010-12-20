@@ -1,6 +1,7 @@
 ---
 title: Jak se projevuje 'const'
 abstract: různé kombinace modifikátoru <code>const</code>
+tags: c, programování, const
 ---
 
 Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic
