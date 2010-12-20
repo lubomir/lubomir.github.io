@@ -45,9 +45,12 @@ a[href$=pdf] {
 }
 
 .rounded {
-    border-radius: 10px;
-    -moz-border-radius: 10px;
+    border-radius:         10px;
+    -moz-border-radius:    10px;
     -webkit-border-radius: 10px;
+    box-shadow:         #ccc 3px 3px 0px;
+    -moz-box-shadow:    #ccc 3px 3px 0px;
+    -webkit-box-shadow: #ccc 3px 3px 0px;
 }
 
 table td {
