@@ -1,27 +1,24 @@
 body {
-    padding: 30px 50px;
+    padding: 30px;
     background-color: #E0E4ED;
 }
 
 #envelope {
     max-width: 45em;
     background-color: #ffffff;
+    color: #111111;
     padding: 1em 2em;
     margin: 0 auto;
 }
 
-h1, h2, h3 {
+h1, h2, h3, a {
     background-color: #ffffff;
-    color: #5c3566;
+    color: #204a87;
 }
 h1 {
     text-shadow: #cccccc 3px 3px 1px;
 }
 
-a {
-    color: #204a87;
-    background-color: #ffffff;
-}
 a:hover {
     text-decoration: none;
 }
