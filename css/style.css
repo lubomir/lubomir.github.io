@@ -1,7 +1,6 @@
 body {
     padding: 30px;
     background-color: #E0E4ED;
-    border: 8px solid #dddde6;
     margin: 0;
 }
 
@@ -141,4 +140,23 @@ pre .dt {
 pre .kw {
     color: #eeeeec;
     font-weight: bold;
+}
+
+/* BORDERS */
+body:before, body:after {
+    content: " ";
+    position: fixed;
+    background-color: #ccccff;
+}
+body:before {
+    width: 8px;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+body:after {
+    width: 8px;
+    height: 100%;
+    top: 0;
+    right: 0;
 }
