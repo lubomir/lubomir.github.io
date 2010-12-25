@@ -1,6 +1,8 @@
 body {
     padding: 30px;
     background-color: #E0E4ED;
+    border: 8px solid #dddde6;
+    margin: 0;
 }
 
 #envelope {
@@ -93,7 +95,7 @@ ul.navigation img {
     background-color: #ffffff;
     max-width: 45em;
     padding: 1em 2em;
-    margin: 1em auto;
+    margin: 1em auto 0 auto;
 }
 #footer li {
     padding: 0 .7em 0 0;
