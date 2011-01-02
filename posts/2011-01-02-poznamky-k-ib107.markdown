@@ -1,0 +1,136 @@
+---
+title: Poznámky k IB107
+tags: teorie, vyčíslitelnost
+---
+
+## Věta o numeraci
+
+> Pro každé $j \geq 1$ existuje vyčíslitelná funkce $\Phi: N^{j+1} → N$, která
+> je univerzální pro standardní numeraci j-árních funkcí. Tedy pro každé $e \in
+> N$ a $(a_1, \ldots a_j) \in N^j$ platí
+> ![Věta o numeraci]($root/images/veta-o-numeraci.png)
+
+Pro každou aritu tedy existuje funkce $\Phi$, která bere o jeden argument
+víc -- potřebuje ještě index programu, který má simulovat. Důkaz věty spočívá
+v definici interpretu -- programu, který bude simulovat jiné programy.
+
+
+## Věta o parametrizaci
+
+> Ke každému $n\geq 1$, $m\geq 1$ existuje totálně vyčíslitelná funkce
+> ${s^m}_n: N^{m+1} → N$, taková, že platí
+> ![Věta o parametrizaci]($root/images/veta-o-parametrizaci.png)
+
+Takže: existuje funkce $s$, která pro index programu $i$ a $m$ jeho argumentů
+spočítá index jiného programu, který bude dělat totéž co $i$, ale bude
+potřebovat o $m$ argumentů míň. Funkce $s$ vlastně zafixuje prvním $m$
+argumentů na nějaké konstanty. $m$ je tady počet fixovaných parametrů, $n$
+počet těch, které se nefixují.
+
+Dokazuje se pomocí programu, který celou konstrukci realizuje -- má $m$
+konstant a přesypává argumenty tak, aby to sedělo. Prvních $n$ argumentů posune
+o $m$ pozic doprava a na uvolněná místa dosadí konstanty.
+
+
+## První Riceova věta
+
+> Nechť $I \subset N$ je netriviální (není prázdná ani se nerovná $N$) a
+> rekurzivní. Potom existují indexy programů $i \in I$ a $j \in I'$^[apostrofem
+> označím doplněk množiny] tak, že $\phi_i = \phi_j$.
+
+Tedy pokud je netriviální podmožina $N$ rekurzivní, potom nerespektuje funkce a
+naopak pokud nějaká množina respektuje funkce a je triviální, potom nemůže být
+rekurzivní.
+
+Důkaz se provede sporem: předpokládejme, že množina nerespektuje funkce a že
+množina $I$ obsahuje index nějaké vyčíslitelné funkce^[a tedy všechny její
+indexy] $\theta$, která není prázdná. $I'$ potom obsahuje indexy prázdné
+funkce. Kdyby tomu tak nebylo, tak se prohodí $I$ a $I'$.
+
+Nechť $P_{f(i)}$ je program `begin` $x_2$ `:=` $\Phi(i,i)$`;` $x_1$ `:=`
+$\theta(x_1)$ `end`. Zřejmě program $P$ počítá funkci $\theta$, pokud
+$\phi_i(i)$ je definováné a jinak počítá prázdnou funkci.
+
+Tedy pro všechna $i \in N$ platí $\phi_{f(i)} = \theta$ právě tehdy když $i \in
+K$.
+
+Pokud tedy $f(i) \in I$, pak $f(i)$ není index prádné funkce. Je to index
+$\theta$. Obráceně pokud $f(i)$ je indexem funkce $\theta$, pak $f(i) \in I$.
+Nechť $\chi_I$ je charakteristická funkce $I$. Pro všechna $i \in N$ musí platit
+![Tvrzení 1]($root/images/prvni-riceova-veta-tvrzeni.png)
+
+Protože $\chi_I \circ f$ je totálně vyčíslitelná, musela by $K$ být
+rekurzivní, což zřejmě není.
+
+
+## Druhá Riceova věta
+
+> Necht $I \subset N$ respektuje funkce a nechť existuje funkce $\theta$
+> taková, že všechny její indexy jsou v $I$ a má vyčíslitelné rozšíření
+> $\theta'$ takové, že jeho indexy patří do $I'$.
+>
+> $I$ potom není rekurzivně spočetná.
+
+Důkaz půjde zase sporem. Nechť funkce $\xi(i,j)$ se rovná $\theta'(j)$, pokud
+$\phi_i(i)$ je definováno a jinak se rovná $\theta(j)$. Tato funkce je
+vyčíslitelná^[Nejdřív se začne paralelně (pomocí step counteru) počítat
+$\theta(j)$ a $\phi_i(i)$. Pokud první skončí $\theta(j)$, vrátí se její
+výsledek. Pokud by první skončil výpočet $\phi_i(i)$, začne se přímo simulovat
+$\theta'(j)$.]. Podle [věty o parametrizaci](#věta-o-parametrizaci) existuje
+totálně vyčíslitelná funkce $f: N → N$ taková, že $\xi(i,j) = \phi_{f(i)}(j)$.
+$f(i)$ potom patří do $I$ právě tehdy, když $\phi_i(i)$ není definováno. Tj.
+$f(i) \in I \equiv i \in K'$.
+
+Pokud by tedy $I$ byla rekurzivně spočetná, tak i $K'$ by musela být rekurzivně
+spočetná. To ale není.
+
+Při použití druhé Riceovy věty je tedy zřejmě potřeba zvolit $\theta$ tak, aby
+nebyla totální. Jinak by totiž neměla potřebné rozšíření.
+
+
+## Třetí Riceova věta
+
+> Nechť $I \subset N$ respektuje funkce a nechť existuje funkce $\theta$
+> taková, že všechny její indexy patří do $I$ a navíc všechna její konečná
+> zúžení patří do $I'$.
+>
+> $I$ potom není rekurzivně spočetná.
+
+Důkaz se opět provede sporem. Nechť funkce $\mu(i,j)$ počítá $\theta(j)$, pokud
+$P_i$ nezastaví pro vstup $i$ během nejvýše $j$ kroků. Pokud zastaví během
+nejvýše $j$ kroků, $\mu$ se zacyklí. Funkce $\mu$ je zřejmě vyčíslitelná.
+
+Podle [věty o parametrizaci](#věta-o-parametrizaci) existuje totálně
+vyčíslitelná funkce $f$ tak, že $\mu(i,j) = \phi_{f(i)}(j)$.
+
+Dostaneme tedy, že pokud $i \in K$, tak $P_i$ zastaví pro $i$. Tedy existuje
+$j$ takové, že $P_i$ zastaví pro $i$ po **přesně** $j$ krocích. Tj. existuje
+$j$ takové, že $\phi_{f(i)}(x)$ počítá $\theta(x)$ pro všechna $x$ menší než
+$j$ a jinak je nedefinované. Potom ale $\phi_{f(i)}$ je zúžením $\theta$ a její
+definiční obor je konečný, tedy $\phi_{f(i)} \in I'$.
+
+Z druhé strany platí, že když $i \in K'$, tak $P_i$ nikdy nezastaví a
+$\phi_{f(i)}$ počítá celou $\theta$ a tedy patří do $I$.
+
+Tedy $i \in K' \equiv f(i) \in I$ a $I$ nemůže být rekurzivně spočetná.
+
+Třetí Riceovu větu tedy zřejmě nejde použít, pokud $I$ obsahuje prázdnou
+funkci. Ta je totiž konečným zúžením každé funkce.
+
+
+## Časová složitost
+
+### $f \in O(g)$
+
+Funkce $f$ roste nejvýše tak rychle jako $g$.
+
+> $\exists c,n_0: \forall n \geq n_0: f(n) \leq cg(n)$
+
+### $f \in o(g)$
+
+Funkce $f$ roste pomaleji než $g$ ![f \in o(g)]($root/images/f-in-og.png)
+
+### $f \in \Omega(g)$
+
+Funkce $f$ roste alespoň tak rychle jako $g$ ![f \in \Omega(g)]($root/images/f-in-Omega-g.png)
+
