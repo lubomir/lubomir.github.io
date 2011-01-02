@@ -128,9 +128,13 @@ Funkce $f$ roste nejvýše tak rychle jako $g$.
 
 ### $f \in o(g)$
 
-Funkce $f$ roste pomaleji než $g$ ![f \in o(g)]($root/images/f-in-og.png)
+Funkce $f$ roste pomaleji než $g$
+
+![]($root/images/f-in-og.png)
 
 ### $f \in \Omega(g)$
 
-Funkce $f$ roste alespoň tak rychle jako $g$ ![f \in \Omega(g)]($root/images/f-in-Omega-g.png)
+Funkce $f$ roste alespoň tak rychle jako $g$
+
+![]($root/images/f-in-Omega-g.png)
 
