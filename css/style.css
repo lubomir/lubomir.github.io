@@ -27,6 +27,18 @@ a:hover {
 li {
     line-height: 150%;
 }
+li p {
+    line-height: 100%;
+}
+.footnotes li p {
+    margin-top: 0;
+    margin-bottom: 0.2em;
+}
+
+img {
+    display: block;
+    margin: 0 auto;
+}
 
 code {
     background-color: #eeeeee;
