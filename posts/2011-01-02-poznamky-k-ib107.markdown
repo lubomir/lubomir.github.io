@@ -23,13 +23,14 @@ v definici interpretu -- programu, který bude simulovat jiné programy.
 
 Takže: existuje funkce $s$, která pro index programu $i$ a $m$ jeho argumentů
 spočítá index jiného programu, který bude dělat totéž co $i$, ale bude
-potřebovat o $m$ argumentů míň. Funkce $s$ vlastně zafixuje prvním $m$
+potřebovat o $m$ argumentů méně. Funkce $s$ vlastně zafixuje prvních $m$
 argumentů na nějaké konstanty. $m$ je tady počet fixovaných parametrů, $n$
 počet těch, které se nefixují.
 
 Dokazuje se pomocí programu, který celou konstrukci realizuje -- má $m$
 konstant a přesypává argumenty tak, aby to sedělo. Prvních $n$ argumentů posune
-o $m$ pozic doprava a na uvolněná místa dosadí konstanty.
+o $m$ pozic doprava a na uvolněná místa dosadí konstanty. Pozor, aby se při
+posunování nepřepsalo něco, co bude ještě potřeba.
 
 
 ## První Riceova věta
@@ -38,7 +39,7 @@ o $m$ pozic doprava a na uvolněná místa dosadí konstanty.
 > rekurzivní. Potom existují indexy programů $i \in I$ a $j \in I'$^[apostrofem
 > označím doplněk množiny] tak, že $\phi_i = \phi_j$.
 
-Tedy pokud je netriviální podmožina $N$ rekurzivní, potom nerespektuje funkce a
+Tedy pokud je netriviální podmnožina $N$ rekurzivní, potom nerespektuje funkce a
 naopak pokud nějaká množina respektuje funkce a je triviální, potom nemůže být
 rekurzivní.
 
@@ -49,12 +50,12 @@ funkce. Kdyby tomu tak nebylo, tak se prohodí $I$ a $I'$.
 
 Nechť $P_{f(i)}$ je program `begin` $x_2$ `:=` $\Phi(i,i)$`;` $x_1$ `:=`
 $\theta(x_1)$ `end`. Zřejmě program $P$ počítá funkci $\theta$, pokud
-$\phi_i(i)$ je definováné a jinak počítá prázdnou funkci.
+$\phi_i(i)$ je definované a jinak počítá prázdnou funkci.
 
 Tedy pro všechna $i \in N$ platí $\phi_{f(i)} = \theta$ právě tehdy když $i \in
 K$.
 
-Pokud tedy $f(i) \in I$, pak $f(i)$ není index prádné funkce. Je to index
+Pokud tedy $f(i) \in I$, pak $f(i)$ není index prázdné funkce. Je to index
 $\theta$. Obráceně pokud $f(i)$ je indexem funkce $\theta$, pak $f(i) \in I$.
 Nechť $\chi_I$ je charakteristická funkce $I$. Pro všechna $i \in N$ musí platit
 ![Tvrzení 1]($root/images/prvni-riceova-veta-tvrzeni.png)
