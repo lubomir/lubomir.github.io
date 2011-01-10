@@ -3,11 +3,17 @@ import Control.Monad
 import Control.Arrow
 import Data.List
 import System.Locale
+import Text.Pandoc (defaultWriterOptions, WriterOptions(..))
 
 defaultTitle = "~xsedlar3"
+webUrl = "http://fi.muni.cz/~xsedlar3"
 
-main = hakyll "http://fi.muni.cz/~xsedlar3" $ do
-    static "favicon.ico"
+myConfig = (defaultHakyllConfiguration webUrl) {
+    pandocWriterOptions = defaultWriterOptions { writerSectionDivs = False }
+  }
+
+main = hakyllWithConfiguration myConfig $ do
+    static           "favicon.ico"
     directory css    "css"
     directory static "data"
     directory static "images"

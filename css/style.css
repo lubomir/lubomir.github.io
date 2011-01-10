@@ -20,6 +20,13 @@ h1 {
     text-shadow: #cccccc 3px 3px 1px;
 }
 
+h2[id]:hover:after {
+    content: " #" attr(id);
+    color: #aaaaaa;
+    font-weight: normal;
+    font-size: 75%;
+}
+
 a:hover {
     text-decoration: none;
 }
