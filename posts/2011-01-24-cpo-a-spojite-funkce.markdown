@@ -4,10 +4,10 @@ tags: teorie, typy, vyčíslitelnost
 ---
 
 Každý typ se dá charakterizovat jako částečně uspořádaná množina hodnot. Pokud
-platí, že každý spočetný řetězec má supremum, potom se jedná o Complete Partial
-Order.
+platí, že každý spočetný řetězec má supremum, potom se jedná o [Complete Partial
+Order](http://en.wikipedia.org/wiki/Complete_partial_order).
 
-## Primitivní typy
+## Primitivní typy -- příklady
 
 ![Unit_⊥_]($root/images/unitt.png)
 
@@ -25,8 +25,8 @@ Z primitivních typů je možné pomocí operací vytvářet další, bohatší 
     všechny původní prvky v X a jinak se touto operací uspořádání nemění.
  X × Y
   : kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a
-    druhá složka má typ Y). Pokud $x_1, x_2 \in X : x_1 \leq x_2$ a
-    $y_1, y_2 \in Y : y_1 \leq y_2$, potom platí $(x_1,y_1) \leq (x_2,y_2)$.
+    druhá složka má typ Y). Pokud $x_1, x_2 \in X, x_1 \leq x_2$ a
+    $y_1, y_2 \in Y, y_1 \leq y_2$, potom platí $(x_1,y_1) \leq (x_2,y_2)$.
     ^[drobný detail: pokaždé se jedná o jiné $\leq$, protože se porovnává
     v jiné doméně]
  X + Y
@@ -68,7 +68,7 @@ monotonicitu].
 Tedy obraz suprema libovolného řetězce musí být supremem obrazů jednotlivých
 prvků řetězce.
 
-Česky: pokud se vezme libovolný spočetný řetězec a funkcí $f$ se zobrazí jeho
+Česky: pokud se vezme libovolný spočetný řetězec a funkcí $f$ zobrazíme jeho
 supremum, tak musíme dostat totéž, jako kdybychom postupně zobrazili všechny
 prvky daného řetězce a našli supremum obrazů.
 
@@ -80,10 +80,10 @@ z Bool_⊥_.
 
 ![Všechny funkce Unit_⊥_ → Bool_⊥_]($root/images/unit-bool2.png)
 
-Tyto funkce by bylo vhodné taky seřadit do diagramu, aby bylo patrné, jaké to
+Tyto funkce by bylo vhodné taky seřadit do diagramu, aby bylo patrné, jak to
 uspořádání na nich funguje. Pro jednoduchost je každou funkci možné zakreslit
-ve tvaru definičního oboru, kde se místo původních prvků na stejná místa doplní
-hodnota, na kterou se ten který prvek zobrazí.
+jako diagram ve tvaru definičního oboru, kde se místo původních prvků na stejná
+místa doplní hodnota, na kterou se ten který prvek zobrazí.
 
 ![Uspořádání na Unit_⊥_ → Bool_⊥_]($root/images/unit-bool.png)
 
