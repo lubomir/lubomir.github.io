@@ -31,6 +31,10 @@ a:hover {
     text-decoration: none;
 }
 
+.figure {
+    margin-top: .5em;
+}
+
 li {
     line-height: 150%;
 }
