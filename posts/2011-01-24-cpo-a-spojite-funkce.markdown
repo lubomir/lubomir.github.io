@@ -37,7 +37,9 @@ Z primitivních typů je možné pomocí operací vytvářet další, bohatší 
   : mocninný typ; typ všech spojitých funkcí, které hodnotu typu X zobrazí na
     hodnotu typu Y
 
-Příklady jsou ve slidech z přednášky na straně 167.
+Další příklady jsou ve slidech z přednášky na straně 167.
+
+![Bool_⊥_ × Bool_⊥_]($root/images/bool-x-bool.png)
 
 ## Spojitost funkce
 
