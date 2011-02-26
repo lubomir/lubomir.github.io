@@ -167,6 +167,10 @@ pre .kw {
     font-weight: bold;
 }
 
+pre .co {
+    color: #888a85;
+}
+
 /* BORDERS */
 body:before, body:after {
     content: " ";
