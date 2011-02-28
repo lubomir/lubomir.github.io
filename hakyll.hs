@@ -50,7 +50,7 @@ main = hakyllWithConfiguration myConfig $ do
         map (>>> copyValue "body" "description") (take 5 renderablePosts)
 
   where
-    postManipulation =   renderDateWithLocale cs "date" "%e. %B %Y" "Neznámé datum"
+    postManipulation =   renderDateWithLocale cs "date" "%-d. %B %Y" "Neznámé datum"
                      >>> renderTagLinks tagToUrl
 
     tagToUrl tag = "$root/tags/" ++ (stripDiacritics . removeSpaces) tag ++ ".html"
