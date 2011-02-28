@@ -7,8 +7,9 @@ tags: prolog, Debian, vim
 ## Instalace
 
 Nejdřív je potřeba stáhnout samotný program k instalaci z [této
-stránky][download]. Přihlašuje se učem a sekundárním heslem. Je nutné stáhnout
-dva soubory: archiv s programem a soubor s příslušným licenčním klíčem.
+stránky][download] (pouze pro studenty FI a nekomerční použití). Přihlašuje se
+učem a sekundárním heslem. Je nutné stáhnout dva soubory: archiv s programem a
+soubor s příslušným licenčním klíčem.
 
 Instalace je docela jednoduchá:
 
@@ -49,6 +50,19 @@ interaktivně vyhledávat přes `^R` nebo jenom šipkou nahoru/dolů. Možná to
 někde nějaký háček, ale zatím jsem na nic nepřišel.
 
 
+### Někdo to rád barevné
+
+Rlwrap umožňuje pomocí přepínače `-p` (nebo `--promp-colour`) obarvit výzvu
+programu. Menší problém je ale v tom, že za prompt považuje i řádky, kde se
+vypisuje víc možných unifikací a interpret čeká na středník kvůli další
+možnosti. Osobně bych preferoval obarvení pouze klasické výzvy `| ?- `.
+
+Naštěstí si tohle přání můžu splnit pomocí filtru. Stačí si uložit [tento
+filtr][filtr] ideálně do adresáře `/usr/share/rlwrap/filters` a potom spouštět
+pomocí `rlwrap -z 'prolog_filter Blue' sicstus`. Možnosti barev jsou `black`,
+`red`, `green`, `yellow`, `blue`, `purple`, `cyan` a `white`. Pokud je alespoň
+první písmeno velké, použije se tučná varianta.
+
 ## Vim
 
 Vim sám o sobě Prolog moc nepodporuje. Nakopírováním těch [správných
@@ -65,8 +79,9 @@ souboru:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-[download]: https://is.muni.cz/auth/system/heslo.pl#pop
+[download]: https://lindir.ics.muni.cz/sicstus/
 [eclipse]:  http://www.eclipse.org/
 [spider]:   http://www.sics.se/sicstus/spider/site/index.html
 [rlwrap]:   http://utopia.knoware.nl/~hlub/rlwrap/
 [vimfile]:  https://github.com/adimit/prolog.vim
+[filtr]:    $root/data/prolog_filter
