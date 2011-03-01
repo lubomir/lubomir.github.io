@@ -55,7 +55,8 @@ někde nějaký háček, ale zatím jsem na nic nepřišel.
 Rlwrap umožňuje pomocí přepínače `-p` (nebo `--promp-colour`) obarvit výzvu
 programu. Menší problém je ale v tom, že za prompt považuje i řádky, kde se
 vypisuje víc možných unifikací a interpret čeká na středník kvůli další
-možnosti. Osobně bych preferoval obarvení pouze klasické výzvy `| ?- `.
+možnosti. Osobně bych preferoval obarvení pouze klasické výzvy `| ?- ` (a
+případně i jiných, pokud existují).
 
 Naštěstí si tohle přání můžu splnit pomocí filtru. Stačí si uložit [tento
 filtr][filtr] ideálně do adresáře `/usr/share/rlwrap/filters` a potom spouštět
