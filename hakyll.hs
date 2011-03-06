@@ -5,13 +5,16 @@ import Data.List
 import System.Locale
 import Text.Pandoc (defaultWriterOptions, WriterOptions(..))
 
+defaultTitle, webUrl :: String
 defaultTitle = "~xsedlar3"
 webUrl = "http://fi.muni.cz/~xsedlar3"
 
+myConfig :: HakyllConfiguration
 myConfig = (defaultHakyllConfiguration webUrl) {
     pandocWriterOptions = defaultWriterOptions { writerSectionDivs = False }
   }
 
+main :: IO ()
 main = hakyllWithConfiguration myConfig $ do
     static           "favicon.ico"
     directory css    "css"
@@ -60,6 +63,7 @@ main = hakyllWithConfiguration myConfig $ do
                                  posts [("title", Left title)]
         renderChain ["posts.html", "templates/default.html"] list
 
+myFeedConfiguration :: FeedConfiguration
 myFeedConfiguration = FeedConfiguration
     { feedUrl         = "rss.xml"
     , feedTitle       = "~xsedlar3"
@@ -76,6 +80,7 @@ replace f r (x:xs)
   | f == x    = r : replace f r xs
   | otherwise = x : replace f r xs
 
+diacritics :: [(Char, Char)]
 diacritics = [ ('ě', 'e')
              , ('š', 's')
              , ('č', 'c')
@@ -87,6 +92,7 @@ diacritics = [ ('ě', 'e')
              , ('é', 'e')
              ]
 
+cs :: TimeLocale
 cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa", "st"),
                             ("čtvrtek", "čt"), ("pátek", "pá"), ("sobota", "so"),
                             ("neděle", "ne") ]
