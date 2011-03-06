@@ -26,7 +26,7 @@ sub colorcode() {
 sub colorize{
     my ($prompt) = @_;
     if ($prompt =~ /^\| .*/) {
-        return colorcode . $prompt . "\033[0m ";
+        return colorcode . $prompt . "\033[0m";
     } else {
         return $prompt;
     }
