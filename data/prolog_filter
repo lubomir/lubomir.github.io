@@ -16,16 +16,15 @@ $filter -> run;
 
 sub colorcode() {
     my %cls = (
-        "black"  => "30", "red"   => "31", "green"  => "32",
-        "yellow" => "33", "blue"  => "34", "purple" => "35",
-        "cyan"   => "36", "white" => "37"
+        "black" => "30", "red"    => "31", "green" => "32", "yellow" => "33",
+        "blue"  => "34", "purple" => "35", "cyan"  => "36", "white"  => "37"
     );
     return("\033[".substr($ARGV[0],0,1)=~/^[A-Z]/.";".$cls{lc($ARGV[0])}."m");
 }
 
 sub colorize{
     my ($prompt) = @_;
-    if ($prompt =~ /^\| .*/) {
+    if ($prompt =~ /^\|.*/) {
         return colorcode . $prompt . "\033[0m";
     } else {
         return $prompt;
