@@ -50,7 +50,7 @@ Tedy: funkce $f$ je monotonní, pokud pro každé dva prvky jejího definičníh
 oboru platí, že pokud je jeden méně definovaný než jiný, tak potom jejich
 obrazy na tom budou stejně.
 
-Takže například funkce $f$ je spojitá, ale funkce $g$ spojitá není.
+Takže například funkce $f$ je monotonní, ale funkce $g$ spojitá není.
 
     f () = True
     f ⊥ = True
@@ -61,14 +61,18 @@ Takže například funkce $f$ je spojitá, ale funkce $g$ spojitá není.
 Spojitost funkce je ještě trochu silnější pojem. Každá spojitá funkce je i
 monotonní. Obrácené tvrzení neplatí, existují i nespojité monotonní funkce.
 Platí ale, že každá monotonní funkce s konečným definičním oborem (doménou) je
-spojitá^[takže pro naprostou většinu příkladů na zkoušce stačí ověřovat
+spojitá^[takže pro naprostou většinu příkladů na zkoušce PB006 stačí ověřovat
 monotonicitu].
 
 > Funkce $f$ je spojitá, pokud pro každý spočetný řetězec $x_1, x_2, \ldots$ platí
 > $f(\bigsqcup(x_1,x_2,\ldots)) = \bigsqcup(f(x_1), f(x_2), \ldots)$
 
-Tedy obraz suprema libovolného řetězce musí být supremem obrazů jednotlivých
-prvků řetězce.
+(Značka $\bigsqcup$ značí supremum, nejmenší horní závoru, least upper bound.
+Horní závora nějaké podmnožiny je prvek, který je větší než libovolný prvek
+dané podmnožiny.)
+
+Definice tedy říká, že obraz suprema libovolného řetězce musí být supremem
+obrazů jednotlivých prvků řetězce.
 
 Česky: pokud se vezme libovolný spočetný řetězec a funkcí $f$ zobrazíme jeho
 supremum, tak musíme dostat totéž, jako kdybychom postupně zobrazili všechny
