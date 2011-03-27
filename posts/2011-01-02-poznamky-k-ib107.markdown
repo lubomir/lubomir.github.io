@@ -1,5 +1,6 @@
 ---
 title: Poznámky k IB107
+description: souhrn poznámek k základním větám
 tags: teorie, vyčíslitelnost
 ---
 
@@ -8,7 +9,7 @@ tags: teorie, vyčíslitelnost
 > Pro každé $j \geq 1$ existuje vyčíslitelná funkce $\Phi: N^{j+1} → N$, která
 > je univerzální pro standardní numeraci j-árních funkcí. Tedy pro každé $e \in
 > N$ a $(a_1, \ldots a_j) \in N^j$ platí
-> ![Věta o numeraci]($root/images/veta-o-numeraci.png)
+> ![Věta o numeraci](/images/veta-o-numeraci.png)
 
 Pro každou aritu tedy existuje funkce $\Phi$, která bere o jeden argument
 víc -- potřebuje ještě index programu, který má simulovat. Důkaz věty spočívá
@@ -19,7 +20,7 @@ v definici interpretu -- programu, který bude simulovat jiné programy.
 
 > Ke každému $n\geq 1$, $m\geq 1$ existuje totálně vyčíslitelná funkce
 > ${s^m}_n: N^{m+1} → N$, taková, že platí
-> ![Věta o parametrizaci]($root/images/veta-o-parametrizaci.png)
+> ![Věta o parametrizaci](/images/veta-o-parametrizaci.png)
 
 Takže: existuje funkce $s$, která pro index programu $i$ a $m$ jeho argumentů
 spočítá index jiného programu, který bude dělat totéž co $i$, ale bude
@@ -58,7 +59,7 @@ K$.
 Pokud tedy $f(i) \in I$, pak $f(i)$ není index prázdné funkce. Je to index
 $\theta$. Obráceně pokud $f(i)$ je indexem funkce $\theta$, pak $f(i) \in I$.
 Nechť $\chi_I$ je charakteristická funkce $I$. Pro všechna $i \in N$ musí platit
-![Tvrzení 1]($root/images/prvni-riceova-veta-tvrzeni.png)
+![Tvrzení 1](/images/prvni-riceova-veta-tvrzeni.png)
 
 Protože $\chi_I \circ f$ je totálně vyčíslitelná, musela by $K$ být
 rekurzivní, což zřejmě není.
@@ -131,11 +132,11 @@ Funkce $f$ roste nejvýše tak rychle jako $g$.
 
 Funkce $f$ roste pomaleji než $g$
 
-![]($root/images/f-in-og.png)
+![](/images/f-in-og.png)
 
 ### $f \in \Omega(g)$
 
 Funkce $f$ roste alespoň tak rychle jako $g$
 
-![]($root/images/f-in-Omega-g.png)
+![](/images/f-in-Omega-g.png)
 

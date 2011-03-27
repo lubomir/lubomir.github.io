@@ -1,6 +1,6 @@
 ---
 title: Inicializační funkce NCurses
-abstract: velice krátký překlad části manuálu
+description: velice krátký překlad části manuálu
 tags: c, programování, ncurses
 ---
 

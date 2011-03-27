@@ -1,6 +1,6 @@
 ---
 title: Testování binárky
-abstract: jednoduchá metoda kontroly spustitelného souboru
+description: jednoduchá metoda kontroly spustitelného souboru
 tags: programování, bash, testy
 ---
 
@@ -32,7 +32,7 @@ Pokud některý soubor neexistuje, tak se příslušná část netestuje.
 
 ## Použití
 
-Stáhněte si [archiv s testovacím skriptem]($root/data/stest.tar.bz2) a pomocným
+Stáhněte si [archiv s testovacím skriptem](/data/stest.tar.bz2) a pomocným
 souborem, který umožňuje vypisovat výsledky barevně. Skript `stest` je dobré
 mít v cestě, `.term_colors` může být buď přímo v domovském adresáři nebo na
 stejném místě jako `stest`.

@@ -1,6 +1,6 @@
 ---
 title: UnitTest v C++
-abstract: jednoduchý úvod do unit testování
+description: jednoduchý úvod do unit testování
 tags: programování, c++, testy
 ---
 

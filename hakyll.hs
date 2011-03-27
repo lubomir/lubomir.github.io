@@ -1,75 +1,110 @@
-import Text.Hakyll
-import Control.Monad
+{-# LANGUAGE OverloadedStrings #-}
+
 import Control.Arrow
-import Data.List
+import Control.Category (id)
+import Data.List (intercalate)
+import qualified Data.Map as M
+import Data.Monoid
+import Prelude hiding (id)
 import System.Locale
-import Text.Pandoc (defaultWriterOptions, WriterOptions(..))
 
-defaultTitle, webUrl :: String
-defaultTitle = "~xsedlar3"
-webUrl = "http://fi.muni.cz/~xsedlar3"
-
-myConfig :: HakyllConfiguration
-myConfig = (defaultHakyllConfiguration webUrl) {
-    pandocWriterOptions = defaultWriterOptions { writerSectionDivs = False }
-  }
+import Hakyll
 
 main :: IO ()
-main = hakyllWithConfiguration myConfig $ do
-    static           "favicon.ico"
-    directory css    "css"
-    directory static "data"
-    directory static "images"
+main = hakyll $ do
 
-    postPaths <- liftM (reverse . sort) $ getRecursiveContents "posts"
-    let renderablePosts = map ((>>> postManipulation) . createPage) postPaths
+    route   "favicon.ico" idRoute
+    compile "favicon.ico" copyFileCompiler
 
-    let tagMap = readTagMap "postTags" postPaths
+    route   "css/*" idRoute
+    compile "css/*" compressCssCompiler
 
-    renderPostList "posts.html" "Všechny texty" renderablePosts
+    route   "data/*" idRoute
+    compile "data/*" copyFileCompiler
 
-    let renderListForTag tag posts =
-            renderPostList (tagToUrl tag) ("Texty označené jako " ++ tag)
-                           (map (>>> postManipulation) posts)
-    withTagMap tagMap renderListForTag
+    route   "images/*" idRoute
+    compile "images/*" copyFileCompiler
 
-    -- Render index, including recent posts.
-    let tagCloud = tagMap >>> renderTagCloud tagToUrl 100 200
-        index = createListing "index.html"
-                              ["templates/postitem.html"]
-                              (take 5 renderablePosts)
-                              [ ("title", Left "~xsedlar3")
-                              , ("tagcloud", Right tagCloud)
-                              ]
-    renderChain ["index.html", "templates/default.html"] index
+    route   "posts/*" $ setExtension "html"
+    compile "posts/*" $ pageCompiler
+        >>> arr (renderDateFieldWith cs "date" "%-d. %B %Y" "Neznámé datum")
+        >>> renderTagsField "prettytags" (fromCaptureString "tags/*")
+        >>> applyTemplateCompiler "templates/post.html"
+        >>> applyTemplateCompiler "templates/default.html"
+        >>> relativizeUrlsCompiler
 
-    -- Render all posts.
-    forM_ renderablePosts $ renderChain [ "templates/post.html"
-                                        , "templates/default.html"
-                                        ]
+    route  "posts.html" idRoute
+    create "posts.html" $
+        constA mempty
+            >>> arr (setField "title" "Všechny texty")
+            >>> requireAllA "posts/*" addPostList
+            >>> applyTemplateCompiler "templates/posts.html"
+            >>> applyTemplateCompiler "templates/default.html"
+            >>> relativizeUrlsCompiler
 
-    -- Render rss feed
-    renderRss myFeedConfiguration $
-        map (>>> copyValue "body" "description") (take 5 renderablePosts)
+    route  "index.html" idRoute
+    create "index.html" $
+        constA mempty
+            >>> arr (setField "title" "Index of ~xsedlar3")
+            >>> requireA "tags" (setFieldA "tagcloud" renderTagCloud')
+            >>> requireAllA "posts/*" (second (arr $ newest 5) >>> addPostList)
+            >>> applyTemplateCompiler "templates/index.html"
+            >>> applyTemplateCompiler "templates/default.html"
+            >>> relativizeUrlsCompiler
+
+    create "tags" $
+        requireAll "posts/*" (\_ ps -> readTags ps :: Tags String)
+
+    route   "tags/*" $ customRoute tagToRoute
+    metaCompile $ require_ "tags"
+        >>> arr (M.toList . tagsMap)
+        >>> arr (map (\(t,p) -> (tagIdentifier t, makeTagList t p >>> relativizeUrlsCompiler)))
+
+    compile "templates/*" templateCompiler
+
+    route   "rss.xml" idRoute
+    create "rss.xml" $
+        requireAll_ "posts/*" >>> renderRss feedConfiguration
+
+    return ()
 
   where
-    postManipulation =   renderDateWithLocale cs "date" "%-d. %B %Y" "Neznámé datum"
-                     >>> renderTagLinks tagToUrl
+    newest :: Int -> [Page a] -> [Page a]
+    newest n = take n . reverse . sortByBaseName
 
-    tagToUrl tag = "$root/tags/" ++ (stripDiacritics . removeSpaces) tag ++ ".html"
+    renderTagCloud' :: Compiler (Tags String) String
+    renderTagCloud' = renderTagCloud tagIdentifier 100 200
 
-    renderPostList url title posts = do
-        let list = createListing url ["templates/postitem.html"]
-                                 posts [("title", Left title)]
-        renderChain ["posts.html", "templates/default.html"] list
+    tagIdentifier :: String -> Identifier
+    tagIdentifier = fromCaptureString "tags/*"
 
-myFeedConfiguration :: FeedConfiguration
-myFeedConfiguration = FeedConfiguration
-    { feedUrl         = "rss.xml"
+addPostList :: Compiler (Page String, [Page String]) (Page String)
+addPostList = setFieldA "posts" $
+    arr (reverse . sortByBaseName)
+        >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
+        >>> arr mconcat
+        >>> arr pageBody
+
+makeTagList :: String
+            -> [Page String]
+            -> Compiler () (Page String)
+makeTagList tag posts =
+    constA (mempty, posts)
+        >>> addPostList
+        >>> arr (setField "title" ("Texty označené jako " ++ tag))
+        >>> applyTemplateCompiler "templates/posts.html"
+        >>> applyTemplateCompiler "templates/default.html"
+
+feedConfiguration :: FeedConfiguration
+feedConfiguration = FeedConfiguration
+    { feedRoot        = "http://fi.muni.cz/~xsedlar3/"
     , feedTitle       = "~xsedlar3"
     , feedDescription = "home of ~xsedlar3"
     , feedAuthorName  = "Lubomír Sedlář"
     }
+
+tagToRoute :: Identifier -> FilePath
+tagToRoute = (++".html") . stripDiacritics . intercalate "/" . unIdentifier
 
 stripDiacritics :: String -> String
 stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics

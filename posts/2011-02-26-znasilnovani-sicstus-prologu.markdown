@@ -1,5 +1,6 @@
 ---
 title: Znásilňování SICStus Prologu
+description: přiohnutí interpretu Prologu
 tags: prolog, Debian, vim
 ---
 
@@ -95,4 +96,4 @@ souboru:
 [spider]:   http://www.sics.se/sicstus/spider/site/index.html
 [rlwrap]:   http://utopia.knoware.nl/~hlub/rlwrap/
 [vimfile]:  https://github.com/adimit/prolog.vim
-[filtr]:    $root/data/prolog_filter
+[filtr]:    /data/prolog_filter

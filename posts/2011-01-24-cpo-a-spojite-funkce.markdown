@@ -1,5 +1,6 @@
 ---
 title: CPO a spojité funkce
+description: pokus o čitelné shrnutí problematiky CPO
 tags: teorie, typy, vyčíslitelnost
 ---
 
@@ -9,9 +10,9 @@ Order](http://en.wikipedia.org/wiki/Complete_partial_order).
 
 ## Primitivní typy -- příklady
 
-![Unit_⊥_]($root/images/unitt.png)
+![Unit_⊥_](/images/unitt.png)
 
-![Bool_⊥_]($root/images/boolt.png)
+![Bool_⊥_](/images/boolt.png)
 
 Značky `tt` a `ff` jsou jednoduše symboly pro pravdivou a nepravdivou hodnotu.
 Další primitivní typ je třeba typ všech celých čísel `Int`.
@@ -39,7 +40,7 @@ Z primitivních typů je možné pomocí operací vytvářet další, bohatší 
 
 Další příklady jsou ve slidech z přednášky na straně 167.
 
-![Bool_⊥_ × Bool_⊥_]($root/images/bool-x-bool.png)
+![Bool_⊥_ × Bool_⊥_](/images/bool-x-bool.png)
 
 ## Spojitost funkce
 
@@ -84,18 +85,18 @@ Zadání: Napište všechny spojité funkce typu Unit_⊥_ → Bool_⊥_. Co je 
 s tímto typem? Takováto funkce musí každé hodnotě z Unit_⊥_ přiřadit něco
 z Bool_⊥_.
 
-![Všechny funkce Unit_⊥_ → Bool_⊥_]($root/images/unit-bool2.png)
+![Všechny funkce Unit_⊥_ → Bool_⊥_](/images/unit-bool2.png)
 
 Tyto funkce by bylo vhodné taky seřadit do diagramu, aby bylo patrné, jak to
 uspořádání na nich funguje. Pro jednoduchost je každou funkci možné zakreslit
 jako diagram ve tvaru definičního oboru, kde se místo původních prvků na stejná
 místa doplní hodnota, na kterou se ten který prvek zobrazí.
 
-![Uspořádání na Unit_⊥_ → Bool_⊥_]($root/images/unit-bool.png)
+![Uspořádání na Unit_⊥_ → Bool_⊥_](/images/unit-bool.png)
 
 Pro jiný typ funkcí to může dopadnout třeba tak, jako na obrázku níž.
 
-![Bool_⊥_ → Bool_⊥_]($root/images/bool-bool.png)
+![Bool_⊥_ → Bool_⊥_](/images/bool-bool.png)
 
 ## Striktní funkce
 
