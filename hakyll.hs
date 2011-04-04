@@ -2,6 +2,7 @@
 
 import Control.Arrow
 import Control.Category (id)
+import Data.Char (toLower)
 import Data.List (intercalate)
 import qualified Data.Map as M
 import Data.Monoid
@@ -104,7 +105,7 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = (++".html") . stripDiacritics . intercalate "/" . unIdentifier
+tagToRoute = (++".html") . map toLower . stripDiacritics . intercalate "/" . unIdentifier
 
 stripDiacritics :: String -> String
 stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics

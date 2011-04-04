@@ -1,7 +1,7 @@
 ---
 title: Jak se projevuje 'const'
 description: různé kombinace modifikátoru <code>const</code>
-tags: c, programování, const
+tags: C, programování, const
 ---
 
 Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic
