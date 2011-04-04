@@ -171,6 +171,10 @@ pre .co {
     color: #888a85;
 }
 
+pre .fu {
+    font-weight: bold;
+}
+
 /* BORDERS */
 body:before, body:after {
     content: " ";
