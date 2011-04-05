@@ -2,6 +2,7 @@
 
 import Control.Arrow
 import Control.Category (id)
+import Control.Monad (forM_)
 import Data.Char (toLower)
 import Data.List (intercalate)
 import qualified Data.Map as M
@@ -34,7 +35,7 @@ main = hakyll $ do
         >>> applyTemplateCompiler "templates/default.html"
         >>> relativizeUrlsCompiler
 
-    route  "posts.html" idRoute
+    route  "posts.html" $ idRoute
     create "posts.html" $
         constA mempty
             >>> arr (setField "title" "Všechny texty")
@@ -50,6 +51,13 @@ main = hakyll $ do
             >>> requireA "tags" (setFieldA "tagcloud" renderTagCloud')
             >>> requireAllA "posts/*" (second (arr $ newest 5) >>> addPostList)
             >>> applyTemplateCompiler "templates/index.html"
+            >>> applyTemplateCompiler "templates/default.html"
+            >>> relativizeUrlsCompiler
+
+    forM_ ["403.html", "404.html"] $ \p -> do
+        route   p $ idRoute
+        compile p $ readPageCompiler
+            >>> arr (setField "title" "Chyba na ~xsedlar3")
             >>> applyTemplateCompiler "templates/default.html"
             >>> relativizeUrlsCompiler
 
