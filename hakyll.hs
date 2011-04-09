@@ -15,65 +15,74 @@ import Hakyll
 main :: IO ()
 main = hakyll $ do
 
-    route   "favicon.ico" idRoute
-    compile "favicon.ico" copyFileCompiler
+    match "favicon.ico" $ do
+        route   idRoute
+        compile copyFileCompiler
 
-    route   "css/*" idRoute
-    compile "css/*" compressCssCompiler
+    match "css/*" $ do
+        route   idRoute
+        compile compressCssCompiler
 
-    route   "data/*" idRoute
-    compile "data/*" copyFileCompiler
+    match "data/*" $ do
+        route   idRoute
+        compile copyFileCompiler
 
-    route   "images/*" idRoute
-    compile "images/*" copyFileCompiler
+    match "images/*" $ do
+        route   idRoute
+        compile copyFileCompiler
 
-    route   "posts/*" $ setExtension "html"
-    compile "posts/*" $ pageCompiler
-        >>> arr (renderDateFieldWith cs "date" "%-d. %B %Y" "Neznámé datum")
-        >>> renderTagsField "prettytags" (fromCaptureString "tags/*")
-        >>> applyTemplateCompiler "templates/post.html"
-        >>> applyTemplateCompiler "templates/default.html"
-        >>> relativizeUrlsCompiler
-
-    route  "posts.html" $ idRoute
-    create "posts.html" $
-        constA mempty
-            >>> arr (setField "title" "Všechny texty")
-            >>> requireAllA "posts/*" addPostList
-            >>> applyTemplateCompiler "templates/posts.html"
+    match "posts/*" $ do
+        route   $ setExtension "html"
+        compile $ pageCompiler
+            >>> arr (renderDateFieldWith cs "date" "%-d. %B %Y" "Neznámé datum")
+            >>> renderTagsField "prettytags" (fromCaptureString "tags/*")
+            >>> applyTemplateCompiler "templates/post.html"
             >>> applyTemplateCompiler "templates/default.html"
             >>> relativizeUrlsCompiler
 
-    route  "index.html" idRoute
-    create "index.html" $
-        constA mempty
-            >>> arr (setField "title" "Index of ~xsedlar3")
-            >>> requireA "tags" (setFieldA "tagcloud" renderTagCloud')
-            >>> requireAllA "posts/*" (second (arr $ newest 5) >>> addPostList)
-            >>> applyTemplateCompiler "templates/index.html"
-            >>> applyTemplateCompiler "templates/default.html"
-            >>> relativizeUrlsCompiler
+    match "posts.html" $ do
+        route  idRoute
+        create "posts.html" $
+            constA mempty
+                >>> arr (setField "title" "Všechny texty")
+                >>> requireAllA "posts/*" addPostList
+                >>> applyTemplateCompiler "templates/posts.html"
+                >>> applyTemplateCompiler "templates/default.html"
+                >>> relativizeUrlsCompiler
+
+    match "index.html" $ do
+        route  idRoute
+        create "index.html" $
+            constA mempty
+                >>> arr (setField "title" "Index of ~xsedlar3")
+                >>> requireA "tags" (setFieldA "tagcloud" renderTagCloud')
+                >>> requireAllA "posts/*" (second (arr $ newest 5) >>> addPostList)
+                >>> applyTemplateCompiler "templates/index.html"
+                >>> applyTemplateCompiler "templates/default.html"
+                >>> relativizeUrlsCompiler
 
     forM_ ["403.html", "404.html"] $ \p -> do
-        route   p $ idRoute
-        compile p $ readPageCompiler
-            >>> arr (setField "title" "Chyba na ~xsedlar3")
-            >>> applyTemplateCompiler "templates/default.html"
-            >>> relativizeUrlsCompiler
+        match p $ do
+            route   idRoute
+            compile $ readPageCompiler
+                >>> arr (setField "title" "Chyba na ~xsedlar3")
+                >>> applyTemplateCompiler "templates/default.html"
+                >>> relativizeUrlsCompiler
 
     create "tags" $
         requireAll "posts/*" (\_ ps -> readTags ps :: Tags String)
 
-    route   "tags/*" $ customRoute tagToRoute
-    metaCompile $ require_ "tags"
-        >>> arr (M.toList . tagsMap)
-        >>> arr (map (\(t,p) -> (tagIdentifier t, makeTagList t p >>> relativizeUrlsCompiler)))
+    match "tags/*" $ do
+        route  $ customRoute tagToRoute
+        metaCompile $ require_ "tags"
+            >>> arr tagsMap
+            >>> arr (map (\(t,p) -> (tagIdentifier t, makeTagList t p >>> relativizeUrlsCompiler)))
 
-    compile "templates/*" templateCompiler
+    match "templates/*" $ compile templateCompiler
 
-    route   "rss.xml" idRoute
-    create "rss.xml" $
-        requireAll_ "posts/*" >>> renderRss feedConfiguration
+    match "rss.xml" $ do
+        route  idRoute
+        create "rss.xml" $ requireAll_ "posts/*" >>> renderRss feedConfiguration
 
     return ()
 
@@ -113,7 +122,7 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = (++".html") . map toLower . stripDiacritics . intercalate "/" . unIdentifier
+tagToRoute = (++".html") . map toLower . stripDiacritics . toFilePath
 
 stripDiacritics :: String -> String
 stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics
