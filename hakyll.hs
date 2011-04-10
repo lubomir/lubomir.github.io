@@ -1,11 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Control.Arrow
-import Control.Category (id)
 import Control.Monad (forM_)
 import Data.Char (toLower)
-import Data.List (intercalate)
-import qualified Data.Map as M
+import Data.List (sortBy)
+import Data.Ord (comparing)
 import Data.Monoid
 import Prelude hiding (id)
 import System.Locale
@@ -61,7 +60,7 @@ main = hakyll $ do
                 >>> applyTemplateCompiler "templates/default.html"
                 >>> relativizeUrlsCompiler
 
-    forM_ ["403.html", "404.html"] $ \p -> do
+    forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
             compile $ readPageCompiler
@@ -91,7 +90,10 @@ main = hakyll $ do
     newest n = take n . reverse . sortByBaseName
 
     renderTagCloud' :: Compiler (Tags String) String
-    renderTagCloud' = renderTagCloud tagIdentifier 100 200
+    renderTagCloud' = arr sortTags >>> renderTagCloud tagIdentifier 100 200
+
+    sortTags :: Tags String -> Tags String
+    sortTags = Tags . sortBy (comparing (map toLower . fst)) . tagsMap
 
     tagIdentifier :: String -> Identifier
     tagIdentifier = fromCaptureString "tags/*"
