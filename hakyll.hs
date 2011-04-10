@@ -14,21 +14,14 @@ import Hakyll
 main :: IO ()
 main = hakyll $ do
 
-    match "favicon.ico" $ do
-        route   idRoute
-        compile copyFileCompiler
-
     match "css/*" $ do
         route   idRoute
         compile compressCssCompiler
 
-    match "data/*" $ do
-        route   idRoute
-        compile copyFileCompiler
-
-    match "images/*" $ do
-        route   idRoute
-        compile copyFileCompiler
+    forM_ ["favicon.ico", "data/*", "images/*"] $ \p ->
+        match p $ do
+            route   idRoute
+            compile copyFileCompiler
 
     match "posts/*" $ do
         route   $ setExtension "html"
