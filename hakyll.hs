@@ -117,7 +117,7 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = (++".html") . map toLower . stripDiacritics . toFilePath
+tagToRoute = (++".html") . stripDiacritics . map toLower . toFilePath
 
 stripDiacritics :: String -> String
 stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics
