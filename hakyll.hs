@@ -65,7 +65,7 @@ main = hakyll $ do
         requireAll "posts/*" (\_ ps -> readTags ps :: Tags String)
 
     match "tags/*" $ do
-        route  $ customRoute tagToRoute
+        route  $ customRoute tagToRoute `composeRoutes` setExtension "html"
         metaCompile $ require_ "tags"
             >>> arr tagsMap
             >>> arr (map (\(t,p) -> (tagIdentifier t, makeTagList t p >>> relativizeUrlsCompiler)))
@@ -117,7 +117,7 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = (++".html") . stripDiacritics . map toLower . toFilePath
+tagToRoute = stripDiacritics . map toLower . toFilePath
 
 stripDiacritics :: String -> String
 stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics
