@@ -27,7 +27,7 @@ main = hakyll $ do
         route   $ setExtension "html"
         compile $ pageCompiler
             >>> arr (renderDateFieldWith cs "date" "%-d. %B %Y" "Neznámé datum")
-            >>> renderTagsField "prettytags" (fromCaptureString "tags/*")
+            >>> renderTagsField "prettytags" (fromCapture "tags/*")
             >>> applyTemplateCompiler "templates/post.html"
             >>> applyTemplateCompiler "templates/default.html"
             >>> relativizeUrlsCompiler
@@ -89,7 +89,7 @@ main = hakyll $ do
     sortTags = Tags . sortBy (comparing (map toLower . fst)) . tagsMap
 
     tagIdentifier :: String -> Identifier
-    tagIdentifier = fromCaptureString "tags/*"
+    tagIdentifier = fromCapture "tags/*"
 
 addPostList :: Compiler (Page String, [Page String]) (Page String)
 addPostList = setFieldA "posts" $
