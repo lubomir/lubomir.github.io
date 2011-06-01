@@ -26,9 +26,8 @@ v `WM_NORMAL_HINTS` a dá se zjistit třeba přes `xprop`. Toto pole má typ
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.c}
 typedef struct {
-    long flags;                /* marks which fields
-                                  in this structure
-                                  are defined */
+    long flags;                /* marks which fields in this
+                                  structure are defined */
     int x, y;                  /* Obsolete */
     int width, height;         /* Obsolete */
     int min_width, min_height;
@@ -46,7 +45,7 @@ typedef struct {
 
 To jistě není žádný zázrak, ale už se s tím dá něco dělat. Zajímavé hodnoty
 jsou ty s prefixem `min_` a `max_`. Pokud jsou nastavené na jinou hodnotu než 0
-a zároveň se rovnají odpovídající se hodnoty, okno má asi nastavenou fixní
+a zároveň se rovnají odpovídající si hodnoty, okno má zřejmě nastavenou fixní
 velikost.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.haskell}
@@ -57,7 +56,7 @@ isFixed h = minWidth h == maxWidth h
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 V modulu `XMonad.Util.WindowProperties` je k dispozici funkce
-`getProp32s :: String -> Window -> X (Maybe [CLong]`, s jejíž pomocí už se dá
+`getProp32s :: String -> Window -> X (Maybe [CLong])`, s jejíž pomocí už se dá
 napsat potřebná funkce pro manage hook. Definice typu `CLong` je v modulu
 `Foreign.C.Types`.
 
@@ -81,7 +80,9 @@ maxHeight = (!! 8) :: [CLong] -> CLong
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem
-nepozoroval.
+nepozoroval. [Kompletní soubor][hsfile] stačí nakopírovat do `~/.xmonad/lib/`,
+naimportovat do konfiguračního souboru a použít.
 
 [frozen-bubble]: http://www.frozen-bubble.org/
 [dosbox]: http://www.dosbox.com/
+[hsfile]: /data/HandleFixedWindows.hs
