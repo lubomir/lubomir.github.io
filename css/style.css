@@ -193,3 +193,31 @@ body:after {
     top: 0;
     right: 0;
 }
+
+/* ASSIGNMENTS */
+.hiding-box {
+    border: 1px solid;
+    border-radius: 1em;
+    padding: 0.5em;
+    margin-bottom: 1em;
+}
+.hiding-box div {
+    display:none;
+}
+.hiding-box:hover div {
+    display: block;
+}
+.hint {
+    background-color: #d5f5b6;
+    border-color: #4e9a06;
+}
+.hint>b {
+    color: #4e9a06;
+}
+.solution {
+    background-color: #fdef82;
+    border-color: #c4a000;
+}
+.solution>b {
+    color: #c4a000;
+}
