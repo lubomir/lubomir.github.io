@@ -43,6 +43,18 @@ main = hakyll $ do
                 >>> applyTemplateCompiler "templates/default.html"
                 >>> relativizeUrlsCompiler
 
+    match "tasks/*" $ compile pageCompiler
+
+    match "tasks.html" $ do
+        route  idRoute
+        create "tasks.html" $
+            constA mempty
+                >>> arr (setField "title" "Programovací úlohy")
+                >>> requireAllA "tasks/*" addTaskList
+                >>> applyTemplateCompiler "templates/tasks.html"
+                >>> applyTemplateCompiler "templates/default.html"
+                >>> relativizeUrlsCompiler
+
     match "index.html" $ do
         route  idRoute
         create "index.html" $
@@ -98,6 +110,14 @@ addPostList = setFieldA "posts" $
         >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
+
+addTaskList :: Compiler (Page String, [Page String]) (Page String)
+addTaskList = setFieldA "tasks" $
+    arr chronological
+        >>> arr (map $ trySetField "hint" "")
+        >>> require "templates/task.html" (\p t -> map (applyTemplate t) p)
+        >>> arr mconcat
+        >>> arr pageBody
 
 makeTagList :: String
             -> [Page String]
