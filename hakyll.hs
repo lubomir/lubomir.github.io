@@ -111,13 +111,20 @@ addPostList = setFieldA "posts" $
         >>> arr mconcat
         >>> arr pageBody
 
+sections :: Page String -> Page String
+sections page = foldl (\p (k,t) -> setField k t $ p) page (zip keys parts)
+  where
+    parts = splitAll "<!-- SECTION -->" (pageBody page) ++ repeat ""
+    keys = ["task", "hint", "solution"]
+
 addTaskList :: Compiler (Page String, [Page String]) (Page String)
 addTaskList = setFieldA "tasks" $
     arr chronological
-        >>> arr (map $ trySetField "hint" "")
+        >>> arr (map sections)
         >>> require "templates/task.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
+  --where doTask = apply
 
 makeTagList :: String
             -> [Page String]
