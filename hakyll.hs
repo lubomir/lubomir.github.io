@@ -80,7 +80,7 @@ main = hakyll $ do
 
   where
     newest :: Int -> [Page a] -> [Page a]
-    newest n = take n . reverse . sortByBaseName
+    newest n = take n . reverse . chronological
 
     renderTagCloud' :: Compiler (Tags String) String
     renderTagCloud' = arr sortTags >>> renderTagCloud tagIdentifier 100 200
@@ -88,12 +88,12 @@ main = hakyll $ do
     sortTags :: Tags String -> Tags String
     sortTags = Tags . sortBy (comparing (map toLower . fst)) . tagsMap
 
-    tagIdentifier :: String -> Identifier
+    tagIdentifier :: String -> Identifier a
     tagIdentifier = fromCapture "tags/*"
 
 addPostList :: Compiler (Page String, [Page String]) (Page String)
 addPostList = setFieldA "posts" $
-    arr (reverse . sortByBaseName)
+    arr (reverse . chronological)
         >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
@@ -116,7 +116,7 @@ feedConfiguration = FeedConfiguration
     , feedAuthorName  = "Lubomír Sedlář"
     }
 
-tagToRoute :: Identifier -> FilePath
+tagToRoute :: Identifier a -> FilePath
 tagToRoute = stripDiacritics . map toLower . toFilePath
 
 stripDiacritics :: String -> String
