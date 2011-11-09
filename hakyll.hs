@@ -10,6 +10,7 @@ import Prelude hiding (id)
 import System.Locale
 
 import Hakyll
+import Czech
 
 main :: IO ()
 main = hakyll $ do
@@ -26,7 +27,7 @@ main = hakyll $ do
     match "posts/*" $ do
         route   $ setExtension "html"
         compile $ pageCompiler
-            >>> arr (renderDateFieldWith cs "date" "%-d. %B %Y" "Neznámé datum")
+            >>> arr (renderCzechDate "date")
             >>> renderTagsField "prettytags" (fromCapture "tags/*")
             >>> applyTemplateCompiler "templates/post.html"
             >>> applyTemplateCompiler "templates/default.html"
@@ -118,42 +119,3 @@ feedConfiguration = FeedConfiguration
 
 tagToRoute :: Identifier a -> FilePath
 tagToRoute = stripDiacritics . map toLower . toFilePath
-
-stripDiacritics :: String -> String
-stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics
-
-replace :: Eq a => a -> a -> [a] -> [a]
-replace _ _ [] = []
-replace f r (x:xs)
-  | f == x    = r : replace f r xs
-  | otherwise = x : replace f r xs
-
-diacritics :: [(Char, Char)]
-diacritics = [ ('ě', 'e')
-             , ('š', 's')
-             , ('č', 'c')
-             , ('ř', 'r')
-             , ('ž', 'z')
-             , ('ý', 'y')
-             , ('á', 'a')
-             , ('í', 'i')
-             , ('é', 'e')
-             , ('ó', 'o')
-             ]
-
-cs :: TimeLocale
-cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa", "st"),
-                            ("čtvrtek", "čt"), ("pátek", "pá"), ("sobota", "so"),
-                            ("neděle", "ne") ]
-                , months = [
-                    ("leden", "led"), ("únor", "ún"), ("březen", "bře"),
-                    ("duben", "dub"), ("květen", "kvě"), ("červen", "čer"),
-                    ("červenec", "čec"), ("srpen", "srp"), ("září", "žá"),
-                    ("říjen", "ří"), ("listopad", "lis"), ("prosinec", "pro") ]
-                , intervals = []
-                , amPm = ("am", "pm")
-                , dateTimeFmt = ""
-                , dateFmt = ""
-                , timeFmt = ""
-                , time12Fmt = ""
-                }
