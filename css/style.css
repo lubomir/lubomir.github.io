@@ -197,9 +197,9 @@ body:after {
 /* ASSIGNMENTS */
 .hiding-box {
     border: 1px solid;
-    border-radius: 1em;
     padding: 0.5em;
     margin-bottom: 1em;
+    box-shadow: 2px 2px 1px #ccc;
 }
 .hiding-box div {
     display:none;

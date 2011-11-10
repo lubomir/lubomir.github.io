@@ -129,7 +129,7 @@ renderHidingBox h t = renderHtml $
         H.b   $ H.toHtml header
         H.div $ H.preEscapedString t
   where
-    cls = H.toValue $ "hiding-box " ++ map toLower h
+    cls = H.toValue $ "rounded hiding-box " ++ map toLower h
     header :: String
     header = case h of
                 "hint"     -> "Nápověda"
