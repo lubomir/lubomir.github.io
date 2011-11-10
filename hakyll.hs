@@ -7,7 +7,10 @@ import Data.List (sortBy)
 import Data.Ord (comparing)
 import Data.Monoid
 import Prelude hiding (id)
-import System.Locale
+import qualified Text.Blaze.Html5 as H
+import qualified Text.Blaze.Html5.Attributes as H
+import Text.Blaze.Renderer.String (renderHtml)
+
 
 import Hakyll
 import Czech
@@ -112,10 +115,26 @@ addPostList = setFieldA "posts" $
         >>> arr pageBody
 
 sections :: Page String -> Page String
-sections page = foldl (\p (k,t) -> setField k t $ p) page (zip keys parts)
+sections page = foldl doSec page (zip keys parts)
   where
+    doSec pg (key, text) = setField key (renderHidingBox key text) pg
     parts = splitAll "<!-- SECTION -->" (pageBody page) ++ repeat ""
     keys = ["task", "hint", "solution"]
+
+renderHidingBox :: String -> String -> String
+renderHidingBox "task" t = t
+renderHidingBox _ ""     = ""
+renderHidingBox h t = renderHtml $
+    H.div H.! H.class_ cls $ do
+        H.b   $ H.toHtml header
+        H.div $ H.preEscapedString t
+  where
+    cls = H.toValue $ "hiding-box " ++ map toLower h
+    header :: String
+    header = case h of
+                "hint"     -> "Nápověda"
+                "solution" -> "Řešení"
+                _          -> ""
 
 addTaskList :: Compiler (Page String, [Page String]) (Page String)
 addTaskList = setFieldA "tasks" $
@@ -124,7 +143,6 @@ addTaskList = setFieldA "tasks" $
         >>> require "templates/task.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
-  --where doTask = apply
 
 makeTagList :: String
             -> [Page String]
