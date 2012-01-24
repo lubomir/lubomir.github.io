@@ -5,7 +5,7 @@ category: vstup a výstup
 
 Napište program, který načte ze vstupu dvě celá čísla a vypíše jejich součet.
 Až budete umět sčítat na korektním vstupu, ošetřete případy, kdy uživatel zadá
-jen žádné nebo jen jedno číslo, případně to vůbec číslo nebude.
+žádné nebo jen jedno číslo, případně to vůbec číslo nebude.
 
 <!-- SECTION -->
 
