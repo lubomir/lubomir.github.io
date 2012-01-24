@@ -99,10 +99,15 @@ main = hakyll $ do
     newest n = take n . reverse . chronological
 
     renderTagCloud' :: Compiler (Tags String) String
-    renderTagCloud' = arr sortTags >>> renderTagCloud tagIdentifier 100 200
+    renderTagCloud' = sortTagsBy caseInsensitiveTags
+                    >>> renderTagCloud tagIdentifier 100 200
 
-    sortTags :: Tags String -> Tags String
-    sortTags = Tags . sortBy (comparing (map toLower . fst)) . tagsMap
+    sortTagsBy :: ((String, [Page a]) -> (String, [Page a]) -> Ordering)
+               -> Compiler (Tags a) (Tags a)
+    sortTagsBy f = arr $ Tags . sortBy f . tagsMap
+
+    caseInsensitiveTags :: (String, [Page a]) -> (String, [Page a]) -> Ordering
+    caseInsensitiveTags = comparing $ map toLower . fst
 
     tagIdentifier :: String -> Identifier a
     tagIdentifier = fromCapture "tags/*"
