@@ -20,6 +20,6 @@ a {
 .timeinfo {
     text-align: left;
 }
-p.navigation, .timeinfo span, #footer {
+p.navigation, .timeinfo span, #footer, #face {
     display: none;
 }
