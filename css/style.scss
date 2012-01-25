@@ -115,7 +115,6 @@ table {
 
 p.navigation {
     float: left;
-    margin-top: -1em;
 }
 
 ul.navigation {
@@ -132,11 +131,15 @@ ul.navigation {
 }
 
 .timeinfo {
-    margin-top: -1em;
     text-align: right;
     span {
         display: block;
     }
+}
+
+.post {
+    padding-top: 0.1em;
+    clear: both;
 }
 
 .tagcloud {
