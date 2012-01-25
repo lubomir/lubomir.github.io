@@ -1,5 +1,23 @@
 $background: #E0E4ED;
 
+@mixin border-radius($r) {
+    -moz-border-radius: $r;
+    -webkit-border-radius: $r;
+    border-radius: $r;
+}
+
+@mixin box-shadow($c) {
+    -moz-box-shadow: $c;
+    -webkit-box-shadow: $c;
+    box-shadow: $c;
+}
+
+@mixin text-shadow($val) {
+    -moz-text-shadow: $val;
+    -webkit-text-shadow: $val;
+    text-shadow: $val;
+}
+
 body {
     padding: 30px;
     background-color: $background;
@@ -20,7 +38,7 @@ h1, h2, h3, h4 {
 }
 
 h1 {
-    text-shadow: #cccccc 3px 3px 1px;
+    @include text-shadow(#cccccc 3px 3px 1px);
 }
 
 h2[id]:hover:after {
@@ -74,18 +92,6 @@ code {
 dt {
     margin-top: 1em;
     font-weight: bold;
-}
-
-@mixin border-radius($r) {
-    -moz-border-radius: $r;
-    -webkit-border-radius: $r;
-    border-radius: $r;
-}
-
-@mixin box-shadow($c) {
-    -moz-box-shadow: $c;
-    -webkit-box-shadow: $c;
-    box-shadow: $c;
 }
 
 .rounded {
