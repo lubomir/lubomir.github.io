@@ -29,8 +29,7 @@ main = hakyll $ do
         route   $ setExtension "html"
         compile $ pageCompiler
             >>> applyTemplateCompiler "templates/static.html"
-            >>> applyTemplateCompiler "templates/default.html"
-            >>> relativizeUrlsCompiler
+            >>> defaultCompiler
 
     forM_ ["favicon.ico", "data/*", "images/*"] $ \p ->
         match p $ do
@@ -43,8 +42,7 @@ main = hakyll $ do
             >>> arr (renderCzechDate "date")
             >>> renderTagsField "prettytags" (fromCapture "tags/*")
             >>> applyTemplateCompiler "templates/post.html"
-            >>> applyTemplateCompiler "templates/default.html"
-            >>> relativizeUrlsCompiler
+            >>> defaultCompiler
 
     match "posts.html" $ do
         route  idRoute
@@ -53,8 +51,7 @@ main = hakyll $ do
                 >>> arr (setField "title" "Všechny texty")
                 >>> requireAllA "posts/*" addPostList
                 >>> applyTemplateCompiler "templates/posts.html"
-                >>> applyTemplateCompiler "templates/default.html"
-                >>> relativizeUrlsCompiler
+                >>> defaultCompiler
 
     match "tasks/*" $ compile pageCompiler
 
@@ -65,8 +62,7 @@ main = hakyll $ do
                 >>> arr (setField "title" "Programovací úlohy")
                 >>> requireAllA "tasks/*" addTaskList
                 >>> applyTemplateCompiler "templates/tasks.html"
-                >>> applyTemplateCompiler "templates/default.html"
-                >>> relativizeUrlsCompiler
+                >>> defaultCompiler
 
     match "index.html" $ do
         route  idRoute
@@ -76,16 +72,14 @@ main = hakyll $ do
                 >>> requireA "tags" (setFieldA "tagcloud" renderTagCloud')
                 >>> requireAllA "posts/*" (second (arr $ newest 5) >>> addPostList)
                 >>> applyTemplateCompiler "templates/index.html"
-                >>> applyTemplateCompiler "templates/default.html"
-                >>> relativizeUrlsCompiler
+                >>> defaultCompiler
 
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
             compile $ readPageCompiler
                 >>> arr (setField "title" "Chyba na ~xsedlar3")
-                >>> applyTemplateCompiler "templates/default.html"
-                >>> relativizeUrlsCompiler
+                >>> defaultCompiler
 
     create "tags" $
         requireAll "posts/*" (\_ ps -> readTags ps :: Tags String)
@@ -94,7 +88,7 @@ main = hakyll $ do
         route  $ customRoute tagToRoute `composeRoutes` setExtension "html"
         metaCompile $ require_ "tags"
             >>> arr tagsMap
-            >>> arr (map (\(t,p) -> (tagIdentifier t, makeTagList t p >>> relativizeUrlsCompiler)))
+            >>> arr (map $ \(t,p) -> (tagIdentifier t, makeTagList t p))
 
     match "templates/*" $ compile templateCompiler
 
@@ -114,6 +108,10 @@ main = hakyll $ do
 
     tagIdentifier :: String -> Identifier a
     tagIdentifier = fromCapture "tags/*"
+
+defaultCompiler :: Compiler (Page String) (Page String)
+defaultCompiler = applyTemplateCompiler "templates/default.html"
+              >>> relativizeUrlsCompiler
 
 addPostList :: Compiler (Page String, [Page String]) (Page String)
 addPostList = setFieldA "posts" $
@@ -160,7 +158,7 @@ makeTagList tag posts =
         >>> addPostList
         >>> arr (setField "title" ("Texty označené jako " ++ tag))
         >>> applyTemplateCompiler "templates/posts.html"
-        >>> applyTemplateCompiler "templates/default.html"
+        >>> defaultCompiler
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration
