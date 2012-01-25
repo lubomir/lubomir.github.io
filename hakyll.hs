@@ -3,8 +3,6 @@
 import Control.Arrow
 import Control.Monad (forM_)
 import Data.Char (toLower)
-import Data.List (sortBy)
-import Data.Ord (comparing)
 import Data.Monoid
 import Prelude hiding (id)
 import qualified Text.Blaze.Html5 as H
@@ -101,13 +99,6 @@ main = hakyll $ do
     renderTagCloud' :: Compiler (Tags String) String
     renderTagCloud' = sortTagsBy caseInsensitiveTags
                     >>> renderTagCloud tagIdentifier 100 200
-
-    sortTagsBy :: ((String, [Page a]) -> (String, [Page a]) -> Ordering)
-               -> Compiler (Tags a) (Tags a)
-    sortTagsBy f = arr $ Tags . sortBy f . tagsMap
-
-    caseInsensitiveTags :: (String, [Page a]) -> (String, [Page a]) -> Ordering
-    caseInsensitiveTags = comparing $ map toLower . fst
 
     tagIdentifier :: String -> Identifier a
     tagIdentifier = fromCapture "tags/*"
