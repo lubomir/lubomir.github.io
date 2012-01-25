@@ -25,6 +25,13 @@ main = hakyll $ do
         compile $ getResourceString
             >>> unixFilter "sass" ["-s", "-C", "-t", "compressed", "--scss"]
 
+    match "static/*" $ do
+        route   $ setExtension "html"
+        compile $ pageCompiler
+            >>> applyTemplateCompiler "templates/static.html"
+            >>> applyTemplateCompiler "templates/default.html"
+            >>> relativizeUrlsCompiler
+
     forM_ ["favicon.ico", "data/*", "images/*"] $ \p ->
         match p $ do
             route   idRoute
