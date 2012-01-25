@@ -16,9 +16,14 @@ import Czech
 main :: IO ()
 main = hakyll $ do
 
-    match "css/*" $ do
+    match "css/*.css" $ do
         route   idRoute
         compile compressCssCompiler
+
+    match "css/*.scss" $ do
+        route   $ setExtension "css"
+        compile $ getResourceString
+            >>> unixFilter "sass" ["-s", "-C", "-t", "compressed", "--scss"]
 
     forM_ ["favicon.ico", "data/*", "images/*"] $ \p ->
         match p $ do
