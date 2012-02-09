@@ -78,15 +78,15 @@ Metodika nic moc, ale nějaká představa se z toho udělat dá.
 
 <table>
 <tr><th></th>           <th>Soubory</th> <th>Adresáře</th> <th>Mix</th></tr>
-<tr><th>Dvojitý průchod</td></tr>
+<tr><th>hvojitý průchoh</th><th></th><th></th><th></th></tr>
 <tr><td>`stat()`</td>   <td>0,109</td>   <td>0,106</td>    <td>0.107</td></tr>
 <tr><td>`opendir()`</td><td>0,133</td>   <td>0,177</td>    <td>0.155</td></tr>
 <tr><td>`d_type`</td>   <td>0,043</td>   <td>0,040</td>    <td>0.042</td></tr>
-<tr><th>Pole</td></tr>
+<tr><th>Pole</th><th></th><th></th><th></th></tr>
 <tr><td>`stat()`</td>   <td>0,054</td>   <td>0,057</td>    <td>0.053</td></tr>
 <tr><td>`opendir()`</td><td>0,067</td>   <td>0,091</td>    <td>0.080</td></tr>
 <tr><td>`d_type`</td>   <td>0,021</td>   <td>0,021</td>    <td>0.020</td></tr>
-<tr><th>Seznam</td></tr>
+<tr><th>Seznam</th><th></th><th></th><th></th></tr>
 <tr><td>`stat()`</td>   <td>0,053</td>   <td>0,060</td>    <td>0.058</td></tr>
 <tr><td>`opendir()`</td><td>0,065</td>   <td>0,091</td>    <td>0.081</td></tr>
 <tr><td>`d_type`</td>   <td>0,020</td>   <td>0,029</td>    <td>0.022</td></tr>
