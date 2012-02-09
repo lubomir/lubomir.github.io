@@ -11,6 +11,7 @@ import Text.Blaze.Renderer.String (renderHtml)
 
 
 import Hakyll
+import Text.Pandoc
 import Czech
 
 main :: IO ()
@@ -34,7 +35,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route   $ setExtension "html"
-        compile $ pageCompiler
+        compile $ pageCompilerWith defaultHakyllParserState myWriterOptions
             >>> arr (renderCzechDate "date")
             >>> renderTagsField "prettytags" (fromCapture "tags/*")
             >>> applyTemplateCompiler "templates/post.html"
@@ -104,6 +105,11 @@ main = hakyll $ do
 
     tagIdentifier :: String -> Identifier a
     tagIdentifier = fromCapture "tags/*"
+
+myWriterOptions :: WriterOptions
+myWriterOptions = defaultHakyllWriterOptions
+    { writerHtml5 = True
+    }
 
 defaultCompiler :: Compiler (Page String) (Page String)
 defaultCompiler = applyTemplateCompiler "templates/default.html"

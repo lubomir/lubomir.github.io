@@ -123,6 +123,10 @@ p.navigation {
     float: left;
 }
 
+[data-icon]:before {
+    content: attr(data-icon)" ";
+}
+
 ul.navigation {
     li {
         display: inline-block;
