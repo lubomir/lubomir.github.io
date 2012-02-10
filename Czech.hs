@@ -1,21 +1,14 @@
 module Czech where
 
 import Hakyll (renderDateFieldWith)
+import Data.Char (isAscii)
+import qualified Data.Text as T
+import qualified Data.Text.ICU as ICU
 import System.Locale
 
--- |Replace accents from above letters.
+-- |Remove accents from above letters.
 stripDiacritics :: String -> String
-stripDiacritics str = foldl (\s (f,t) -> replace f t s) str diacritics
-
-replace :: Eq a => a -> a -> [a] -> [a]
-replace _ _ [] = []
-replace f r (x:xs)
-  | f == x    = r : replace f r xs
-  | otherwise = x : replace f r xs
-
-diacritics :: [(Char, Char)]
-diacritics =  zip "ěščřžýáíéĚŠČŘŽÝÁÍÉúů"
-                  "escrzyaieESCRZYAIEuu"
+stripDiacritics = T.unpack . T.filter isAscii . ICU.normalize ICU.NFD . T.pack
 
 renderCzechDate field = renderDateFieldWith cs field "%-d. %B %Y" "Neznámé datum"
 
