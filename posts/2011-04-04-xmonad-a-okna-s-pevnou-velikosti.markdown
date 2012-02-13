@@ -9,7 +9,7 @@ Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty
 dají odstranit.
 
 Poslední věc, na kterou jsem narazil a která mě donutila upravit `xmonad.hs`
-bylo ne zrovna přátelské chování k oknům, které si nastavují nějakou
+bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou
 požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině
 případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá
 moc smysl měnit velikost. V mém případě šlo hlavně o [Frozen
