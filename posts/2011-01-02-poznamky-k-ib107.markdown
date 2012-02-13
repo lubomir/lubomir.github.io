@@ -132,11 +132,11 @@ Funkce $f$ roste nejvýše tak rychle jako $g$.
 
 Funkce $f$ roste pomaleji než $g$
 
-![](/images/f-in-og.png)
+![](/images/f-in-og.png "\lim{n \to \infty}\frac{f(n)}{g(n)} = 0")
 
 ### $f \in \Omega(g)$
 
 Funkce $f$ roste alespoň tak rychle jako $g$
 
-![](/images/f-in-Omega-g.png)
+![](/images/f-in-Omega-g.png "\exists n_0, c: \forall n \geq n_0 : f(n) \geq \frac{1}{c} g(n)")
 
