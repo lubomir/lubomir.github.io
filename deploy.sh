@@ -2,8 +2,10 @@
 
 set -e
 
-echo "*** Compiling Hakyll ***"
-ghc --make hakyll.hs
+if [ "$1" != "--skip-compilation" ]; then
+    echo "*** Compiling Hakyll ***"
+    ghc --make hakyll.hs
+fi
 
 echo "*** Building site ***"
 ./hakyll rebuild
