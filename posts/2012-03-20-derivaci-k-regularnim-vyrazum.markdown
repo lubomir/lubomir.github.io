@@ -226,7 +226,7 @@ str =~ regex = runFA (strToFA regex) str
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Nalezení všech odpovídajících podřetězců je maličko složitější. Postupně
-spustíme automat na všechny sufixy řetězce a zapamatovat si, kde jsme došli do
+spustíme automat na všechny sufixy řetězce a zapamatujeme si, kde jsme došli do
 akceptujícího stavu. Zároveň ale zastavíme, když dorazíme do stavu `Zero`,
 protože z něj už není úniku.
 
@@ -249,7 +249,7 @@ allMatches re str = concatMap (uncurry $ run 1 (startNode fa)) starts
 
 V tomhle stavu program při výpočtu tráví naprostou většinu času porovnáváním
 regulárních výrazů. Bylo by pěkné zbavit se jich a místo nich používat pro
-označování stavů čísla.
+označování stavů čísla. To už ale dělat nebudu.
 
 ![tis+ti+iti](/images/regex1.png)
 
