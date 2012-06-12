@@ -40,11 +40,11 @@ posunování nepřepsalo něco, co bude ještě potřeba.
 > rekurzivní. Potom existují indexy programů $i \in I$ a $j \in I'$^[apostrofem
 > označím doplněk množiny] tak, že $\phi_i = \phi_j$.
 
-Tedy pokud je netriviální podmnožina $N$ rekurzivní, potom nerespektuje funkce a
-naopak pokud nějaká množina respektuje funkce a je triviální, potom nemůže být
-rekurzivní.
+Tedy pokud je netriviální podmnožina $N$ rekurzivní, potom nerespektuje funkce
+a naopak pokud nějaká množina respektuje funkce a je netriviální, potom nemůže
+být rekurzivní.
 
-Důkaz se provede sporem: předpokládejme, že množina nerespektuje funkce a že
+Důkaz se provede sporem: předpokládejme, že množina respektuje funkce a že
 množina $I$ obsahuje index nějaké vyčíslitelné funkce^[a tedy všechny její
 indexy] $\theta$, která není prázdná. $I'$ potom obsahuje indexy prázdné
 funkce. Kdyby tomu tak nebylo, tak se prohodí $I$ a $I'$.
