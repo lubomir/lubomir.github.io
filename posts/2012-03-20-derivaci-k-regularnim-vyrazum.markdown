@@ -86,7 +86,7 @@ conc _ Zero    = Zero
 conc x y       = Conc (canBeEpsilon x && canBeEpsilon y) x y
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Jak jsem psal výše, musíme mýt schopní pro daný výraz $E$ určit, jestli $L(E)$
+Jak jsem psal výše, musíme být schopní pro daný výraz $E$ určit, jestli $L(E)$
 obsahuje $\epsilon$. Vzhledem k tomu, kolikrát se tato funkce bude volat při
 derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.
 
