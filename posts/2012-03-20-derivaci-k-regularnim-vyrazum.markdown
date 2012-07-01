@@ -9,7 +9,9 @@ konečný automat, a ne nedeterministický s $\epsilon$-kroky. Touto metodou je
 možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe
 porozumět algoritmu než si ho zkusit naprogramovat?
 
-Podrobnější popis je algoritmu je k dispozici [ve slidech][slidy].
+Podrobnější popis je algoritmu je k dispozici [ve slidech][slidy], případně ve
+článku [*Derivatives of Regular Expressions*][paper], jehož autorem je *Janusz
+A. Brzozowski*.
 
 ![$a^*b+(c+d+e)a$](/images/regex0.png)
 
@@ -67,10 +69,11 @@ data FiniteAutomaton = FiniteAutomaton
                      }
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-V první řadě nadefinujeme dvě pomocné funkce pro spojování regexpů, které se
+V první řadě nadefinujeme tři pomocné funkce pro spojování regexpů, které se
 postarají o korektní vyplnění pomocné boolovské části a taky zabrání vzniku
 několika patologických výrazů – např. nemá smysl řetězit něco s prázdným
-slovem.
+slovem. Jiný příklad je výraz `(E*)*`, který je ekvivalentní s `E*` (a navíc
+vede k zacyklení).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ {.haskell}
 plus :: Regex a -> Regex a -> Regex a
@@ -84,6 +87,10 @@ conc x Epsilon = x
 conc Zero _    = Zero
 conc _ Zero    = Zero
 conc x y       = Conc (canBeEpsilon x && canBeEpsilon y) x y
+
+iter :: Regex a -> Regex a
+iter (Iter x) = Iter x
+iter x        = Iter x
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Jak jsem psal výše, musíme být schopní pro daný výraz $E$ určit, jestli $L(E)$
@@ -112,7 +119,7 @@ plusu a závorek, které by jinak měly speciální význam.
 regexP, termP, simpleP :: Parser (Regex Char)
 regexP = buildExpressionParser table termP
 termP = simpleP <|> char '(' *> regexP <* char ')'
-table = [ [ Postfix $ char '*' >> return Iter ]
+table = [ [ Postfix $ char '*' >> return iter ]
         , [Infix (return conc) AssocLeft]
         , [Infix (char '+' >> return plus) AssocLeft]
         ]
@@ -150,7 +157,7 @@ derive (Plus _ p q) x = plus (derive p x) (derive q x)
 derive (Conc _ p q) x
     | canBeEpsilon p  = plus (conc (derive p x) q) (derive q x)
     | otherwise       = conc (derive p x) q
-derive (Iter p) x     = conc (derive p x) (Iter p)
+derive (Iter p) x     = conc (derive p x) (iter p)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -253,6 +260,13 @@ označování stavů čísla. To už ale dělat nebudu.
 
 ![tis+ti+iti](/images/regex1.png)
 
+## Aktualizace
+
+2012-07-01
+:   upraveno tak, aby `(E*)*` nevedlo k zacyklení; doplněn odkaz na původní
+    článek
+
 
 [PV030]: http://www.fi.muni.cz/~sojka/PV030/
 [slidy]: http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf
+[paper]: http://dl.acm.org/citation.cfm?id=321249
