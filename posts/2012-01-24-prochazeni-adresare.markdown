@@ -78,7 +78,7 @@ Metodika nic moc, ale nějaká představa se z toho udělat dá.
 
 <table>
 <tr><th></th>           <th>Soubory</th> <th>Adresáře</th> <th>Mix</th></tr>
-<tr><th>hvojitý průchoh</th><th></th><th></th><th></th></tr>
+<tr><th>dvojitý průchod</th><th></th><th></th><th></th></tr>
 <tr><td>`stat()`</td>   <td>0,109</td>   <td>0,106</td>    <td>0.107</td></tr>
 <tr><td>`opendir()`</td><td>0,133</td>   <td>0,177</td>    <td>0.155</td></tr>
 <tr><td>`d_type`</td>   <td>0,043</td>   <td>0,040</td>    <td>0.042</td></tr>
