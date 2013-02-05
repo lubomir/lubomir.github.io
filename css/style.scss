@@ -227,31 +227,3 @@ body:before {
 body:after {
     right: 0;
 }
-
-/* ASSIGNMENTS */
-.hiding-box {
-    border: 1px solid;
-    padding: 0.5em;
-    margin-bottom: 1em;
-    @include box-shadow(2px 2px 1px #ccc);
-    div {
-        display: none;
-    }
-}
-.hiding-box:hover div {
-    display: block;
-}
-.hint {
-    background-color: #d5f5b6;
-    border-color: #4e9a06;
-}
-.hint>b {
-    color: #4e9a06;
-}
-.solution {
-    background-color: #fdef82;
-    border-color: #c4a000;
-}
-.solution>b {
-    color: #c4a000;
-}

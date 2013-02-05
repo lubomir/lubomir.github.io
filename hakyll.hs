@@ -50,17 +50,6 @@ main = hakyll $ do
                 >>> applyTemplateCompiler "templates/posts.html"
                 >>> defaultCompiler
 
-    match "tasks/*" $ compile pageCompiler
-
-    match "tasks.html" $ do
-        route  idRoute
-        create "tasks.html" $
-            constA mempty
-                >>> arr (setField "title" "Programovací úlohy")
-                >>> requireAllA "tasks/*" addTaskList
-                >>> applyTemplateCompiler "templates/tasks.html"
-                >>> defaultCompiler
-
     match "index.html" $ do
         route  idRoute
         create "index.html" $
@@ -121,36 +110,6 @@ addPostList = setFieldA "posts" $
         >>> require "templates/postitem.html" (\p t -> map (applyTemplate t) p)
         >>> arr mconcat
         >>> arr pageBody
-
-sections :: Page String -> Page String
-sections page = foldl doSec page (zip keys parts)
-  where
-    doSec pg (key, text) = setField key (renderHidingBox key text) pg
-    parts = splitAll "<!-- SECTION -->" (pageBody page) ++ repeat ""
-    keys = ["task", "hint", "solution"]
-
-renderHidingBox :: String -> String -> String
-renderHidingBox "task" t = t
-renderHidingBox _ ""     = ""
-renderHidingBox h t = renderHtml $
-    H.div H.! H.class_ cls $ do
-        H.b   $ H.toHtml header
-        H.div $ H.preEscapedString t
-  where
-    cls = H.toValue $ "rounded hiding-box " ++ map toLower h
-    header :: String
-    header = case h of
-                "hint"     -> "Nápověda"
-                "solution" -> "Řešení"
-                _          -> ""
-
-addTaskList :: Compiler (Page String, [Page String]) (Page String)
-addTaskList = setFieldA "tasks" $
-    arr chronological
-        >>> arr (map sections)
-        >>> require "templates/task.html" (\p t -> map (applyTemplate t) p)
-        >>> arr mconcat
-        >>> arr pageBody
 
 makeTagList :: String
             -> [Page String]
