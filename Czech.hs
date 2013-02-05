@@ -1,6 +1,6 @@
 module Czech where
 
-import Hakyll (renderDateFieldWith)
+import Hakyll (dateFieldWith)
 import Data.Char (isAscii)
 import qualified Data.Text as T
 import qualified Data.Text.ICU as ICU
@@ -10,7 +10,7 @@ import System.Locale
 stripDiacritics :: String -> String
 stripDiacritics = T.unpack . T.filter isAscii . ICU.normalize ICU.NFD . T.pack
 
-renderCzechDate field = renderDateFieldWith cs field "%-d. %B %Y" "Neznámé datum"
+czechDateField field = dateFieldWith cs field "%-d. %B %Y"
 
 cs :: TimeLocale
 cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa", "st"),
