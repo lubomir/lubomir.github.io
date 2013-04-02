@@ -5,9 +5,11 @@ tags: pdf, unix, bash, různé
 
 Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy
 dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí
-posouvat nejen směrem dolů, ale i do stran a občas nahoru. Nakonec jsem našel
-relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a
-abych to nezapomněl, tak si to poznamenám.
+posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic
+moc.
+
+Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat
+na menší kousky, a abych to nezapomněl, tak si to poznamenám.
 
 Budeme potřebovat [pdftk], [imagemagick] a [poppler-utils]. V Debianu je
 všechno nachystané v repozitářích.
