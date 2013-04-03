@@ -19,9 +19,10 @@ $background: #E0E4ED;
 }
 
 body {
-    padding: 30px;
+    padding: 1em 2em;
     background-color: $background;
     margin: 0;
+    line-height: 1.6em;
 }
 
 #envelope {
@@ -48,6 +49,7 @@ h2[id]:hover:after {
         weight: normal;
         size: 75%;
     }
+    line-height: 1em;
 }
 
 a {
