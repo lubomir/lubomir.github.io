@@ -56,10 +56,7 @@ main = hakyll $ do
             let indexContent = constField "posts" list `mappend`
                     field "tags" (\_ -> renderTagCloud' tags) `mappend`
                     defaultContext
-
-            getResourceBody
-                >>= applyAsTemplate indexContent
-                >>= applyAsTemplate indexContent >>= defaultCompiler
+            getResourceBody >>= applyAsTemplate indexContent >>= defaultCompiler
 
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
@@ -80,15 +77,14 @@ main = hakyll $ do
   where
     renderTagCloud' :: Tags -> Compiler String
     renderTagCloud' tags =
-        let sorted = sortTagsBy caseInsensitiveTags tags
-        in renderTagCloud 100 200 sorted
+        renderTagCloud 100 200 (sortTagsBy caseInsensitiveTags tags)
 
     postListCompiler :: String -> String -> Item String -> Compiler (Item String)
     postListCompiler title list =
         loadAndApplyTemplate "templates/posts.html" (mconcat
             [ constField "title" title
-            , constField "posts" list,
-            defaultContext])
+            , constField "posts" list
+            , defaultContext])
         >=> defaultCompiler
 
 
@@ -110,11 +106,7 @@ postCtx tags = mconcat
     ]
 
 feedCtx :: Context String
-feedCtx = mconcat
-    [ bodyField "description"
-    , defaultContext
-    ]
-
+feedCtx = bodyField "description" `mappend` defaultContext
 
 postList :: Tags -> Pattern -> ([Item String] -> Compiler [Item String])
          -> Compiler String
