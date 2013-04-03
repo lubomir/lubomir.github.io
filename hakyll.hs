@@ -31,7 +31,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route   $ setExtension "html"
-        compile $ (pandocCompilerWith defaultHakyllReaderOptions myWriterOptions)
+        compile $ pandocCompilerWith defaultHakyllReaderOptions myWriterOptions
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
             >>= defaultCompiler
@@ -79,14 +79,14 @@ main = hakyll $ do
             route   idRoute
             compile $ pandocCompiler >>= defaultCompiler
 
-    match "templates/*" $ compile $ templateCompiler
+    match "templates/*" $ compile templateCompiler
 
     create ["rss.xml"] $ do
         route  idRoute
-        compile $ do
+        compile $
             loadAllSnapshots "posts/*" "content"
                 >>= fmap (take 10) . recentFirst
-                >>= renderAtom (feedConfiguration) feedCtx
+                >>= renderAtom feedConfiguration feedCtx
 
     return ()
 
