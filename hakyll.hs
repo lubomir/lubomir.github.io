@@ -21,8 +21,7 @@ main = hakyll $ do
         route   $ setExtension "html"
         compile $ pandocCompiler
             >>= loadAndApplyTemplate "templates/static.html" defaultContext
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
+            >>= defaultCompiler
 
     match ("favicon.ico" .||. "data/*" .||. "images/*") $ do
         route   idRoute
@@ -35,8 +34,7 @@ main = hakyll $ do
         compile $ (pandocCompilerWith defaultHakyllReaderOptions myWriterOptions)
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
-            >>= loadAndApplyTemplate "templates/default.html" defaultContext
-            >>= relativizeUrls
+            >>= defaultCompiler
 
     create ["posts.html"] $ do
         route  idRoute
@@ -47,8 +45,7 @@ main = hakyll $ do
                         (constField "title" "Všechny texty" `mappend`
                             constField "posts" list `mappend`
                             defaultContext)
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+                >>= defaultCompiler
 
     tagsRules tags $ \tag pattern -> do
         let title = "Příspěvky označené jako " ++ tag
@@ -62,8 +59,7 @@ main = hakyll $ do
                         (constField "title" title `mappend`
                             constField "posts" list `mappend`
                             defaultContext)
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+                >>= defaultCompiler
 
 
     match "index.html" $ do
@@ -76,15 +72,12 @@ main = hakyll $ do
 
             getResourceBody
                 >>= applyAsTemplate indexContent
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+                >>= applyAsTemplate indexContent >>= defaultCompiler
 
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
-            compile $ pandocCompiler
-                >>= loadAndApplyTemplate "templates/default.html" defaultContext
-                >>= relativizeUrls
+            compile $ pandocCompiler >>= defaultCompiler
 
     match "templates/*" $ compile $ templateCompiler
 
@@ -102,6 +95,10 @@ main = hakyll $ do
     renderTagCloud' tags =
         let sorted = sortTagsBy caseInsensitiveTags tags
         in renderTagCloud 100 200 sorted
+
+    defaultCompiler :: Item String -> Compiler (Item String)
+    defaultCompiler x = loadAndApplyTemplate "templates/default.html" defaultContext x
+        >>= relativizeUrls
 
 myWriterOptions :: WriterOptions
 myWriterOptions = defaultHakyllWriterOptions
