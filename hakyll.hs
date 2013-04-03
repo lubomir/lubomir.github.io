@@ -140,4 +140,5 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = stripDiacritics . map toLower . toFilePath
+tagToRoute = stripSpaces . stripDiacritics . map toLower . toFilePath
+  where stripSpaces = map (\c -> if c == ' ' then '-' else c)
