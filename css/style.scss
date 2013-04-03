@@ -229,3 +229,36 @@ body:before {
 body:after {
     right: 0;
 }
+
+@media only screen and (max-device-width:800px) {
+    body {
+        background-color: #fff;
+        padding: 0;
+    }
+    #envelope {
+        max-width: none;
+        margin: 0;
+        padding: 0.8em;
+    }
+    #footer {
+        max-width: none;
+    }
+    .rounded {
+        @include box-shadow(#fff 0 0 0);
+    }
+    h1 {
+        @include text-shadow(#fff 0 0 0);
+    }
+    pre {
+        overflow: scroll;
+    }
+    p.navigation {
+        float: none;
+    }
+    .timeinfo {
+        text-align: left;
+    }
+    body:before, body:after {
+        display: none;
+    }
+}
