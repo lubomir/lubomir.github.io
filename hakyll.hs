@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Monad (forM_)
+import Control.Monad (forM_, (>=>))
 import Data.Char (toLower)
 import Data.Monoid
 import Prelude hiding (id)
@@ -40,27 +40,14 @@ main = hakyll $ do
         route  idRoute
         compile $ do
             list <- postList tags "posts/*" recentFirst
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/posts.html"
-                        (constField "title" "Všechny texty" `mappend`
-                            constField "posts" list `mappend`
-                            defaultContext)
-                >>= defaultCompiler
+            makeItem "" >>= postListCompiler "Všechny texty" list
 
     tagsRules tags $ \tag pattern -> do
         let title = "Příspěvky označené jako " ++ tag
-
-        -- FIXME Copied from posts
         route   $ customRoute tagToRoute `composeRoutes` setExtension "html"
         compile $ do
             list <- postList tags pattern recentFirst
-            makeItem ""
-                >>= loadAndApplyTemplate "templates/posts.html"
-                        (constField "title" title `mappend`
-                            constField "posts" list `mappend`
-                            defaultContext)
-                >>= defaultCompiler
-
+            makeItem "" >>= postListCompiler title list
 
     match "index.html" $ do
         route  idRoute
@@ -95,6 +82,15 @@ main = hakyll $ do
     renderTagCloud' tags =
         let sorted = sortTagsBy caseInsensitiveTags tags
         in renderTagCloud 100 200 sorted
+
+    postListCompiler :: String -> String -> Item String -> Compiler (Item String)
+    postListCompiler title list =
+        loadAndApplyTemplate "templates/posts.html" (mconcat
+            [ constField "title" title
+            , constField "posts" list,
+            defaultContext])
+        >=> defaultCompiler
+
 
     defaultCompiler :: Item String -> Compiler (Item String)
     defaultCompiler x = loadAndApplyTemplate "templates/default.html" defaultContext x
