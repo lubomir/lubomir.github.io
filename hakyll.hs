@@ -53,10 +53,10 @@ main = hakyll $ do
         route  idRoute
         compile $ do
             list <- postList tags "posts/*" $ fmap (take 5) . recentFirst
-            let indexContent = constField "posts" list `mappend`
+            let indexContext = constField "posts" list `mappend`
                     field "tags" (\_ -> renderTagCloud' tags) `mappend`
                     defaultContext
-            getResourceBody >>= applyAsTemplate indexContent >>= defaultCompiler
+            getResourceBody >>= applyAsTemplate indexContext >>= defaultCompiler
 
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
