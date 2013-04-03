@@ -1,14 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-import Control.Arrow
 import Control.Monad (forM_)
 import Data.Char (toLower)
 import Data.Monoid
 import Prelude hiding (id)
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as H
-import Text.Blaze.Renderer.String (renderHtml)
-
 
 import Hakyll
 import Text.Pandoc
