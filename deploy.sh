@@ -2,9 +2,9 @@
 
 set -e
 
-if [ "$1" != "--skip-compilation" ]; then
+if [ "$1" == "--recompile" ]; then
     echo "*** Compiling Hakyll ***"
-    ghc --make hakyll.hs
+    ghc --make hakyll.hs -Wall -O2
 fi
 
 echo "*** Building site ***"
