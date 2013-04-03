@@ -19,7 +19,7 @@ main = hakyll $ do
 
     match "static/*" $ do
         route   $ setExtension "html"
-        compile $ pandocCompiler
+        compile $ myCompiler
             >>= loadAndApplyTemplate "templates/static.html" defaultContext
             >>= defaultCompiler
 
@@ -31,7 +31,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route   $ setExtension "html"
-        compile $ pandocCompilerWithTransform defaultHakyllReaderOptions myWriterOptions czechPandocTransform
+        compile $ myCompiler
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
             >>= defaultCompiler
@@ -61,7 +61,7 @@ main = hakyll $ do
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
-            compile $ pandocCompiler >>= defaultCompiler
+            compile $ myCompiler >>= defaultCompiler
 
     match "templates/*" $ compile templateCompiler
 
@@ -92,10 +92,10 @@ main = hakyll $ do
     defaultCompiler = loadAndApplyTemplate "templates/default.html" defaultContext
         >=> relativizeUrls
 
-myWriterOptions :: WriterOptions
-myWriterOptions = defaultHakyllWriterOptions
-    { writerHtml5 = True
-    }
+myCompiler :: Compiler (Item String)
+myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransform
+  where
+    myWriterOptions = def { writerHtml5 = True }
 
 postCtx :: Tags -> Context String
 postCtx tags = mconcat
