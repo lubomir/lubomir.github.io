@@ -31,7 +31,7 @@ main = hakyll $ do
 
     match "posts/*" $ do
         route   $ setExtension "html"
-        compile $ pandocCompilerWith defaultHakyllReaderOptions myWriterOptions
+        compile $ pandocCompilerWithTransform defaultHakyllReaderOptions myWriterOptions czechPandocTransform
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
             >>= defaultCompiler

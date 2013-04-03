@@ -1,10 +1,14 @@
-module Czech where
+module Czech ( stripDiacritics
+             , czechDateField
+             , czechPandocTransform
+             ) where
 
 import Hakyll (dateFieldWith, Context(..))
-import Data.Char (isAscii)
+import Data.Char (isAscii, toLower)
 import qualified Data.Text as T
 import qualified Data.Text.ICU as ICU
 import System.Locale
+import Text.Pandoc (bottomUp, Pandoc(..), Inline(..))
 
 -- |Remove accents from above letters.
 stripDiacritics :: String -> String
@@ -29,3 +33,19 @@ cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa",
                 , timeFmt = ""
                 , time12Fmt = ""
                 }
+
+conjuctions :: [String]
+conjuctions = ["a", "i", "k", "o", "s", "u", "v", "z"]
+
+nbsp :: String
+nbsp = " "
+
+addNonBreakingSpaces :: [Inline] -> [Inline]
+addNonBreakingSpaces [] = []
+addNonBreakingSpaces (Str s : Space : xs)
+    | map toLower s `elem` conjuctions = Str (s++nbsp) : addNonBreakingSpaces xs
+    | otherwise = Str s : Space : addNonBreakingSpaces xs
+addNonBreakingSpaces (x:xs) = x : addNonBreakingSpaces xs
+
+czechPandocTransform :: Pandoc -> Pandoc
+czechPandocTransform = bottomUp addNonBreakingSpaces
