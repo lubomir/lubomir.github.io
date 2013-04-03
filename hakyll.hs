@@ -93,8 +93,8 @@ main = hakyll $ do
 
 
     defaultCompiler :: Item String -> Compiler (Item String)
-    defaultCompiler x = loadAndApplyTemplate "templates/default.html" defaultContext x
-        >>= relativizeUrls
+    defaultCompiler = loadAndApplyTemplate "templates/default.html" defaultContext
+        >=> relativizeUrls
 
 myWriterOptions :: WriterOptions
 myWriterOptions = defaultHakyllWriterOptions
