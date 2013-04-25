@@ -1,6 +1,6 @@
 ---
 title: Derivací k regulárním výrazům
-tags: haskell, regulární výrazy
+tags: Haskell, regulární výrazy
 ---
 
 V předmětu [PV030] se člověk mimo jiné potká s algoritmy pro práci s
