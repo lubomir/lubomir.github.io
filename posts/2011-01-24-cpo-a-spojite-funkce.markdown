@@ -10,9 +10,9 @@ Order](http://en.wikipedia.org/wiki/Complete_partial_order).
 
 ## Primitivní typy -- příklady
 
-![Unit_⊥_](/images/unitt.png)
+![Unit~⊥~](/images/unitt.png)
 
-![Bool_⊥_](/images/boolt.png)
+![Bool~⊥~](/images/boolt.png)
 
 Značky `tt` a `ff` jsou jednoduše symboly pro pravdivou a nepravdivou hodnotu.
 Další primitivní typ je třeba typ všech celých čísel `Int`.
@@ -40,7 +40,7 @@ Z primitivních typů je možné pomocí operací vytvářet další, bohatší 
 
 Další příklady jsou ve slidech z přednášky na straně 167.
 
-![Bool_⊥_ × Bool_⊥_](/images/bool-x-bool.png)
+![Bool~⊥~ × Bool~⊥~](/images/bool-x-bool.png)
 
 ## Spojitost funkce
 
@@ -51,7 +51,7 @@ Tedy: funkce $f$ je monotonní, pokud pro každé dva prvky jejího definičníh
 oboru platí, že pokud je jeden méně definovaný než jiný, tak potom jejich
 obrazy na tom budou stejně.
 
-Takže například funkce $f$ je monotonní, ale funkce $g$ spojitá není.
+Takže například funkce $f$ je monotonní, ale funkce $g$ monotonní není.
 
     f () = True
     f ⊥ = True
@@ -79,24 +79,24 @@ obrazů jednotlivých prvků řetězce.
 supremum, tak musíme dostat totéž, jako kdybychom postupně zobrazili všechny
 prvky daného řetězce a našli supremum obrazů.
 
-## Všechny Unit_⊥_ → Bool_⊥_
+## Všechny Unit~⊥~ → Bool~⊥~
 
-Zadání: Napište všechny spojité funkce typu Unit_⊥_ → Bool_⊥_. Co je to funkce
-s tímto typem? Takováto funkce musí každé hodnotě z Unit_⊥_ přiřadit něco
-z Bool_⊥_.
+Zadání: Napište všechny spojité funkce typu Unit~⊥~ → Bool~⊥~. Co je to funkce
+s tímto typem? Takováto funkce musí každé hodnotě z Unit~⊥~ přiřadit něco
+z Bool~⊥~.
 
-![Všechny funkce Unit_⊥_ → Bool_⊥_](/images/unit-bool2.png)
+![Všechny funkce Unit~⊥~ → Bool~⊥~](/images/unit-bool2.png)
 
 Tyto funkce by bylo vhodné taky seřadit do diagramu, aby bylo patrné, jak to
 uspořádání na nich funguje. Pro jednoduchost je každou funkci možné zakreslit
 jako diagram ve tvaru definičního oboru, kde se místo původních prvků na stejná
 místa doplní hodnota, na kterou se ten který prvek zobrazí.
 
-![Uspořádání na Unit_⊥_ → Bool_⊥_](/images/unit-bool.png)
+![Uspořádání na Unit~⊥~ → Bool~⊥~](/images/unit-bool.png)
 
 Pro jiný typ funkcí to může dopadnout třeba tak, jako na obrázku níž.
 
-![Bool_⊥_ → Bool_⊥_](/images/bool-bool.png)
+![Bool~⊥~ → Bool~⊥~](/images/bool-bool.png)
 
 ## Striktní funkce
 
