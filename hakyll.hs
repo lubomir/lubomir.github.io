@@ -61,7 +61,7 @@ main = hakyll $ do
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
-            compile $ myCompiler >>= defaultCompiler
+            compile $ myCompiler >>= loadAndApplyTemplate "templates/default.html" defaultContext
 
     match "templates/*" $ compile templateCompiler
 
