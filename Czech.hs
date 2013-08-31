@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 module Czech ( stripDiacritics
              , czechDateField
              , czechPandocTransform
@@ -8,7 +9,9 @@ import Data.Char (isAscii, toLower)
 import qualified Data.Text as T
 import qualified Data.Text.ICU as ICU
 import System.Locale
-import Text.Pandoc (bottomUp, Pandoc(..), Inline(..))
+import Text.Pandoc (bottomUp, Pandoc(..), Inline(..), topDown)
+import Text.Parsec
+import Control.Monad (void)
 
 -- |Remove accents from above letters.
 stripDiacritics :: String -> String
@@ -34,18 +37,81 @@ cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa",
                 , time12Fmt = ""
                 }
 
-conjuctions :: [String]
+conjuctions, dashes :: [String]
 conjuctions = ["a", "i", "k", "o", "s", "u", "v", "z"]
+dashes = ["-", "–", "—"]
 
-nbsp :: String
+isUnit :: String -> Bool
+isUnit u = u `elem` ["g", "dg", "dag", "kg", "ml", "l"]
+
+isNumberOrRange :: String -> Bool
+isNumberOrRange s = case parse numberRange "" s of
+    Left _  -> False
+    Right _ -> True
+
+numberRange, number, dash :: Monad m => ParsecT String () m ()
+numberRange = number >> optional (dash >> number)
+number = many1 digit >> optional (char ',' >> many1 digit)
+dash = void $ choice $ map string dashes
+
+isDash :: String -> Bool
+isDash s = s `elem` dashes
+
+nbsp, thinspace :: String
 nbsp = " "
+--nbsp = "×"
+thinspace = " "
+--thinspace = "÷"
 
-addNonBreakingSpaces :: [Inline] -> [Inline]
-addNonBreakingSpaces [] = []
-addNonBreakingSpaces (Str s : Space : xs)
-    | map toLower s `elem` conjuctions = Str (s++nbsp) : addNonBreakingSpaces xs
-    | otherwise = Str s : Space : addNonBreakingSpaces xs
-addNonBreakingSpaces (x:xs) = x : addNonBreakingSpaces xs
+pass1 :: [Inline] -> [Inline]
+pass1 [] = []
+pass1 (Str "..." : xs) = Str "…" : pass1 xs
+pass1 (Space : Str s : Space : xs)
+    | isDash s = Space : Str "–" : Space : pass1 xs
+    | otherwise = Space : pass1 (Str s : Space : xs)
+pass1 (Str s : Space : Str u : xs)
+    | isNumberOrRange s && isUnit u = Str s : Str thinspace : pass1 (Str u : xs)
+    | map toLower s `elem` conjuctions = Str s : Str nbsp : pass1 (Str u : xs)
+    | otherwise = Str s : pass1 (Space : Str u : xs)
+pass1 (Str s : Space : xs)
+    | map toLower s `elem` conjuctions = Str s : Str nbsp : pass1 xs
+    | otherwise = Str s : pass1 (Space : xs)
+pass1 (x:xs) = x : pass1 xs
 
+replaceQ :: Bool -> String -> (String, Bool)
+replaceQ q [] = ([], q)
+replaceQ q ('"' : xs) = let (s', q') = replaceQ (not q) xs
+                        in (quote ++ s', q')
+  where quote = if q then "”" else "„"
+replaceQ q (x : xs) = let (s, q') = replaceQ q xs
+                      in (x:s, q')
+
+pass2 :: Bool -> [Inline] -> [Inline]
+pass2 _ [] = []
+pass2 q (Str s : xs) = let (s', q') = replaceQ q s
+                       in Str s' : pass2 q' xs
+pass2 q (x:xs) = x : pass2 q xs
+
+pass3 :: Inline -> Inline
+pass3 (Str s')
+  | isNumberOrRange s' = case break (=='-') s' of
+        (s, []) -> Str s
+        (s, _:t) -> Str $ s ++ "–" ++ t
+  | otherwise = Str s'
+pass3 x = x
+
+-- | Helper filter that adds smart typography to Czech texts.
+--
+--   * adds nonbreakable spaces after single letter conjunctions
+--     and prepositions
+--
+--   * adds thin nonbreakable spaces between number and unit
+--
+--   * converts - to – if surrounded by spaces or in number ranges
+--
+--   * converts ... to …
+--
+--   * creates proper Czech quotes
+--
 czechPandocTransform :: Pandoc -> Pandoc
-czechPandocTransform = bottomUp addNonBreakingSpaces
+czechPandocTransform = bottomUp pass3 . topDown (pass2 False . pass1)
