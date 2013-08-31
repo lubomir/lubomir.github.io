@@ -4,6 +4,8 @@ module Czech ( stripDiacritics
              , czechPandocTransform
              ) where
 
+import Control.Arrow (first)
+import Control.Applicative ((<$>), (<*>))
 import Hakyll (dateFieldWith, Context(..))
 import Data.Char (isAscii, toLower)
 import qualified Data.Text as T
@@ -11,7 +13,6 @@ import qualified Data.Text.ICU as ICU
 import System.Locale
 import Text.Pandoc (Pandoc(..), Inline(..), topDown)
 import Text.Parsec
-import Control.Monad (void)
 
 -- |Remove accents from above letters.
 stripDiacritics :: String -> String
@@ -44,15 +45,20 @@ dashes = ["-", "–", "—"]
 isUnit :: String -> Bool
 isUnit u = u `elem` ["g", "dg", "dag", "kg", "ml", "l"]
 
+fixNumberOrRange :: String -> String
+fixNumberOrRange s = case parse numberRange "" s of
+    Left _ -> s
+    Right n -> n
+
 isNumberOrRange :: String -> Bool
 isNumberOrRange s = case parse numberRange "" s of
     Left _  -> False
     Right _ -> True
 
-numberRange, number, dash :: Monad m => ParsecT String () m ()
-numberRange = number >> optional (dash >> number)
-number = many1 digit >> optional (char ',' >> many1 digit)
-dash = void $ choice $ map string dashes
+numberRange, number, dash :: Monad m => ParsecT String () m String
+numberRange = (++) <$> number <*> option "" ((++) <$> dash <*> number)
+number = (++) <$> many1 digit <*> option "" ((:) <$> char ',' <*> many1 digit)
+dash = choice (map string dashes) >> return "–"
 
 isDash :: String -> Bool
 isDash s = s `elem` dashes
@@ -80,11 +86,9 @@ pass1 (x:xs) = x : pass1 xs
 
 replaceQ :: Bool -> String -> (String, Bool)
 replaceQ q [] = ([], q)
-replaceQ q ('"' : xs) = let (s', q') = replaceQ (not q) xs
-                        in (quote ++ s', q')
+replaceQ q ('"' : xs) = first (quote++) $ replaceQ (not q) xs
   where quote = if q then "”" else "„"
-replaceQ q (x : xs) = let (s, q') = replaceQ q xs
-                      in (x:s, q')
+replaceQ q (x : xs) = first (x:) $ replaceQ q xs
 
 pass2 :: Bool -> [Inline] -> [Inline]
 pass2 _ [] = []
@@ -94,11 +98,7 @@ pass2 q (x:xs) = x : pass2 q xs
 
 pass3 :: [Inline] -> [Inline]
 pass3 [] = []
-pass3 (Str s' : xs)
-  | isNumberOrRange s' = case break (=='-') s' of
-        (s, []) -> Str s : pass3 xs
-        (s, _:t) -> (Str $ s ++ "–" ++ t) : pass3 xs
-  | otherwise = Str s' : pass3 xs
+pass3 (Str s : xs) = Str (fixNumberOrRange s) : pass3 xs
 pass3 (x:xs) = x : pass3 xs
 
 -- | Helper filter that adds smart typography to Czech texts.
