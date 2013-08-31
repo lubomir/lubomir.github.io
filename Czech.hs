@@ -9,7 +9,7 @@ import Data.Char (isAscii, toLower)
 import qualified Data.Text as T
 import qualified Data.Text.ICU as ICU
 import System.Locale
-import Text.Pandoc (bottomUp, Pandoc(..), Inline(..), topDown)
+import Text.Pandoc (Pandoc(..), Inline(..), topDown)
 import Text.Parsec
 import Control.Monad (void)
 
@@ -92,13 +92,14 @@ pass2 q (Str s : xs) = let (s', q') = replaceQ q s
                        in Str s' : pass2 q' xs
 pass2 q (x:xs) = x : pass2 q xs
 
-pass3 :: Inline -> Inline
-pass3 (Str s')
+pass3 :: [Inline] -> [Inline]
+pass3 [] = []
+pass3 (Str s' : xs)
   | isNumberOrRange s' = case break (=='-') s' of
-        (s, []) -> Str s
-        (s, _:t) -> Str $ s ++ "–" ++ t
-  | otherwise = Str s'
-pass3 x = x
+        (s, []) -> Str s : pass3 xs
+        (s, _:t) -> (Str $ s ++ "–" ++ t) : pass3 xs
+  | otherwise = Str s' : pass3 xs
+pass3 (x:xs) = x : pass3 xs
 
 -- | Helper filter that adds smart typography to Czech texts.
 --
@@ -114,4 +115,4 @@ pass3 x = x
 --   * creates proper Czech quotes
 --
 czechPandocTransform :: Pandoc -> Pandoc
-czechPandocTransform = bottomUp pass3 . topDown (pass2 False . pass1)
+czechPandocTransform = topDown (pass2 False . pass3 . pass1)
