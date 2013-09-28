@@ -4,11 +4,12 @@ set -e
 
 if [ "$1" == "--recompile" ]; then
     echo "*** Compiling Hakyll ***"
-    ghc --make hakyll.hs -Wall -O2
+    cabal configure
+    cabal build
 fi
 
 echo "*** Building site ***"
-./hakyll rebuild
+./dist/build/site/site rebuild
 
 if ! grep -q '<span class="dt">' _site/posts/2010-12-19-const.html; then
     echo " Missing syntax highlighting, exiting ..."

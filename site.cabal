@@ -11,6 +11,7 @@ cabal-version:       >=1.8
 executable site
   main-is:             hakyll.hs
   -- other-modules:       Czech.hs
+  ghc-options:         -Wall
   build-depends:       base ==4.6.*
                      , hakyll ==4.3.*
                      , text ==0.11.*
