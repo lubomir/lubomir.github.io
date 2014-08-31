@@ -1,7 +1,6 @@
 .cabal-sandbox
 _cache
 dist
-hakyll
 *.hi
 *.o
 _site
