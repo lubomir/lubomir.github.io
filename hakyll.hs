@@ -23,7 +23,7 @@ main = hakyll $ do
             >>= loadAndApplyTemplate "templates/static.html" defaultContext
             >>= defaultCompiler
 
-    match ("favicon.ico" .||. "data/*" .||. "images/*") $ do
+    match ("favicon.ico" .||. "data/*" .||. "images/**") $ do
         route   idRoute
         compile copyFileCompiler
 
