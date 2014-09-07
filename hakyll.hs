@@ -123,13 +123,6 @@ main = hakyll $ do
 
     match "templates/*" $ compile templateCompiler
 
-    create ["rss.xml"] $ do
-        route  idRoute
-        compile $
-            loadAllSnapshots "posts/*" "content"
-                >>= fmap (take 10) . recentFirst
-                >>= renderAtom feedConfiguration feedCtx
-
     return ()
 
   where
