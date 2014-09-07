@@ -66,6 +66,13 @@ subsite bc@(BlogConfig {..}) = do
             list <- postList bc tags pattern recentFirst
             makeItem "" >>= postListCompiler title list
 
+    create [fromFilePath $ langPrefix </> "rss.xml"] $ do
+        route  idRoute
+        compile $
+            loadAllSnapshots postPattern "content"
+                >>= fmap (take 10) . recentFirst
+                >>= renderAtom feedConfiguration feedCtx
+
     return tags
 
 getRecentPosts :: BlogConfig -> Tags -> Compiler String
