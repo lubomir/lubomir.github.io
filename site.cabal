@@ -19,3 +19,4 @@ executable site
                      , old-locale ==1.0.*
                      , pandoc ==1.11.*
                      , parsec ==3.1.*
+                     , filepath ==1.3.*

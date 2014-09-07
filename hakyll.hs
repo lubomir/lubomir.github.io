@@ -1,21 +1,88 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, RecordWildCards, ExistentialQuantification #-}
 
 import Control.Monad (forM_, (>=>))
 import Data.Char (toLower)
 import Data.Monoid
-import Prelude hiding (id)
+import Prelude
+import System.FilePath
 
 import Hakyll
 import Text.Pandoc
 import Czech
 
+data BlogConfig = BlogConfig { langPrefix :: String
+                             , listHeader :: String
+                             , tagsHeader :: String
+                             , postPattern :: Pattern
+                             , dateFormatter :: String -> Context String
+                             , backToMain :: String
+                             , taggedAs :: String
+                             }
+
+czechConfig :: BlogConfig
+czechConfig = BlogConfig "cs"
+                         "Všechny texty"
+                         "Příspěvky označené jako "
+                         "posts/cs/*"
+                         czechDateField
+                         "zpět na hlavní stránku"
+                         "Označeno jako"
+
+englishConfig :: BlogConfig
+englishConfig = BlogConfig "en"
+                           "All posts"
+                           "Posts tagged "
+                           "posts/en/*"
+                           (\f -> dateField f "%B %-d, %Y")
+                           "back to main page"
+                           "Tagged as"
+
+postRoute :: BlogConfig -> Routes
+postRoute (BlogConfig { langPrefix = lp }) = customRoute $
+    (`replaceExtension` "html") . (lp </>) . takeFileName . toFilePath
+
+subsite :: BlogConfig -> Rules Tags
+subsite bc@(BlogConfig {..}) = do
+    tags <- buildTags postPattern (fromCapture $ fromGlob $ langPrefix </> "tags/*.html")
+
+    match postPattern $ do
+        route   $ postRoute bc
+        compile $ myCompiler
+            >>= saveSnapshot "content"
+            >>= loadAndApplyTemplate (fromFilePath $ "templates/post.html")
+                                     (postCtx bc tags)
+            >>= defaultCompiler
+
+    create [fromFilePath $ langPrefix </> "posts.html"] $ do
+        route  idRoute
+        compile $ do
+            list <- postList bc tags postPattern recentFirst
+            makeItem "" >>= postListCompiler listHeader list
+
+    tagsRules tags $ \tag pattern -> do
+        let title = tagsHeader ++ tag
+        route $ customRoute tagToRoute `composeRoutes` setExtension "html"
+        compile $ do
+            list <- postList bc tags pattern recentFirst
+            makeItem "" >>= postListCompiler title list
+
+    return tags
+
+getRecentPosts :: BlogConfig -> Tags -> Compiler String
+getRecentPosts bc tags =
+    postList bc tags (postPattern bc) $ fmap (take 5) . recentFirst
+
 main :: IO ()
 main = hakyll $ do
 
-    match "css/*" $ do
+    match "css/*.scss" $ do
         route   $ setExtension "css"
         let sass = unixFilter "sass" ["-s", "-C", "-t", "compressed", "--scss"]
         compile $ getResourceString >>= withItemBody sass
+
+    match "css/*.css" $ do
+        route idRoute
+        compile compressCssCompiler
 
     match "static/*" $ do
         route   $ setExtension "html"
@@ -27,34 +94,18 @@ main = hakyll $ do
         route   idRoute
         compile copyFileCompiler
 
-    tags <- buildTags "posts/*" (fromCapture "tags/*.html")
-
-    match "posts/*" $ do
-        route   $ setExtension "html"
-        compile $ myCompiler
-            >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate "templates/post.html" (postCtx tags)
-            >>= defaultCompiler
-
-    create ["posts.html"] $ do
-        route  idRoute
-        compile $ do
-            list <- postList tags "posts/*" recentFirst
-            makeItem "" >>= postListCompiler "Všechny texty" list
-
-    tagsRules tags $ \tag pattern -> do
-        let title = "Příspěvky označené jako " ++ tag
-        route   $ customRoute tagToRoute `composeRoutes` setExtension "html"
-        compile $ do
-            list <- postList tags pattern recentFirst
-            makeItem "" >>= postListCompiler title list
+    cstags <- subsite czechConfig
+    entags <- subsite englishConfig
 
     match "index.html" $ do
         route  idRoute
         compile $ do
-            list <- postList tags "posts/*" $ fmap (take 5) . recentFirst
-            let indexContext = constField "posts" list `mappend`
-                    field "tags" (\_ -> renderTagCloud' tags) `mappend`
+            cslist <- getRecentPosts czechConfig cstags
+            enlist <- getRecentPosts englishConfig entags
+            let indexContext = constField "csposts" cslist `mappend`
+                    constField "enposts" enlist `mappend`
+                    field "cstags" (\_ -> renderTagCloud' cstags) `mappend`
+                    field "entags" (\_ -> renderTagCloud' entags) `mappend`
                     defaultContext
             getResourceBody >>= applyAsTemplate indexContext >>= defaultCompiler
 
@@ -79,41 +130,43 @@ main = hakyll $ do
     renderTagCloud' tags =
         renderTagCloud 100 200 (sortTagsBy caseInsensitiveTags tags)
 
-    postListCompiler :: String -> String -> Item String -> Compiler (Item String)
-    postListCompiler title list =
-        loadAndApplyTemplate "templates/posts.html" (mconcat
-            [ constField "title" title
-            , constField "posts" list
-            , defaultContext])
-        >=> defaultCompiler
+postListCompiler :: String -> String -> Item String -> Compiler (Item String)
+postListCompiler title list =
+    loadAndApplyTemplate "templates/posts.html" (mconcat
+        [ constField "title" title
+        , constField "posts" list
+        , defaultContext])
+    >=> defaultCompiler
 
 
-    defaultCompiler :: Item String -> Compiler (Item String)
-    defaultCompiler = loadAndApplyTemplate "templates/default.html" defaultContext
-        >=> relativizeUrls
+defaultCompiler :: Item String -> Compiler (Item String)
+defaultCompiler = loadAndApplyTemplate "templates/default.html" defaultContext
+    >=> relativizeUrls
 
 myCompiler :: Compiler (Item String)
 myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransform
   where
     myWriterOptions = def { writerHtml5 = True }
 
-postCtx :: Tags -> Context String
-postCtx tags = mconcat
+postCtx :: BlogConfig -> Tags -> Context String
+postCtx bc tags = mconcat
     [ modificationTimeField "mtime" "%U"
-    , czechDateField "date"
+    , dateFormatter bc "date"
     , tagsField "tags" tags
+    , constField "taggedAs" (taggedAs bc)
+    , constField "backToMain" (backToMain bc)
     , defaultContext
     ]
 
 feedCtx :: Context String
 feedCtx = bodyField "description" `mappend` defaultContext
 
-postList :: Tags -> Pattern -> ([Item String] -> Compiler [Item String])
-         -> Compiler String
-postList tags pattern preprocess' = do
+postList :: BlogConfig -> Tags -> Pattern -> ([Item String]
+         -> Compiler [Item String]) -> Compiler String
+postList bc tags pattern preprocess' = do
     postItemTpl <- loadBody "templates/postitem.html"
     posts       <- preprocess' =<< loadAll pattern
-    applyTemplateList postItemTpl (postCtx tags) posts
+    applyTemplateList postItemTpl (postCtx bc tags) posts
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration

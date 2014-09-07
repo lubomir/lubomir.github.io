@@ -3,8 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link rel="stylesheet" type="text/css" href="/css/print.css" media="print">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="/rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="/favicon.ico">
     <title>$title$</title>
@@ -12,19 +11,21 @@
 
   <body id="top">
 
-    <div id="envelope" class="rounded">
+    <div class="container">
       $body$
-    </div>
+    </div><!-- .container -->
 
-    <ul id="footer" class="rounded navigation">
-      <li><a href="/">Úvod</a></li>
-      <li><a href="#top" data-icon="↑">Nahoru</a></li>
-      <li><a href="/static/code.html">Programy</a></li>
-      <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Napište mi</a></li>
-      <li class="license"><a href="http://creativecommons.org/licenses/by/3.0/">
-        <img src="/images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
-      </li>
-    </ul>
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="/">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li><a href="/static/code.html">Code</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Contact me</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/3.0/">
+            <img src="/images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
 
     <script type="text/javascript">
         var _gaq = _gaq || [];

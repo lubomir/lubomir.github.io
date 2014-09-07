@@ -2,25 +2,40 @@
 title: Index of ~xsedlar3
 ---
 
-<h1 class="mainheader">$title$</h1>
+<h1 class="page-header">$title$</h1>
 
-<h2>Nedávné příspěvky</h2>
-<ul>
-  $posts$
-</ul>
+<div class="row">
+  <div class="col-sm-6">
+    <h2>Recent posts</h2>
+    <ul>
+      $enposts$
+    </ul>
 
-<ul class="navigation">
-  <li><a href="/rss.xml"><img src="/images/feed-icon-14x14.png" alt="RSS" width="14"></a></li>
-  <li><a href="/posts.html">Všechny texty</a></li>
-</ul>
+    <ul class="navigation">
+      <li><a href="/rss.xml"><img src="/images/feed-icon-14x14.png" alt="RSS" width="14"></a></li>
+      <li><a href="/en/posts.html">All posts</a></li>
+    </ul>
 
-<h2>Štítky</h2>
-<div class="tagcloud">
-  $tags$
-</div>
+    <h2>Tags</h2>
+    <div class="tagcloud">
+      $entags$
+    </div>
+  </div>
 
-<h2>Kontakt</h2>
+  <div class="col-sm-6">
+    <h2>Nedávné příspěvky</h2>
+    <ul>
+      $csposts$
+    </ul>
 
-<p>Používám školní e-mail <code>lsedlar@mail.muni.cz</code>. Fingerprint <a
-    href="data/public-key.asc">mého klíče PGP</a> je <code>F640 81CA BF7E 02E9
-    1C0C 3FC3 54CC 0A57 D702 431B</code>.</p>
+    <ul class="navigation">
+      <li><a href="/rss.xml"><img src="/images/feed-icon-14x14.png" alt="RSS" width="14"></a></li>
+      <li><a href="/cs/posts.html">Všechny texty</a></li>
+    </ul>
+
+    <h2>Štítky</h2>
+    <div class="tagcloud">
+      $cstags$
+    </div>
+  </div>
+</div><!-- .row -->
