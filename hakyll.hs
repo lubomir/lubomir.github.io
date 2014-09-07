@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, RecordWildCards, ExistentialQuantification #-}
+{-# LANGUAGE OverloadedStrings, RecordWildCards #-}
 
 import Control.Monad (forM_, (>=>))
 import Data.Char (toLower)
