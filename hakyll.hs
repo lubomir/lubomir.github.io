@@ -33,7 +33,7 @@ englishConfig = BlogConfig "en"
                            "All posts"
                            "Posts tagged "
                            "posts/en/*"
-                           (\f -> dateField f "%B %-d, %Y")
+                           (`dateField` "%B %-d, %Y")
                            "back to main page"
                            "Tagged as"
 
@@ -49,7 +49,7 @@ subsite bc@(BlogConfig {..}) = do
         route   $ postRoute bc
         compile $ myCompiler
             >>= saveSnapshot "content"
-            >>= loadAndApplyTemplate (fromFilePath $ "templates/post.html")
+            >>= loadAndApplyTemplate (fromFilePath "templates/post.html")
                                      (postCtx bc tags)
             >>= defaultCompiler
 
