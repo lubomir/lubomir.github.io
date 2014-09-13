@@ -74,7 +74,7 @@ table {
   }
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid #999 !important;
     page-break-inside: avoid;
   }
   thead {
@@ -106,6 +106,12 @@ table {
   }
   .table {
     border-collapse: collapse !important;
+  }
+  .post {
+    font-size: 12px !important;
+  }
+  .metainfo, footer {
+    display: none;
   }
 }
 
