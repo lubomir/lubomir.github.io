@@ -101,12 +101,6 @@ main = hakyll $ do
         route idRoute
         compile compressCssCompiler
 
-    match "static/*" $ do
-        route   $ setExtension "html"
-        compile $ myCompiler
-            >>= loadAndApplyTemplate "templates/static.html" defaultContext
-            >>= defaultCompiler
-
     match ("favicon.ico" .||. "data/*" .||. "images/**") $ do
         route   idRoute
         compile copyFileCompiler
