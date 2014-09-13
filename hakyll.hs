@@ -61,15 +61,24 @@ subsite bc@(BlogConfig {..}) = do
 
     tagsRules tags $ \tag pattern -> do
         let title = tagsHeader ++ tag
+        let fConf = feedConfiguration {
+            feedTitle = feedTitle feedConfiguration ++ " – " ++ title
+        }
+
         route $ customRoute tagToRoute `composeRoutes` setExtension "html"
         compile $ do
             list <- postList bc tags pattern recentFirst
             makeItem "" >>= postListCompiler title list
 
+        version "rss" $ do
+            route $ customRoute tagToRoute `composeRoutes` setExtension "xml"
+            compile $ loadAllSnapshots pattern "content"
+                    >>= fmap (take 10) . recentFirst
+                    >>= renderAtom fConf feedCtx
+
     create [fromFilePath $ langPrefix </> "rss.xml"] $ do
         route  idRoute
-        compile $
-            loadAllSnapshots postPattern "content"
+        compile $ loadAllSnapshots postPattern "content"
                 >>= fmap (take 10) . recentFirst
                 >>= renderAtom feedConfiguration feedCtx
 
