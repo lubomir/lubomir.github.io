@@ -57,26 +57,27 @@ subsite bc@(BlogConfig {..}) = do
         route  idRoute
         compile $ do
             list <- postList bc tags postPattern recentFirst
-            makeItem "" >>= postListCompiler listHeader list
+            makeItem "" >>= postListCompiler listHeader list "posts"
 
     tagsRules tags $ \tag pattern -> do
         let title = tagsHeader ++ tag
         let fConf = feedConfiguration {
             feedTitle = feedTitle feedConfiguration ++ " – " ++ title
         }
+        let fRoute = tagToRoute' tag
 
         route $ customRoute tagToRoute `composeRoutes` setExtension "html"
         compile $ do
             list <- postList bc tags pattern recentFirst
-            makeItem "" >>= postListCompiler title list
+            makeItem "" >>= postListCompiler title list fRoute
 
-        version "rss" $ do
-            route $ customRoute tagToRoute `composeRoutes` setExtension "xml"
+        version "atom" $ do
+            route $ customRoute tagToRoute `composeRoutes` setExtension "atom"
             compile $ loadAllSnapshots pattern "content"
                     >>= fmap (take 10) . recentFirst
                     >>= renderAtom fConf feedCtx
 
-    create [fromFilePath $ langPrefix </> "rss.xml"] $ do
+    create [fromFilePath $ langPrefix </> "posts.atom"] $ do
         route  idRoute
         compile $ loadAllSnapshots postPattern "content"
                 >>= fmap (take 10) . recentFirst
@@ -139,12 +140,13 @@ main = hakyll $ do
     renderTagCloud' tags =
         renderTagCloud 100 200 (sortTagsBy caseInsensitiveTags tags)
 
-postListCompiler :: String -> String -> Item String -> Compiler (Item String)
-postListCompiler title list =
+postListCompiler :: String -> String -> String -> Item String -> Compiler (Item String)
+postListCompiler title list feed =
     loadAndApplyTemplate "templates/posts.html" (mconcat
         [ constField "title" title
         , constField "posts" list
-        , defaultContext])
+        , defaultContext
+        , constField "feed" feed])
     >=> defaultCompiler
 
 
@@ -187,5 +189,8 @@ feedConfiguration = FeedConfiguration
     }
 
 tagToRoute :: Identifier -> FilePath
-tagToRoute = stripSpaces . stripDiacritics . map toLower . toFilePath
+tagToRoute = tagToRoute' . toFilePath
+
+tagToRoute' :: String -> String
+tagToRoute' = stripSpaces . stripDiacritics . map toLower
   where stripSpaces = map (\c -> if c == ' ' then '-' else c)
