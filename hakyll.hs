@@ -92,11 +92,6 @@ getRecentPosts bc tags =
 main :: IO ()
 main = hakyll $ do
 
-    match "css/*.scss" $ do
-        route   $ setExtension "css"
-        let sass = unixFilter "sass" ["-s", "-C", "-t", "compressed", "--scss"]
-        compile $ getResourceString >>= withItemBody sass
-
     match "css/*.css" $ do
         route idRoute
         compile compressCssCompiler
