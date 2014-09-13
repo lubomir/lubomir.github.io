@@ -67,6 +67,7 @@ Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se
 nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.
 
 Rozpoznávání pomocí `d_type` je nejjednodušší, ale opět má nevýhody:
+
  + nemusí existovat (pozná se podle makra `_DIRENT_HAVE_D_TYPE`
  + i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu
    `DT_UNKNOWN` a tedy je potřeba se s tím vyrovnat
