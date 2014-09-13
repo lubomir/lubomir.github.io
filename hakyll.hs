@@ -57,7 +57,7 @@ subsite bc@(BlogConfig {..}) = do
         route  idRoute
         compile $ do
             list <- postList bc tags postPattern recentFirst
-            makeItem "" >>= postListCompiler listHeader list "posts"
+            makeItem "" >>= postListCompiler bc listHeader list "posts"
 
     tagsRules tags $ \tag pattern -> do
         let title = tagsHeader ++ tag
@@ -69,7 +69,7 @@ subsite bc@(BlogConfig {..}) = do
         route $ customRoute tagToRoute `composeRoutes` setExtension "html"
         compile $ do
             list <- postList bc tags pattern recentFirst
-            makeItem "" >>= postListCompiler title list fRoute
+            makeItem "" >>= postListCompiler bc title list fRoute
 
         version "atom" $ do
             route $ customRoute tagToRoute `composeRoutes` setExtension "atom"
@@ -140,13 +140,14 @@ main = hakyll $ do
     renderTagCloud' tags =
         renderTagCloud 100 200 (sortTagsBy caseInsensitiveTags tags)
 
-postListCompiler :: String -> String -> String -> Item String -> Compiler (Item String)
-postListCompiler title list feed =
+postListCompiler :: BlogConfig -> String -> String -> String -> Item String -> Compiler (Item String)
+postListCompiler bc title list feed =
     loadAndApplyTemplate "templates/posts.html" (mconcat
         [ constField "title" title
         , constField "posts" list
         , defaultContext
-        , constField "feed" feed])
+        , constField "feed" feed
+        , constField "backToMain" (backToMain bc)])
     >=> defaultCompiler
 
 
