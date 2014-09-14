@@ -20,6 +20,7 @@ data BlogConfig = BlogConfig { langPrefix :: String
                              , homeLink :: String
                              , topLink :: String
                              , contactLink :: String
+                             , licensedAs :: String
                              }
 
 mkContext :: BlogConfig -> Context String
@@ -32,6 +33,7 @@ mkContext (BlogConfig {..}) =
             , constField "homeLink" homeLink
             , constField "topLink" topLink
             , constField "contactLink" contactLink
+            , constField "licensedAs" licensedAs
             , defaultContext
             ]
 
@@ -46,6 +48,7 @@ czechConfig = BlogConfig "cs"
                          "Domů"
                          "Nahoru"
                          "Kontakt"
+                         "Licencováno jako Creative Commons Attribution"
 
 englishConfig :: BlogConfig
 englishConfig = BlogConfig "en"
@@ -58,6 +61,7 @@ englishConfig = BlogConfig "en"
                            "Home"
                            "Back to top"
                            "Contact me"
+                           "Licensed under Creative Commons Attribution"
 
 postRoute :: BlogConfig -> Routes
 postRoute (BlogConfig { langPrefix = lp }) = customRoute $
