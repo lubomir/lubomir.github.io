@@ -1,0 +1,31 @@
+language: haskell
+ghc: 7.8.2
+branches:
+  only:
+    - source
+install:
+- cabal sandbox init
+- cabal install pandoc -fno-https
+- cabal install hakyll -fno-watchserver -fno-previewserver -fno-checkexternal
+- cabal install --only-dependencies
+- cabal configure --disable-library-profiling --disable-tests --disable-library-coverage
+  --disable-benchmarks --disable-split-objs
+before_script:
+- git config --global user.email "$GH_EMAIL"
+- git config --global user.name "$GH_NAME"
+- cd _site
+- git checkout master
+- git pull origin master
+- cd ..
+script: cabal run -j build
+after_script:
+- cd _site
+- export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
+- git remote add github https://${GH_TOKEN}@${REMOTE}
+- git checkout -b master
+- git add --all
+- git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
+- git push -f github master:master | grep -v http
+env:
+  global:
+    secure: ZP0lLqds3bXOrlZ97K3cdx6/wgNKxcXDAtYL8KRE+nJnooqx60B/b7HMG7LSkWMf42ddqbkvJe/d46cw3+Mc5gl3QT0SL6TpyY8QoDW6hH7cdNWzfgcPuqFpgz7Q2ZT+WDbrT5V2TLZagXcNx42H1k2uVsBA+bFdZfylmjsKCr0=
