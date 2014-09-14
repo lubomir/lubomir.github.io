@@ -19,39 +19,39 @@
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
 <p>Společným znakem oken, která mají fixní velikost, je nastavení minimální a maximální velikosti okna na stejnou hodnotu. Toto nastavení je v <code>WM_NORMAL_HINTS</code> a dá se zjistit třeba přes <code>xprop</code>. Toto pole má typ <code>XSizeHints</code> a nejpřesnější popis, který jsem našel, vypadá takto:</p>
-<pre class="c"><code>typedef struct {
-    long flags;                /* marks which fields in this
-                                  structure are defined */
-    int x, y;                  /* Obsolete */
-    int width, height;         /* Obsolete */
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span> {
+    long flags;                <span class="co">/* marks which fields in this</span>
+<span class="co">                                  structure are defined */</span>
+    int x, y;                  <span class="co">/* Obsolete */</span>
+    int width, height;         <span class="co">/* Obsolete */</span>
     int min_width, min_height;
     int max_width, max_height;
     int width_inc, height_inc;
     struct {
-           int x;              /* numerator */
-           int y;              /* denominator */
+           <span class="dt">int</span> x;              <span class="co">/* numerator */</span>
+           <span class="dt">int</span> y;              <span class="co">/* denominator */</span>
     } min_aspect, max_aspect;
     int base_width, base_height;
     int win_gravity;
-    /* this structure may be extended in the future */
+    <span class="co">/* this structure may be extended in the future */</span>
 } XSizeHints;</code></pre>
 <p>To jistě není žádný zázrak, ale už se s tím dá něco dělat. Zajímavé hodnoty jsou ty s prefixem <code>min_</code> a <code>max_</code>. Pokud jsou nastavené na jinou hodnotu než 0 a zároveň se rovnají odpovídající si hodnoty, okno má zřejmě nastavenou fixní velikost.</p>
-<pre class="haskell"><code>isFixed :: [CLong] -&gt; Bool
-isFixed h = minWidth h == maxWidth h
-         &amp;&amp; minHeight h == maxHeight h
-         &amp;&amp; all (&gt;0) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isFixed ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+isFixed h <span class="fu">=</span> minWidth h <span class="fu">==</span> maxWidth h
+         <span class="fu">&amp;&amp;</span> minHeight h <span class="fu">==</span> maxHeight h
+         <span class="fu">&amp;&amp;</span> all (<span class="fu">&gt;</span><span class="dv">0</span>) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre>
 <p>V modulu <code>XMonad.Util.WindowProperties</code> je k dispozici funkce <code>getProp32s :: String -&gt; Window -&gt; X (Maybe [CLong])</code>, s jejíž pomocí už se dá napsat potřebná funkce pro manage hook. Definice typu <code>CLong</code> je v modulu <code>Foreign.C.Types</code>.</p>
-<pre class="haskell"><code>isNonResizable :: Query Bool
-isNonResizable = ask &gt;&gt;= \w -&gt; liftX $ do
-    atom &lt;- getProp32s &quot;WM_NORMAL_HINTS&quot; w
-    return $ case atom of
-        Just hints  -&gt; hasFixedSize hints
-        Nothing     -&gt; False</code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isNonResizable ::</span> <span class="dt">Query</span> <span class="dt">Bool</span>
+isNonResizable <span class="fu">=</span> ask <span class="fu">&gt;&gt;=</span> \w <span class="ot">-&gt;</span> liftX <span class="fu">$</span> <span class="kw">do</span>
+    atom <span class="ot">&lt;-</span> getProp32s <span class="st">&quot;WM_NORMAL_HINTS&quot;</span> w
+    return <span class="fu">$</span> <span class="kw">case</span> atom <span class="kw">of</span>
+        <span class="dt">Just</span> hints  <span class="ot">-&gt;</span> hasFixedSize hints
+        <span class="dt">Nothing</span>     <span class="ot">-&gt;</span> <span class="dt">False</span></code></pre>
 <p>Poslední chybějící kus jsou funkce na vrácení požadovaných rozměrů. Vlastně jde jenom o čitelnější zápisy vytažení příslušné hodnoty ze seznamu:</p>
-<pre class="haskell"><code>minWidth  = (!! 5) :: [CLong] -&gt; CLong
-minHeight = (!! 6) :: [CLong] -&gt; CLong
-maxWidth  = (!! 7) :: [CLong] -&gt; CLong
-maxHeight = (!! 8) :: [CLong] -&gt; CLong</code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">minWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+minHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">6</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">7</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre>
 <p>A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem nepozoroval. <a href="/data/HandleFixedWindows.hs">Kompletní soubor</a> stačí nakopírovat do <code>~/.xmonad/lib/</code>, naimportovat do konfiguračního souboru a použít.</p>]]></summary>
 </entry>
 

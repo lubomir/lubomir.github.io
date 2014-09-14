@@ -19,27 +19,27 @@
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
 <p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
-<pre class="bash"><code>for i in $(seq 1 30000); do
-    touch bench1/file-$i
-    mkdir bench2/dir-$i
-done
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
+    <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
+<span class="kw">done</span>
 
-for i in $(seq 1 15000); do
-    touch bench3/$(mkpasswd &quot;file-$i&quot; | sed &quot;s@/@_@g&quot;)
-    mkdir bench3/$(mkpasswd &quot;dir-$i&quot; | sed &quot;s@/@_@g&quot;)
-done</code></pre>
+<span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+    <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+<span class="kw">done</span></code></pre>
 <h2 id="metody">Metody</h2>
 <p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
 <p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
 <p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
-<pre class="c"><code>int is_dir(const char *path)
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
 {
-    struct DIR *dir = opendir(path);
-    if (dir == NULL) {
-        return 0;
-    } else {
+    <span class="kw">struct</span> DIR *dir = opendir(path);
+    <span class="kw">if</span> (dir == NULL) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    } <span class="kw">else</span> {
         closedir(dir);
-        return 1;
+        <span class="kw">return</span> <span class="dv">1</span>;
     }
 }</code></pre>
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
@@ -237,25 +237,25 @@ Seznam
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
-<pre class="c"><code>#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
 
-int main (void)
+<span class="dt">int</span> main (<span class="dt">void</span>)
 {
-  const char *       str1 = (char*) malloc(10*sizeof(char));
-  char * const       str2 = (char*) malloc(10*sizeof(char));
-  const char * const str3 = (char*) malloc(10*sizeof(char));
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
 
   str1 = NULL;
   str2 = NULL;
   str3 = NULL;
 
-  strcpy(str1, &quot;a&quot;);
-  strcpy(str2, &quot;a&quot;);
-  strcpy(str3, &quot;a&quot;);
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
 
-  return 0;
+  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
 <table>

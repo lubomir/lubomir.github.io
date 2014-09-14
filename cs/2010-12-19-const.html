@@ -29,25 +29,25 @@
 
 <div class="post">
 <p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
-<pre class="c"><code>#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt;
-#include &lt;string.h&gt;
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
 
-int main (void)
+<span class="dt">int</span> main (<span class="dt">void</span>)
 {
-  const char *       str1 = (char*) malloc(10*sizeof(char));
-  char * const       str2 = (char*) malloc(10*sizeof(char));
-  const char * const str3 = (char*) malloc(10*sizeof(char));
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
 
   str1 = NULL;
   str2 = NULL;
   str3 = NULL;
 
-  strcpy(str1, &quot;a&quot;);
-  strcpy(str2, &quot;a&quot;);
-  strcpy(str3, &quot;a&quot;);
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
 
-  return 0;
+  <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
 <table>

@@ -23,58 +23,58 @@
 <p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
 <h2 id="implementace">Implementace</h2>
 <p>Nejdříve tedy definice typů.</p>
-<pre class="haskell"><code>data Bit = Zero | One deriving (Eq)
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
 
-instance Show Bit where
-    show Zero = &quot;0&quot;
-    show One  = &quot;1&quot;
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bit</span> <span class="kw">where</span>
+    show <span class="dt">Zero</span> <span class="fu">=</span> <span class="st">&quot;0&quot;</span>
+    show <span class="dt">One</span>  <span class="fu">=</span> <span class="st">&quot;1&quot;</span>
 
-type Stream = [Bit]</code></pre>
+<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre>
 <p>Typy požadovaných funkcí vypadají následovně. Kódovací funkce pro číslo vrátí posloupnost bitů, dekódovací naopak z proudy bitů vytáhnou první číslo a vrátí ho společně se zbytkem proudu. Funkce <code>fromBinary</code> se liší v tom, že zpracuje celý proud.</p>
-<pre class="haskell"><code>unary, binary, gamma, delta        :: Int -&gt; Stream
-parseUnary, parseGamma, parseDelta :: Stream -&gt; (Int, Stream)
-fromBinary :: Stream -&gt; Int</code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+parseUnary, parseGamma,<span class="ot"> parseDelta ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
 <p>Unární kódování je velice jednoduché. Operátor <code>(***) :: (a -&gt; b) -&gt; (c -&gt; d) -&gt; (a, c) -&gt; (b, d)</code> se nachází v modulu <code>Control.Arrow</code> a jeho jediný účel je aplikace funkcí na složky dvojice.</p>
-<pre class="haskell"><code>unary n    = replicate n Zero ++ [One]
-parseUnary = (length *** tail) . span (== Zero)</code></pre>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
+parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre>
 <p>Funkce pro binární kódování čísla jsou trošku složitější, ale pořád tam není žádná magie. Provádí klasický přepis čísla do dvojkové soustavy. Pomocná funkce <code>binary'</code> navíc výsledný kód doplní zleva do požadované délky nulami. Také 0 při délce kódu 0 reprezentuje prázdným seznamem.</p>
-<pre class="haskell"><code>binary = bin []
-  where
-    bin acc 0 = Zero : acc
-    bin acc 1 = One  : acc
-    bin acc n = bin ((if odd n then One else Zero) : acc) (n `div` 2)
+<pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
+  <span class="kw">where</span>
+    bin acc <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">:</span> acc
+    bin acc <span class="dv">1</span> <span class="fu">=</span> <span class="dt">One</span>  <span class="fu">:</span> acc
+    bin acc n <span class="fu">=</span> bin ((<span class="kw">if</span> odd n <span class="kw">then</span> <span class="dt">One</span> <span class="kw">else</span> <span class="dt">Zero</span>) <span class="fu">:</span> acc) (n <span class="ot">`div`</span> <span class="dv">2</span>)
 
-binary&#39; :: Int -&gt; Int -&gt; Stream
-binary&#39; 0 0 = []
-binary&#39; len n = padding ++ code
-  where code = binary n
-        padding = replicate (len - length code) Zero
+<span class="ot">binary&#39; ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+binary&#39; <span class="dv">0</span> <span class="dv">0</span> <span class="fu">=</span> []
+binary&#39; len n <span class="fu">=</span> padding <span class="fu">++</span> code
+  <span class="kw">where</span> code <span class="fu">=</span> binary n
+        padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
 
-fromBinary = foldl (\num x -&gt; num * 2 + (if x == Zero then 0 else 1)) 0</code></pre>
+fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre>
 <p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
-<pre class="haskell"><code>encodeWith :: (Int -&gt; Stream) -&gt; Int -&gt; Stream
-encodeWith f n = f len ++ binary&#39; len (n - 2^len + 1)
-  where len = floor . logBase 2 . fromIntegral $ n + 1
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary&#39; len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
+  <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
 
-parseWith :: (Stream -&gt; (Int, Stream)) -&gt; Stream -&gt; (Int, Stream)
-parseWith f s = (fromBinary bin + 2^len - 1, ss)
-  where (len, rest) = f s
-        (bin, ss)   = splitAt len rest</code></pre>
+<span class="ot">parseWith ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
+  <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
+        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre>
 <p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
-<pre class="haskell"><code>gamma = encodeWith unary
-parseGamma = parseWith parseUnary
+<pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
+parseGamma <span class="fu">=</span> parseWith parseUnary
 
-delta = encodeWith gamma
-parseDelta = parseWith parseGamma</code></pre>
+delta <span class="fu">=</span> encodeWith gamma
+parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre>
 <p>Odtud už je jednoduché napsat funkci, které bude kódovat nebo dekódovat seznam čísel.</p>
-<pre class="haskell"><code>encode :: (Int -&gt; Stream) -&gt; [Int] -&gt; Stream
-encode = concatMap
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encode <span class="fu">=</span> concatMap
 
-decode :: (Stream -&gt; (Int, Stream)) -&gt; Stream -&gt; [Int]
-decode f s = let (n, ss) = f s
-             in case ss of
-                  [] -&gt; [n]
-                  _  -&gt; n : decode f ss</code></pre>
+<span class="ot">decode ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span class="fu">=</span> f s
+             <span class="kw">in</span> <span class="kw">case</span> ss <span class="kw">of</span>
+                  [] <span class="ot">-&gt;</span> [n]
+                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre>
 <p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>]]></summary>
 </entry>
 
