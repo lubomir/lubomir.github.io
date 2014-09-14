@@ -7,16 +7,28 @@ module Czech ( stripDiacritics
 import Control.Arrow (first)
 import Control.Applicative ((<$>), (<*>))
 import Hakyll (dateFieldWith, Context(..))
-import Data.Char (isAscii, toLower)
-import qualified Data.Text as T
-import qualified Data.Text.ICU as ICU
+import Data.Char (toLower)
+import Data.Maybe (fromMaybe)
 import System.Locale
 import Text.Pandoc (Pandoc(..), Inline(..), topDown)
 import Text.Parsec
 
 -- |Remove accents from above letters.
 stripDiacritics :: String -> String
-stripDiacritics = T.unpack . T.filter isAscii . ICU.normalize ICU.NFD . T.pack
+stripDiacritics = map (\c -> fromMaybe c (lookup c pairs))
+  where
+    pairs = [('á', 'a'), ('č', 'c'), ('ď', 'd'), ('é', 'e'), ('ě', 'e'),
+             ('í', 'i'), ('ó', 'o'), ('ň', 'n'), ('ř', 'r'), ('š', 's'),
+             ('ť', 't'), ('ú', 'u'), ('ů', 'u'), ('ý', 'y'), ('ž', 'z'),
+             ('ü', 'u'), ('ö', 'o'), ('ä', 'a'), ('ë', 'e'), ('ï', 'i'),
+             ('â', 'a'), ('ê', 'e'), ('î', 'i'), ('ô', 'o'), ('û', 'u'),
+             ('à', 'a'), ('è', 'e'), ('ì', 'i'), ('ò', 'o'), ('ù', 'u'),
+             ('Á', 'A'), ('Č', 'C'), ('Ď', 'D'), ('É', 'E'), ('Ě', 'E'),
+             ('Í', 'I'), ('Ó', 'O'), ('Ň', 'N'), ('Ř', 'R'), ('Š', 'S'),
+             ('Ť', 'T'), ('Ú', 'U'), ('Ů', 'U'), ('Ý', 'Y'), ('Ž', 'Z'),
+             ('Ü', 'U'), ('Ö', 'O'), ('Ä', 'A'), ('Ë', 'E'), ('Ï', 'I'),
+             ('Â', 'A'), ('Ê', 'E'), ('Î', 'I'), ('Ô', 'O'), ('Û', 'U'),
+             ('À', 'A'), ('È', 'E'), ('Ì', 'I'), ('Ò', 'O'), ('Ù', 'U')]
 
 czechDateField :: String -> Context s
 czechDateField field = dateFieldWith cs field "%-d. %B %Y"
