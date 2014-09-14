@@ -17,7 +17,23 @@ data BlogConfig = BlogConfig { langPrefix :: String
                              , dateFormatter :: String -> Context String
                              , backToMain :: String
                              , taggedAs :: String
+                             , homeLink :: String
+                             , topLink :: String
+                             , contactLink :: String
                              }
+
+mkContext :: BlogConfig -> Context String
+mkContext (BlogConfig {..}) =
+    mconcat [ constField "taggedAs" taggedAs
+            , constField "backToMain" backToMain
+            , constField "listHeader" listHeader
+            , constField "tagsHeader" tagsHeader
+            , dateFormatter "date"
+            , constField "homeLink" homeLink
+            , constField "topLink" topLink
+            , constField "contactLink" contactLink
+            , defaultContext
+            ]
 
 czechConfig :: BlogConfig
 czechConfig = BlogConfig "cs"
@@ -27,6 +43,9 @@ czechConfig = BlogConfig "cs"
                          czechDateField
                          "zpět na hlavní stránku"
                          "Označeno jako"
+                         "Domů"
+                         "Nahoru"
+                         "Kontakt"
 
 englishConfig :: BlogConfig
 englishConfig = BlogConfig "en"
@@ -36,6 +55,9 @@ englishConfig = BlogConfig "en"
                            (`dateField` "%B %-d, %Y")
                            "back to main page"
                            "Tagged as"
+                           "Home"
+                           "Back to top"
+                           "Contact me"
 
 postRoute :: BlogConfig -> Routes
 postRoute (BlogConfig { langPrefix = lp }) = customRoute $
@@ -51,7 +73,7 @@ subsite bc@(BlogConfig {..}) = do
             >>= saveSnapshot "content"
             >>= loadAndApplyTemplate (fromFilePath "templates/post.html")
                                      (postCtx bc tags)
-            >>= defaultCompiler
+            >>= defaultCompiler bc
 
     create [fromFilePath $ langPrefix </> "posts.html"] $ do
         route  idRoute
@@ -112,14 +134,16 @@ main = hakyll $ do
                                        , constField "enposts" enlist
                                        , field "cstags" (\_ -> renderTagCloud' cstags)
                                        , field "entags" (\_ -> renderTagCloud' entags)
-                                       , defaultContext
+                                       , mkContext englishConfig
                                        ]
-            getResourceBody >>= applyAsTemplate indexContext >>= defaultCompiler
+            getResourceBody >>= applyAsTemplate indexContext
+                            >>= defaultCompiler englishConfig
 
     forM_ ["403.html", "404.html"] $ \p ->
         match p $ do
             route   idRoute
-            compile $ myCompiler >>= loadAndApplyTemplate "templates/default.html" defaultContext
+            compile $ myCompiler
+                >>= loadAndApplyTemplate "templates/default.html" (mkContext englishConfig)
 
     match "templates/*" $ compile templateCompiler
 
@@ -130,7 +154,12 @@ main = hakyll $ do
     renderTagCloud' tags =
         renderTagCloud 100 200 (sortTagsBy caseInsensitiveTags tags)
 
-postListCompiler :: BlogConfig -> String -> String -> String -> Item String -> Compiler (Item String)
+postListCompiler :: BlogConfig
+                 -> String
+                 -> String
+                 -> String
+                 -> Item String
+                 -> Compiler (Item String)
 postListCompiler bc title list feed =
     loadAndApplyTemplate "templates/posts.html" (mconcat
         [ constField "title" title
@@ -138,11 +167,11 @@ postListCompiler bc title list feed =
         , defaultContext
         , constField "feed" feed
         , constField "backToMain" (backToMain bc)])
-    >=> defaultCompiler
+    >=> defaultCompiler bc
 
 
-defaultCompiler :: Item String -> Compiler (Item String)
-defaultCompiler = loadAndApplyTemplate "templates/default.html" defaultContext
+defaultCompiler :: BlogConfig -> Item String -> Compiler (Item String)
+defaultCompiler bc = loadAndApplyTemplate "templates/default.html" (mkContext bc)
     >=> relativizeUrls
 
 myCompiler :: Compiler (Item String)
@@ -153,11 +182,8 @@ myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransfor
 postCtx :: BlogConfig -> Tags -> Context String
 postCtx bc tags = mconcat
     [ modificationTimeField "mtime" "%U"
-    , dateFormatter bc "date"
     , tagsField "tags" tags
-    , constField "taggedAs" (taggedAs bc)
-    , constField "backToMain" (backToMain bc)
-    , defaultContext
+    , mkContext bc
     ]
 
 feedCtx :: Context String
