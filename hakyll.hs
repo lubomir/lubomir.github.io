@@ -181,7 +181,9 @@ defaultCompiler bc = loadAndApplyTemplate "templates/default.html" (mkContext bc
 myCompiler :: Compiler (Item String)
 myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransform
   where
-    myWriterOptions = def { writerHtml5 = True }
+    myWriterOptions = def { writerHtml5 = True
+                          , writerHighlight = True
+                          }
 
 postCtx :: BlogConfig -> Tags -> Context String
 postCtx bc tags = mconcat
