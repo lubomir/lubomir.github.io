@@ -1,7 +1,6 @@
 .cabal-sandbox
 _cache
 dist
-*.hi
-*.o
 _site
 *.swp
+cabal.sandbox.config
