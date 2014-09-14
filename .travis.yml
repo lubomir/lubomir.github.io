@@ -5,9 +5,8 @@ branches:
     - source
 install:
 - cabal sandbox init
-- cabal install pandoc -fno-https
+- cabal install pandoc -fno-https -fhighlighting
 - cabal install hakyll -fno-watchserver -fno-previewserver -fno-checkexternal
-- cabal install --only-dependencies
 - cabal configure --disable-library-profiling --disable-tests --disable-library-coverage
   --disable-benchmarks --disable-split-objs
 before_script:
@@ -22,7 +21,6 @@ after_script:
 - cd _site
 - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
 - git remote add github https://${GH_TOKEN}@${REMOTE}
-- git checkout -b master
 - git add --all
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
 - git push -f github master:master | grep -v http
