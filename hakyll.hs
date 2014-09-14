@@ -202,11 +202,11 @@ postList bc tags pattern preprocess' = do
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration
-    { feedRoot        = "http://fi.muni.cz/~xsedlar3/"
-    , feedTitle       = "~xsedlar3"
-    , feedDescription = "home of ~xsedlar3"
+    { feedRoot        = "http://lubomir.github.io/"
+    , feedTitle       = "lsedlar"
+    , feedDescription = "home of lsedlar"
     , feedAuthorName  = "Lubomír Sedlář"
-    , feedAuthorEmail = "lsedlar@mail.muni.cz"
+    , feedAuthorEmail = "lubomir.sedlar@gmail.com"
     }
 
 tagToRoute :: Identifier -> FilePath
