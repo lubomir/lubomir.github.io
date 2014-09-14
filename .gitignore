@@ -1,6 +1,5 @@
 .cabal-sandbox
 _cache
 dist
-_site
 *.swp
 cabal.sandbox.config
