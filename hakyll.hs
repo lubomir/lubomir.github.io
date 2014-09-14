@@ -108,11 +108,12 @@ main = hakyll $ do
         compile $ do
             cslist <- getRecentPosts czechConfig cstags
             enlist <- getRecentPosts englishConfig entags
-            let indexContext = constField "csposts" cslist `mappend`
-                    constField "enposts" enlist `mappend`
-                    field "cstags" (\_ -> renderTagCloud' cstags) `mappend`
-                    field "entags" (\_ -> renderTagCloud' entags) `mappend`
-                    defaultContext
+            let indexContext = mconcat [ constField "csposts" cslist
+                                       , constField "enposts" enlist
+                                       , field "cstags" (\_ -> renderTagCloud' cstags)
+                                       , field "entags" (\_ -> renderTagCloud' entags)
+                                       , defaultContext
+                                       ]
             getResourceBody >>= applyAsTemplate indexContext >>= defaultCompiler
 
     forM_ ["403.html", "404.html"] $ \p ->
@@ -160,7 +161,7 @@ postCtx bc tags = mconcat
     ]
 
 feedCtx :: Context String
-feedCtx = bodyField "description" `mappend` defaultContext
+feedCtx = bodyField "description" <> defaultContext
 
 postList :: BlogConfig -> Tags -> Pattern -> ([Item String]
          -> Compiler [Item String]) -> Compiler String
