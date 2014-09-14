@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako programování</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/programovani.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/programovani.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <entry>
+    <title>Rychlost prohledávání adresáře</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html</id>
+    <published>2012-01-24T00:00:00Z</published>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
+<h2 id="hřiště">Hřiště</h2>
+<p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
+<p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
+    <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
+<span class="kw">done</span>
+
+<span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+    <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+<span class="kw">done</span></code></pre>
+<h2 id="metody">Metody</h2>
+<p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
+<p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
+<p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+{
+    <span class="kw">struct</span> DIR *dir = opendir(path);
+    <span class="kw">if</span> (dir == NULL) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    } <span class="kw">else</span> {
+        closedir(dir);
+        <span class="kw">return</span> <span class="dv">1</span>;
+    }
+}</code></pre>
+<p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
+<p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
+<ul>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
+</ul>
+<h2 id="výsledky">Výsledky</h2>
+<p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
+<table>
+<tr><th></th>           <th>
+Soubory
+</th> <th>
+Adresáře
+</th> <th>
+Mix
+</th></tr>
+<tr><th>
+dvojitý průchod
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,109
+</td>   <td>
+0,106
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,133
+</td>   <td>
+0,177
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,043
+</td>   <td>
+0,040
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Pole
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,054
+</td>   <td>
+0,057
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,067
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,021
+</td>   <td>
+0,021
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Seznam
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,053
+</td>   <td>
+0,060
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,065
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,020
+</td>   <td>
+0,029
+</td>    <td>
+0
+</td></tr>
+</table>
+
+<p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
+<p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
+</entry>
+<entry>
+    <title>Kódování čísel</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-06-06-kodovani-cisel.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-06-06-kodovani-cisel.html</id>
+    <published>2011-06-06T00:00:00Z</published>
+    <updated>2011-06-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
+<h2 id="varianty">Varianty</h2>
+<p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>
+<p>Nejjednodušší variantou, jak toho dosáhnout, je použít <em>unární</em> kódování. Číslo <span class="math"><em>n</em></span> zakóduje pomocí <span class="math"><em>n</em></span> nul následovaných jedničkou. Zřejmě je tedy bezprefixové, ale zároveň i paměťově neefektivní, protože délka kódu je lineární k velikosti kódovaného čísla.</p>
+<p>Jako lepší nápad vypadá zapsání čísla binárně a přidání jeho délky pomocí nějakého bezprefixového kódu. To ale také není optimální, protože bychom nevyužili mnoho možností. Konkrétně jde o slova, která začínají nulami. V klasickém dvojkovém zápisu jsou čísla 00 a 0 stejná. Z našeho pohledu je ale užitečné je rozlišit. Proto pro každou délku kódu využijeme všechny možnosti, tedy pro slovem délky jedna budeme kódovat dvě čísla, délkou dvě čtyři atd.</p>
+<p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
+<h2 id="implementace">Implementace</h2>
+<p>Nejdříve tedy definice typů.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
+
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bit</span> <span class="kw">where</span>
+    show <span class="dt">Zero</span> <span class="fu">=</span> <span class="st">&quot;0&quot;</span>
+    show <span class="dt">One</span>  <span class="fu">=</span> <span class="st">&quot;1&quot;</span>
+
+<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre>
+<p>Typy požadovaných funkcí vypadají následovně. Kódovací funkce pro číslo vrátí posloupnost bitů, dekódovací naopak z proudy bitů vytáhnou první číslo a vrátí ho společně se zbytkem proudu. Funkce <code>fromBinary</code> se liší v tom, že zpracuje celý proud.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+parseUnary, parseGamma,<span class="ot"> parseDelta ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
+<p>Unární kódování je velice jednoduché. Operátor <code>(***) :: (a -&gt; b) -&gt; (c -&gt; d) -&gt; (a, c) -&gt; (b, d)</code> se nachází v modulu <code>Control.Arrow</code> a jeho jediný účel je aplikace funkcí na složky dvojice.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
+parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre>
+<p>Funkce pro binární kódování čísla jsou trošku složitější, ale pořád tam není žádná magie. Provádí klasický přepis čísla do dvojkové soustavy. Pomocná funkce <code>binary'</code> navíc výsledný kód doplní zleva do požadované délky nulami. Také 0 při délce kódu 0 reprezentuje prázdným seznamem.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
+  <span class="kw">where</span>
+    bin acc <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">:</span> acc
+    bin acc <span class="dv">1</span> <span class="fu">=</span> <span class="dt">One</span>  <span class="fu">:</span> acc
+    bin acc n <span class="fu">=</span> bin ((<span class="kw">if</span> odd n <span class="kw">then</span> <span class="dt">One</span> <span class="kw">else</span> <span class="dt">Zero</span>) <span class="fu">:</span> acc) (n <span class="ot">`div`</span> <span class="dv">2</span>)
+
+<span class="ot">binary&#39; ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+binary&#39; <span class="dv">0</span> <span class="dv">0</span> <span class="fu">=</span> []
+binary&#39; len n <span class="fu">=</span> padding <span class="fu">++</span> code
+  <span class="kw">where</span> code <span class="fu">=</span> binary n
+        padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
+
+fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre>
+<p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary&#39; len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
+  <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
+
+<span class="ot">parseWith ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
+  <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
+        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre>
+<p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
+parseGamma <span class="fu">=</span> parseWith parseUnary
+
+delta <span class="fu">=</span> encodeWith gamma
+parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre>
+<p>Odtud už je jednoduché napsat funkci, které bude kódovat nebo dekódovat seznam čísel.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encode <span class="fu">=</span> concatMap
+
+<span class="ot">decode ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span class="fu">=</span> f s
+             <span class="kw">in</span> <span class="kw">case</span> ss <span class="kw">of</span>
+                  [] <span class="ot">-&gt;</span> [n]
+                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre>
+<p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>]]></summary>
+</entry>
+<entry>
+    <title>XMonad a okna s pevnou velikostí</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
+    <published>2011-04-04T00:00:00Z</published>
+    <updated>2011-04-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
+<p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
+<p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
+<p>Společným znakem oken, která mají fixní velikost, je nastavení minimální a maximální velikosti okna na stejnou hodnotu. Toto nastavení je v <code>WM_NORMAL_HINTS</code> a dá se zjistit třeba přes <code>xprop</code>. Toto pole má typ <code>XSizeHints</code> a nejpřesnější popis, který jsem našel, vypadá takto:</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span> {
+    long flags;                <span class="co">/* marks which fields in this</span>
+<span class="co">                                  structure are defined */</span>
+    int x, y;                  <span class="co">/* Obsolete */</span>
+    int width, height;         <span class="co">/* Obsolete */</span>
+    int min_width, min_height;
+    int max_width, max_height;
+    int width_inc, height_inc;
+    struct {
+           <span class="dt">int</span> x;              <span class="co">/* numerator */</span>
+           <span class="dt">int</span> y;              <span class="co">/* denominator */</span>
+    } min_aspect, max_aspect;
+    int base_width, base_height;
+    int win_gravity;
+    <span class="co">/* this structure may be extended in the future */</span>
+} XSizeHints;</code></pre>
+<p>To jistě není žádný zázrak, ale už se s tím dá něco dělat. Zajímavé hodnoty jsou ty s prefixem <code>min_</code> a <code>max_</code>. Pokud jsou nastavené na jinou hodnotu než 0 a zároveň se rovnají odpovídající si hodnoty, okno má zřejmě nastavenou fixní velikost.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isFixed ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+isFixed h <span class="fu">=</span> minWidth h <span class="fu">==</span> maxWidth h
+         <span class="fu">&amp;&amp;</span> minHeight h <span class="fu">==</span> maxHeight h
+         <span class="fu">&amp;&amp;</span> all (<span class="fu">&gt;</span><span class="dv">0</span>) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre>
+<p>V modulu <code>XMonad.Util.WindowProperties</code> je k dispozici funkce <code>getProp32s :: String -&gt; Window -&gt; X (Maybe [CLong])</code>, s jejíž pomocí už se dá napsat potřebná funkce pro manage hook. Definice typu <code>CLong</code> je v modulu <code>Foreign.C.Types</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isNonResizable ::</span> <span class="dt">Query</span> <span class="dt">Bool</span>
+isNonResizable <span class="fu">=</span> ask <span class="fu">&gt;&gt;=</span> \w <span class="ot">-&gt;</span> liftX <span class="fu">$</span> <span class="kw">do</span>
+    atom <span class="ot">&lt;-</span> getProp32s <span class="st">&quot;WM_NORMAL_HINTS&quot;</span> w
+    return <span class="fu">$</span> <span class="kw">case</span> atom <span class="kw">of</span>
+        <span class="dt">Just</span> hints  <span class="ot">-&gt;</span> hasFixedSize hints
+        <span class="dt">Nothing</span>     <span class="ot">-&gt;</span> <span class="dt">False</span></code></pre>
+<p>Poslední chybějící kus jsou funkce na vrácení požadovaných rozměrů. Vlastně jde jenom o čitelnější zápisy vytažení příslušné hodnoty ze seznamu:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">minWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+minHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">6</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">7</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre>
+<p>A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem nepozoroval. <a href="/data/HandleFixedWindows.hs">Kompletní soubor</a> stačí nakopírovat do <code>~/.xmonad/lib/</code>, naimportovat do konfiguračního souboru a použít.</p>]]></summary>
+</entry>
+<entry>
+    <title>UnitTest v C++</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-unittest.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-unittest.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
+<p>Já používám knihovnu <a href="http://unittest-cpp.sourceforge.net/">UnitTest++</a>, která je rozumným kompromisem mezi funkcionalitou a jednoduchostí.</p>
+<h2 id="použití">Použití</h2>
+<p>Testy pomocí UnitTest++ je možné psát do libovolného souboru s příponou <code>.cpp</code> i <code>.cc</code>, jak je komu libo. Pro kompilaci je potřeba kompilátoru předat informace o tom, kde najde příslušné hlavičkové soubory a potom i knihovnu. Obojí jsem zkompiloval a je na Aise dostupné v adresáři <code>/home/~xsedlar3/include</code>.</p>
+<p>Na začátku testovacího souboru je pochopitelně třeba vložit hlavičky knihovny vlastního kódu, který je třeba testovat.</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="ot">#include &lt;unittest++/UnitTest++.h&gt;</span></code></pre>
+<p>Ke spouštění testů je třeba přidat i funkci <code>main</code>:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="dt">int</span> main() {
+    <span class="kw">return</span> UnitTest::RunAllTests();
+}</code></pre>
+<h2 id="testy">Testy</h2>
+<p>Jednotlivé testy se píšou pomocí maker <code>TEST</code>, které má jeden parametr -- identifikátor, podle kterého půjde dohledávat, který test selhal. Následuje blok, ve kterém se provádí test.</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">TEST(Addition) {
+    CHECK(someFunction());
+}</code></pre>
+<p>K usnadnění psaní testů je definováno několik šikovných maker jako je výše uvedené <code>CHECK</code>. To jednoduše kontroluje, jestli se jeho argument vyhodnotí na <code>true</code>. Další možnosti jsou třeba <code>CHECK_EQUAL(co_cekam, testovany_vyraz)</code>, které ověří, že testovaný výraz vrací určenou hodnotu. Pořadí argumentů je tady docela důležité, pokud bude očekávaná hodnota jako druhá, případně chyby budou hlášené dost chaoticky. Další makra jsou popsána v <a href="http://unittest-cpp.sourceforge.net/UnitTest++.html">dokumentaci</a>.</p>
+<p>Aby se i ve velkém souboru s testy dalo dobře orientovat, je možné jednotlivé testy dělit do sad pomocí makra <code>SUITE(nazev)</code>, případně je rozdělit do více souborů.</p>
+<p>Jednoduchý test tedy může vypadat takto:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp">TEST(InsertValueAtStart) {
+    List&lt;<span class="dt">int</span>&gt; list;
+    List&lt;<span class="dt">int</span>&gt;::ItemType *iter;
+
+    iter = list.push_front(<span class="dv">10</span>);
+    CHECK( ! list.empty());
+    CHECK_EQUAL(<span class="dv">10</span>, it-&gt;getValue());
+    CHECK_EQUAL(<span class="dv">10</span>, list.first()-&gt;getValue());
+    CHECK_EQUAL(<span class="dv">10</span>, list.last()-&gt;getValue());
+}</code></pre>
+<h2 id="fixtures">Fixtures</h2>
+<p>Při psaní testů se dá velice rychle narazit na situaci, že se na začátku několika testů opakuje stejná část, která jenom chystá objekt na další testovaní, např. plní seznam daty. Toto se dá zjednodušit přesunutím takovéto inicializace do tzv. fixture.</p>
+<p>V případě knihovny UnitTest++ se jedná o definici třídy, jejíž konstruktor se zavolá na začátku testu, kde je použitá, a celý test se potom vykonává tak, že má přímo přístup k členským prvkům dané třídy. Místo makra <code>TEST</code> se potom použije <code>TEST_FIXTURE</code> se dvěma argumenty. Prvním je právě název fixture.</p>
+<p>Může to tedy vypadat takto:</p>
+<pre class="sourceCode cpp"><code class="sourceCode cpp"><span class="kw">struct</span> LongList {
+    LongList() {
+        it1 = list.push_back(<span class="dv">10</span>);
+        it2 = list.push_back(<span class="dv">20</span>);
+        it3 = list.push_back(<span class="dv">30</span>);
+        it4 = list.push_back(<span class="dv">40</span>);
+        it5 = list.push_back(<span class="dv">50</span>);
+        it6 = list.push_back(<span class="dv">60</span>);
+    }
+
+    std::string to_str() { <span class="kw">return</span> list_to_str(list); }
+
+    List&lt;<span class="dt">int</span>&gt; list;
+    List&lt;<span class="dt">int</span>&gt;::ItemType *it1, *it2, *it3, *it4, *it5, *it6;
+};
+
+TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
+    list.push_back(<span class="dv">70</span>);
+    list.swap(it2, it3, it5, it6);
+    CHECK_EQUAL(<span class="st">&quot;{ 10, 50, 60, 40, 20, 30, 70 }&quot;</span>, to_str());
+    list.swap(it5, it6, it2, it3);
+    CHECK_EQUAL(<span class="st">&quot;{ 10, 20, 30, 40, 50, 60, 70 }&quot;</span>, to_str());
+}</code></pre>]]></summary>
+</entry>
+<entry>
+    <title>Testování binárky</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-testovani-binarky.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-testovani-binarky.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
+<h2 id="formát-testů">Formát testů</h2>
+<p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
+<dl>
+<dt><code>*.in</code></dt>
+<dd>toto přijde na standardní vstup
+</dd>
+<dt><code>*.args</code></dt>
+<dd>toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý argument má obsahovat mezeru.)
+</dd>
+<dt><code>*.out</code></dt>
+<dd>očekávaný výstup na stdout
+</dd>
+<dt><code>*.err</code></dt>
+<dd>očekávaný chybový výstup
+</dd>
+<dt><code>*.ret</code></dt>
+<dd>návratový kód programu
+</dd>
+</dl>
+<p>Pokud některý soubor neexistuje, tak se příslušná část netestuje.</p>
+<h2 id="použití">Použití</h2>
+<p>Stáhněte si <a href="/data/stest.tar.bz2">archiv s testovacím skriptem</a> a pomocným souborem, který umožňuje vypisovat výsledky barevně. Skript <code>stest</code> je dobré mít v cestě, <code>.term_colors</code> může být buď přímo v domovském adresáři nebo na stejném místě jako <code>stest</code>.</p>
+<p>K testování stačí spustit příkaz <code>stest ./NAZEV_BINARKY</code>, případně přidat ještě cestu k adresáři s testy. Další možnosti shrnuje nápověda <code>stest --help</code>.</p>]]></summary>
+</entry>
+<entry>
+    <title>Inicializační funkce NCurses</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
+<h2 id="inicializační-funkce">4 Inicializační funkce</h2>
+<ol type="1">
+<li><p><strong>raw() a cbreak()</strong></p>
+<p>Normálně ovladač terminálu ukládá uživatelem zadané znaky do bufferu, dokud uživatel nestiskne enter. Většina programů ale potřebuje, aby byly znaky dostupné hned, když je uživatel zadá. Tyto dvě funkce zakazují bufferování řádků. Rozdíl mezi nimi je ve zpracování ovládacích znaků zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou tyto znaky interpretovány přímo ovladačem terminálu.</p></li>
+<li><p><strong>echo() a noecho()</strong></p>
+<p>Tyto funkce ovládají, jestli se znaky zadávané uživatelem zobrazují na obrazovku či nikoli. Většina interaktivních programů volá na začátku noecho() a pokud to potřebuje, tak znaky vypisuje kontrolovaně sama.</p></li>
+<li><p><strong>keypad()</strong></p>
+<p>Tato inicializační funkce umožňuje čtení funkčních kláves jako F1,, kurzorové klávesy atd. Téměř každý interaktivní program toto povoluje, protože šipky jsou zásadní částí každé uživatelského rozhraní. Abyste povolili tuto vlastnost pro standardní obrazovku (stdscr), zavolejte <code>keypad(stdscr,TRUE)</code>.</p></li>
+<li><p><strong>halfdelay()</strong></p>
+<p>Přestože tato funkce není používaná příliš často, je občas velice užitečná. Vstup je okamžitě předán programu jako po zavolání <code>cbreak()</code> s tím rozdílem, že čeká X desetin sekundy na vstup a jestliže potom není vstup dostupný, vrátí ERR. X je interval zadaný jako argument při volání halfdelay(). Tato funkce je užitečná, pokud potřebujete nějaký vstup, ale když uživatel neodpoví dostatečně rychle, chcete udělat něco jiného.</p></li>
+</ol>]]></summary>
+</entry>
+<entry>
+    <title>Jak se projevuje 'const'</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
+
+<span class="dt">int</span> main (<span class="dt">void</span>)
+{
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+
+  str1 = NULL;
+  str2 = NULL;
+  str3 = NULL;
+
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+</table>
+
+<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
+
+]]></summary>
+</entry>
+
+</feed>

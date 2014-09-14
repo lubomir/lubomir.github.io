@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Znásilňování SICStus Prologu</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Znásilňování SICStus Prologu</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>26. únor 2011</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/prolog.html">prolog</a>, <a href="../cs/tags/debian.html">Debian</a>, <a href="../cs/tags/vim.html">vim</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<h2 id="instalace">Instalace</h2>
+<p>Nejdřív je potřeba stáhnout samotný program k instalaci z <a href="https://lindir.ics.muni.cz/sicstus/">této stránky</a> (pouze pro studenty FI a nekomerční použití). Přihlašuje se učem a sekundárním heslem. Je nutné stáhnout dva soubory: archiv s programem a soubor s příslušným licenčním klíčem.</p>
+<p>Instalace je docela jednoduchá:</p>
+<ol type="1">
+<li>rozbalit archiv</li>
+<li>v nově vytvořeném adresáři spustit <code>./InstallSICStus --all-questions</code></li>
+<li>odpovědět na spoustu otázek
+<ul>
+<li>klíč a podobné věci jsou v druhém staženém souboru</li>
+<li>pokud se zvolí vhodný adresář, není potřeba ani heslo roota</li>
+<li>instalovat Tk, jasper, odbc ani nic podobného není nezbytně nutné</li>
+<li>pokud se instaluje v systému s vyšší verzí GLibc než 2 je potřeba potvrdit, že opravdu chci instalovat</li>
+</ul></li>
+</ol>
+<p>A to je asi tak vše. Další pokračování by mohla být instalace <a href="http://www.eclipse.org/">Eclipse</a> a IDE pro Prolog jménem <a href="http://www.sics.se/sicstus/spider/site/index.html">Spider</a>.</p>
+<p>Případná odinstalace je relativně jednoduchá. Stačí si ponechat soubor <code>UnInstallSICStus</code> z adresáře, odkud se instalovalo. Je to primitivní shellový skript, který smaže všechny nainstalované soubory. Komentář v souboru sice tvrdí, že některé soubory neodstraní, ale nikde jsem žádné zbytky nenašel.</p>
+<h2 id="použití">Použití</h2>
+<p>Při instalaci se do adresáře <code>$PREFIX/bin</code> mimo jiné nainstaluje spustitelný soubor <code>sicstus</code>, což je přímo interpret. Tu stačí spustit a jsem skoro tam, kde jsme chtěli být.</p>
+<p>To slovíčko „skoro“ je poměrně důležité. Interpret sice běží, ale zdaleka se nechová tak, aby se dal pohodlně používat. Například kurzor se nedá posunout šipkami doprostřed psaného dotazu a opravit překlep, po ukončení zůstane nezalomený řádek a posunutý prompt, nikde žádná historie dotazů …</p>
+<p>Naštěstí to není nezvratný stav. Stačí nainstalovat utilitu <a href="http://utopia.knoware.nl/~hlub/rlwrap/">rlwrap</a> třeba ze standardních repozitářů a potom spouštět <code>rlwrap sicsus</code>. Výsledkem je stejný interpret, ale tentokrát se všemi výhodami knihovny readline, jako třeba funkční šipky nebo historie ukládaná do <code>~/.sicstus_history</code>, ve které se dá interaktivně vyhledávat přes <code>^R</code> nebo jenom šipkou nahoru/dolů. Možná to má někde nějaký háček, ale zatím jsem na nic nepřišel.</p>
+<h3 id="někdo-to-rád-barevné">Někdo to rád barevné</h3>
+<p>Rlwrap umožňuje pomocí přepínače <code>-p</code> (nebo <code>--promp-colour</code>) obarvit výzvu programu. Menší problém je ale v tom, že za prompt považuje i řádky, kde se vypisuje víc možných unifikací a interpret čeká na středník kvůli další možnosti. Osobně bych preferoval obarvení pouze klasické výzvy <code>| ?-</code> a podobných, které začínají znakem <code>|</code>.</p>
+<p>Naštěstí si tohle přání můžu splnit pomocí filtru. Stačí si uložit <a href="../data/prolog_filter">tento filtr</a> ideálně do adresáře <code>/usr/share/rlwrap/filters</code> a potom spouštět pomocí <code>rlwrap -z 'prolog_filter Blue' sicstus</code>. Možnosti barev jsou <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>purple</code>, <code>cyan</code> a <code>white</code>. Pokud je alespoň první písmeno velké, použije se tučná varianta.</p>
+<h4 id="aktualizace-16.3.2011">Aktualizace 16</h4>
+<p>Existuje i výrazně jednodušší řešení. Rlwrap umožňuje přepínači nastavit, které výzvy má „vařit“. Je to přepínač <code>-O regexp</code>, kde potřebný regulární výraz je <code>'^\|'</code>. Potom stačí použít klasicky <code>-pBARVA</code> (stejný výčet jako je výše) a už to funguje.</p>
+<p>Taky se může hodit přidat přepínač <code>-g '^.$'</code>, což zakáže ukládání jednopísmenných odpovědí do historie.</p>
+<h2 id="vim">Vim</h2>
+<p>Vim sám o sobě Prolog moc nepodporuje. Nakopírováním těch <a href="https://github.com/adimit/prolog.vim">správných souborů</a> do <code>~/.vim/</code> se ale změní do celkem použitelné formy: sympaticky zvýrazňuje syntaxi, automaticky odsazuje řádky a sám pozná, kde začínají a končí foldy.</p>
+<p>Poslední drobný zádrhel je v tom, že si většinou splete typ souboru s Perlem, který taky používá příponu <code>.pl</code>. Dá se to obejít přidáním modeline na konec souboru:</p>
+<pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="co">% vim: ft=prolog</span></code></pre>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

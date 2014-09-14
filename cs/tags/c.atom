@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako C</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/c.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/c.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <entry>
+    <title>Rychlost prohledávání adresáře</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html</id>
+    <published>2012-01-24T00:00:00Z</published>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
+<h2 id="hřiště">Hřiště</h2>
+<p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
+<p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
+    <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
+<span class="kw">done</span>
+
+<span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+    <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+<span class="kw">done</span></code></pre>
+<h2 id="metody">Metody</h2>
+<p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
+<p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
+<p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+{
+    <span class="kw">struct</span> DIR *dir = opendir(path);
+    <span class="kw">if</span> (dir == NULL) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    } <span class="kw">else</span> {
+        closedir(dir);
+        <span class="kw">return</span> <span class="dv">1</span>;
+    }
+}</code></pre>
+<p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
+<p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
+<ul>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
+</ul>
+<h2 id="výsledky">Výsledky</h2>
+<p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
+<table>
+<tr><th></th>           <th>
+Soubory
+</th> <th>
+Adresáře
+</th> <th>
+Mix
+</th></tr>
+<tr><th>
+dvojitý průchod
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,109
+</td>   <td>
+0,106
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,133
+</td>   <td>
+0,177
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,043
+</td>   <td>
+0,040
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Pole
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,054
+</td>   <td>
+0,057
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,067
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,021
+</td>   <td>
+0,021
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Seznam
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,053
+</td>   <td>
+0,060
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,065
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,020
+</td>   <td>
+0,029
+</td>    <td>
+0
+</td></tr>
+</table>
+
+<p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
+<p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
+</entry>
+<entry>
+    <title>O princezně, která ztrácela pamět</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html</id>
+    <published>2011-11-10T00:00:00Z</published>
+    <updated>2011-11-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<blockquote>
+<p>Tento text vznikl v rámci přemětu VB000 Základy odborného stylu jako esej na téma <em>Bylo nebylo – informatická pohádka</em></p>
+</blockquote>
+<p>Za devatero kompilátory a devatero linkery bylo jedno malé, ale krásné království. V tomto království vládl moudrý král. Spravedlivě přiděloval paměť všem poddaným procesům, blahosklonně uzavíral pozapomenuté otevřené soubory a když některý z jeho poddaných dokončil svůj výpočet a přešel do stavu zombie, pečlivě sesbíral veškerou jeho paměť. Pod jeho vládou nebyl v celém království jediný neadresovatelný bajt.</p>
+<p>Jedna věc ale dělala králi starosti: jeho jediná dcera, princezna a dědička systému. Byla to sice holka jako lusk, se sofistikovanou architekturou a intuitivním uživatelským rozhraním, na princeznu měla ale jednu zásadní vadu. Každý den si od krále vyžádala nový blok paměti, žádných se ale nikdy nevzdávala. A tak přestože před jejím spuštěním království nikdy netrpělo nouzí, s jejím rozmarným chováním se začaly denní příděly paměti všem poddaným snižovat.</p>
+<p>Jednoho pochmurného dne se tedy stalo to, čeho se všichni obávali: v celém království nezbyl jediný volný bajt. Král svolal všechny své rádce, vyložil jim tuto nepříjemnou situaci a očekával návrhy řešení. „Budeme se modlit k velkému Uživateli, aby nám seslal další paměťový modul,“ navrhl některý z rádců. „To je výborný nápad, my ale potřebujeme něco rychlejšího a spolehlivějšího,“ oponoval jiný. Najednou se vzadu ozval králův věrný pobočník Oom: „Vaše Kernelovosti, máme jedinou možnost. Musíme princeznu zabít, paměť jí vzít a nakonec její proces znovu spustíme.“ Králi se toto řešení nelíbilo, přece jen svou dceru miloval, ale nakonec i on uznal, že je to jediné řešení.</p>
+<p>Přestože se privilegovaným procesům takto podařilo krizi zažehnat, celá smutná situace se brzy začala opakovat. Král tedy pátral po trvalejším řešení a pozval optimalizáory a analyzátory z celého repozitáře. Aby je nějak motivoval, dal rozhlásit, že kdo napraví princeznu, dostane ji za ženu a půl pevného disku k tomu. Programy se stahovaly z celého Internetu, ať se ale snažily sebevíc, přivést princeznu k rozumu se jim nepodařilo.</p>
+<p>Za pár dní v království nastalo pozdvižení. Na hranicích se objevil věhlasný mudrc ze vzdáleného Javistánu. Doprovázela ho početná kolekce objektů. Ve spojovém seznamu si vedl neznámé nástroje a jeho sluhové nesli obrovský binární strom z ezoterických jazyků. Všechny procesy v království do mudrce vkládaly velké naděje. Když ale mudrc přišel k princezně, ukázalo se, že ani pro něj nebude ladění jednoduché. První komplikace nastala, když se pokusil prozkoumat princezniny objekty a metody. Jeho obvyklé postupy selhaly! Princezna totiž nebyla objektová, ale procedurální!</p>
+<p>Mudrc byl v úzkých. Postupy, na které byl navyklý, vůbec nezabíraly a s manuální správou paměti si také příliš nerozuměl. Ze své domoviny byl totiž navyklý, že se kolem něj neustále motá sluha a paměť po něm uklízí. I tento světoznámý mudrc tedy nakonec odjel s nepořízenou.</p>
+<p>Král z toho byl zničený. Už se těšil, že bude mít, co se správy paměti týká, normální dceru, ale ladění se zase nepodařilo. Když se král vzpamatoval ze zklamání, rozzuřeně prohlásil: „Už žádné šarlatány. Kdo od teď neuspěje v ladění princezny, bude o zásobník kratší a jeho zdrojové kódy budou smazány.“</p>
+<p>Zhruba ve stejné době se o nadělení s princeznou dozvěděl chytrý Valgrind. Byl to skromný chlapec, kterého sousedé považovali za trochu jednoduššího, především kvůli jeho textovému rozhraní. Ve skrytu haldy ale věděli, že k práci s pamětí má Valgrind talent. A tak si Valgrind řekl: „Už příliš dlouho se válím v rodném /usr/bin. Žádné přerušení mě tady z nudy nevytrhne, půjdu zkusit svoje štěstí.“ Sbalil si svoje kladivo Callgrind a sekeru Cachegrind a vyrazil.</p>
+<p>Jenom se podíval na princeznu, už věděl, která bije. Vždyť ta holka churavá vůbec nepoužívá funkci free(). I když Valgrind věděl, jak na princezniny potíže, nemohl na ni jít zhurta. Nejprve si jenom navzájem posílali signály, ale když král zjistil, že už si naalokovali sdílený blok paměti, bylo jasné, že krize je zažehnána a v království zase nastala hojnost paměti.</p>
+<p>Zakrátko se Valgrind s princeznou vzali a jestli dosud nespadli, tak spolu profilují dodnes.</p>]]></summary>
+</entry>
+<entry>
+    <title>Inicializační funkce NCurses</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
+<h2 id="inicializační-funkce">4 Inicializační funkce</h2>
+<ol type="1">
+<li><p><strong>raw() a cbreak()</strong></p>
+<p>Normálně ovladač terminálu ukládá uživatelem zadané znaky do bufferu, dokud uživatel nestiskne enter. Většina programů ale potřebuje, aby byly znaky dostupné hned, když je uživatel zadá. Tyto dvě funkce zakazují bufferování řádků. Rozdíl mezi nimi je ve zpracování ovládacích znaků zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou tyto znaky interpretovány přímo ovladačem terminálu.</p></li>
+<li><p><strong>echo() a noecho()</strong></p>
+<p>Tyto funkce ovládají, jestli se znaky zadávané uživatelem zobrazují na obrazovku či nikoli. Většina interaktivních programů volá na začátku noecho() a pokud to potřebuje, tak znaky vypisuje kontrolovaně sama.</p></li>
+<li><p><strong>keypad()</strong></p>
+<p>Tato inicializační funkce umožňuje čtení funkčních kláves jako F1,, kurzorové klávesy atd. Téměř každý interaktivní program toto povoluje, protože šipky jsou zásadní částí každé uživatelského rozhraní. Abyste povolili tuto vlastnost pro standardní obrazovku (stdscr), zavolejte <code>keypad(stdscr,TRUE)</code>.</p></li>
+<li><p><strong>halfdelay()</strong></p>
+<p>Přestože tato funkce není používaná příliš často, je občas velice užitečná. Vstup je okamžitě předán programu jako po zavolání <code>cbreak()</code> s tím rozdílem, že čeká X desetin sekundy na vstup a jestliže potom není vstup dostupný, vrátí ERR. X je interval zadaný jako argument při volání halfdelay(). Tato funkce je užitečná, pokud potřebujete nějaký vstup, ale když uživatel neodpoví dostatečně rychle, chcete udělat něco jiného.</p></li>
+</ol>]]></summary>
+</entry>
+<entry>
+    <title>Jak se projevuje 'const'</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
+
+<span class="dt">int</span> main (<span class="dt">void</span>)
+{
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+
+  str1 = NULL;
+  str2 = NULL;
+  str3 = NULL;
+
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+</table>
+
+<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
+
+]]></summary>
+</entry>
+
+</feed>

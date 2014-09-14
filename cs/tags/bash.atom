@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako bash</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/bash.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/bash.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2013-04-02T00:00:00Z</updated>
+    <entry>
+    <title>Zpracování PDF</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html</id>
+    <published>2013-04-02T00:00:00Z</published>
+    <updated>2013-04-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
+<p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
+<p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
+<h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
+<p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
+<h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
+<p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
+    <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
+<span class="kw">done</span></code></pre>
+<p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
+<h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
+<p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
+<h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
+<p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+<span class="kw">&gt;</span> <span class="kw">-dBATCH</span> -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<p>Tím se každá stránka přepočítá na plus minus 72 což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>]]></summary>
+</entry>
+<entry>
+    <title>Testování binárky</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-testovani-binarky.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-testovani-binarky.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
+<h2 id="formát-testů">Formát testů</h2>
+<p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
+<dl>
+<dt><code>*.in</code></dt>
+<dd>toto přijde na standardní vstup
+</dd>
+<dt><code>*.args</code></dt>
+<dd>toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý argument má obsahovat mezeru.)
+</dd>
+<dt><code>*.out</code></dt>
+<dd>očekávaný výstup na stdout
+</dd>
+<dt><code>*.err</code></dt>
+<dd>očekávaný chybový výstup
+</dd>
+<dt><code>*.ret</code></dt>
+<dd>návratový kód programu
+</dd>
+</dl>
+<p>Pokud některý soubor neexistuje, tak se příslušná část netestuje.</p>
+<h2 id="použití">Použití</h2>
+<p>Stáhněte si <a href="/data/stest.tar.bz2">archiv s testovacím skriptem</a> a pomocným souborem, který umožňuje vypisovat výsledky barevně. Skript <code>stest</code> je dobré mít v cestě, <code>.term_colors</code> může být buď přímo v domovském adresáři nebo na stejném místě jako <code>stest</code>.</p>
+<p>K testování stačí spustit příkaz <code>stest ./NAZEV_BINARKY</code>, případně přidat ještě cestu k adresáři s testy. Další možnosti shrnuje nápověda <code>stest --help</code>.</p>]]></summary>
+</entry>
+
+</feed>

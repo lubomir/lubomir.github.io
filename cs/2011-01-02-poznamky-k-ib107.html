@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Poznámky k IB107</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Poznámky k IB107</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>2. leden 2011</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/teorie.html">teorie</a>, <a href="../cs/tags/vycislitelnost.html">vyčíslitelnost</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<h2 id="věta-o-numeraci">Věta o numeraci</h2>
+<blockquote>
+<p>Pro každé <span class="math"><em>j</em> ≥ 1</span> existuje vyčíslitelná funkce <span class="math">Φ  : <em>N</em><sup><em>j</em> + 1</sup>→<em>N</em></span>, která je univerzální pro standardní numeraci j-árních funkcí. Tedy pro každé <span class="math"><em>e</em> ∈ <em>N</em></span> a <span class="math">(<em>a</em><sub>1</sub>, …<em>a</em><sub><em>j</em></sub>) ∈ <em>N</em><sup><em>j</em></sup></span> platí <img src="../images/veta-o-numeraci.png" alt="Věta o numeraci" /></p>
+</blockquote>
+<p>Pro každou aritu tedy existuje funkce <span class="math">Φ </span>, která bere o jeden argument víc -- potřebuje ještě index programu, který má simulovat. Důkaz věty spočívá v definici interpretu -- programu, který bude simulovat jiné programy.</p>
+<h2 id="věta-o-parametrizaci">Věta o parametrizaci</h2>
+<blockquote>
+<p>Ke každému <span class="math"><em>n</em> ≥ 1</span>, <span class="math"><em>m</em> ≥ 1</span> existuje totálně vyčíslitelná funkce <span class="math"><em>s</em><sup><em>m</em></sup><sub><em>n</em></sub> : <em>N</em><sup><em>m</em> + 1</sup>→<em>N</em></span>, taková, že platí <img src="../images/veta-o-parametrizaci.png" alt="Věta o parametrizaci" /></p>
+</blockquote>
+<p>Takže: existuje funkce <span class="math"><em>s</em></span>, která pro index programu <span class="math"><em>i</em></span> a <span class="math"><em>m</em></span> jeho argumentů spočítá index jiného programu, který bude dělat totéž co <span class="math"><em>i</em></span>, ale bude potřebovat o <span class="math"><em>m</em></span> argumentů méně. Funkce <span class="math"><em>s</em></span> vlastně zafixuje prvních <span class="math"><em>m</em></span> argumentů na nějaké konstanty. <span class="math"><em>m</em></span> je tady počet fixovaných parametrů, <span class="math"><em>n</em></span> počet těch, které se nefixují.</p>
+<p>Dokazuje se pomocí programu, který celou konstrukci realizuje -- má <span class="math"><em>m</em></span> konstant a přesypává argumenty tak, aby to sedělo. Prvních <span class="math"><em>n</em></span> argumentů posune o <span class="math"><em>m</em></span> pozic doprava a na uvolněná místa dosadí konstanty. Pozor, aby se při posunování nepřepsalo něco, co bude ještě potřeba.</p>
+<h2 id="první-riceova-věta">První Riceova věta</h2>
+<blockquote>
+<p>Nechť <span class="math"><em>I</em> ⊂ <em>N</em></span> je netriviální (není prázdná ani se nerovná <span class="math"><em>N</em></span>) a rekurzivní. Potom existují indexy programů <span class="math"><em>i</em> ∈ <em>I</em></span> a <span class="math"><em>j</em> ∈ <em>I</em>ʹ</span><sup><a href="#fn1" class="footnoteRef" id="fnref1">1</a></sup> tak, že <span class="math"><em>ϕ</em><sub><em>i</em></sub> = <em>ϕ</em><sub><em>j</em></sub></span>.</p>
+</blockquote>
+<p>Tedy pokud je netriviální podmnožina <span class="math"><em>N</em></span> rekurzivní, potom nerespektuje funkce a naopak pokud nějaká množina respektuje funkce a je netriviální, potom nemůže být rekurzivní.</p>
+<p>Důkaz se provede sporem: předpokládejme, že množina respektuje funkce a že množina <span class="math"><em>I</em></span> obsahuje index nějaké vyčíslitelné funkce<sup><a href="#fn2" class="footnoteRef" id="fnref2">2</a></sup> <span class="math"><em>θ</em></span>, která není prázdná. <span class="math"><em>I</em>ʹ</span> potom obsahuje indexy prázdné funkce. Kdyby tomu tak nebylo, tak se prohodí <span class="math"><em>I</em></span> a <span class="math"><em>I</em>ʹ</span>.</p>
+<p>Nechť <span class="math"><em>P</em><sub><em>f</em>(<em>i</em>)</sub></span> je program <code>begin</code> <span class="math"><em>x</em><sub>2</sub></span> <code>:=</code> <span class="math">Φ (<em>i</em>, <em>i</em>)</span><code>;</code> <span class="math"><em>x</em><sub>1</sub></span> <code>:=</code> <span class="math"><em>θ</em>(<em>x</em><sub>1</sub>)</span> <code>end</code>. Zřejmě program <span class="math"><em>P</em></span> počítá funkci <span class="math"><em>θ</em></span>, pokud <span class="math"><em>ϕ</em><sub><em>i</em></sub>(<em>i</em>)</span> je definované a jinak počítá prázdnou funkci.</p>
+<p>Tedy pro všechna <span class="math"><em>i</em> ∈ <em>N</em></span> platí <span class="math"><em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub> = <em>θ</em></span> právě tehdy když <span class="math"><em>i</em> ∈ <em>K</em></span>.</p>
+<p>Pokud tedy <span class="math"><em>f</em>(<em>i</em>) ∈ <em>I</em></span>, pak <span class="math"><em>f</em>(<em>i</em>)</span> není index prázdné funkce. Je to index <span class="math"><em>θ</em></span>. Obráceně pokud <span class="math"><em>f</em>(<em>i</em>)</span> je indexem funkce <span class="math"><em>θ</em></span>, pak <span class="math"><em>f</em>(<em>i</em>) ∈ <em>I</em></span>. Nechť <span class="math"><em>χ</em><sub><em>I</em></sub></span> je charakteristická funkce <span class="math"><em>I</em></span>. Pro všechna <span class="math"><em>i</em> ∈ <em>N</em></span> musí platit <img src="../images/prvni-riceova-veta-tvrzeni.png" alt="Tvrzení 1" /></p>
+<p>Protože <span class="math"><em>χ</em><sub><em>I</em></sub> ∘ <em>f</em></span> je totálně vyčíslitelná, musela by <span class="math"><em>K</em></span> být rekurzivní, což zřejmě není.</p>
+<h2 id="druhá-riceova-věta">Druhá Riceova věta</h2>
+<blockquote>
+<p>Necht <span class="math"><em>I</em> ⊂ <em>N</em></span> respektuje funkce a nechť existuje funkce <span class="math"><em>θ</em></span> taková, že všechny její indexy jsou v <span class="math"><em>I</em></span> a má vyčíslitelné rozšíření <span class="math"><em>θ</em>ʹ</span> takové, že jeho indexy patří do <span class="math"><em>I</em>ʹ</span>.</p>
+<p><span class="math"><em>I</em></span> potom není rekurzivně spočetná.</p>
+</blockquote>
+<p>Důkaz půjde zase sporem. Nechť funkce <span class="math"><em>ξ</em>(<em>i</em>, <em>j</em>)</span> se rovná <span class="math"><em>θ</em>ʹ(<em>j</em>)</span>, pokud <span class="math"><em>ϕ</em><sub><em>i</em></sub>(<em>i</em>)</span> je definováno a jinak se rovná <span class="math"><em>θ</em>(<em>j</em>)</span>. Tato funkce je vyčíslitelná<sup><a href="#fn3" class="footnoteRef" id="fnref3">3</a></sup>. Podle <a href="#věta-o-parametrizaci">věty o parametrizaci</a> existuje totálně vyčíslitelná funkce <span class="math"><em>f</em> : <em>N</em>→<em>N</em></span> taková, že <span class="math"><em>ξ</em>(<em>i</em>, <em>j</em>) = <em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub>(<em>j</em>)</span>. <span class="math"><em>f</em>(<em>i</em>)</span> potom patří do <span class="math"><em>I</em></span> právě tehdy, když <span class="math"><em>ϕ</em><sub><em>i</em></sub>(<em>i</em>)</span> není definováno. Tj. <span class="math"><em>f</em>(<em>i</em>) ∈ <em>I</em> ≡ <em>i</em> ∈ <em>K</em>ʹ</span>.</p>
+<p>Pokud by tedy <span class="math"><em>I</em></span> byla rekurzivně spočetná, tak i <span class="math"><em>K</em>ʹ</span> by musela být rekurzivně spočetná. To ale není.</p>
+<p>Při použití druhé Riceovy věty je tedy zřejmě potřeba zvolit <span class="math"><em>θ</em></span> tak, aby nebyla totální. Jinak by totiž neměla potřebné rozšíření.</p>
+<h2 id="třetí-riceova-věta">Třetí Riceova věta</h2>
+<blockquote>
+<p>Nechť <span class="math"><em>I</em> ⊂ <em>N</em></span> respektuje funkce a nechť existuje funkce <span class="math"><em>θ</em></span> taková, že všechny její indexy patří do <span class="math"><em>I</em></span> a navíc všechna její konečná zúžení patří do <span class="math"><em>I</em>ʹ</span>.</p>
+<p><span class="math"><em>I</em></span> potom není rekurzivně spočetná.</p>
+</blockquote>
+<p>Důkaz se opět provede sporem. Nechť funkce <span class="math"><em>μ</em>(<em>i</em>, <em>j</em>)</span> počítá <span class="math"><em>θ</em>(<em>j</em>)</span>, pokud <span class="math"><em>P</em><sub><em>i</em></sub></span> nezastaví pro vstup <span class="math"><em>i</em></span> během nejvýše <span class="math"><em>j</em></span> kroků. Pokud zastaví během nejvýše <span class="math"><em>j</em></span> kroků, <span class="math"><em>μ</em></span> se zacyklí. Funkce <span class="math"><em>μ</em></span> je zřejmě vyčíslitelná.</p>
+<p>Podle <a href="#věta-o-parametrizaci">věty o parametrizaci</a> existuje totálně vyčíslitelná funkce <span class="math"><em>f</em></span> tak, že <span class="math"><em>μ</em>(<em>i</em>, <em>j</em>) = <em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub>(<em>j</em>)</span>.</p>
+<p>Dostaneme tedy, že pokud <span class="math"><em>i</em> ∈ <em>K</em></span>, tak <span class="math"><em>P</em><sub><em>i</em></sub></span> zastaví pro <span class="math"><em>i</em></span>. Tedy existuje <span class="math"><em>j</em></span> takové, že <span class="math"><em>P</em><sub><em>i</em></sub></span> zastaví pro <span class="math"><em>i</em></span> po <strong>přesně</strong> <span class="math"><em>j</em></span> krocích. Tj. existuje <span class="math"><em>j</em></span> takové, že <span class="math"><em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub>(<em>x</em>)</span> počítá <span class="math"><em>θ</em>(<em>x</em>)</span> pro všechna <span class="math"><em>x</em></span> menší než <span class="math"><em>j</em></span> a jinak je nedefinované. Potom ale <span class="math"><em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub></span> je zúžením <span class="math"><em>θ</em></span> a její definiční obor je konečný, tedy <span class="math"><em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub> ∈ <em>I</em>ʹ</span>.</p>
+<p>Z druhé strany platí, že když <span class="math"><em>i</em> ∈ <em>K</em>ʹ</span>, tak <span class="math"><em>P</em><sub><em>i</em></sub></span> nikdy nezastaví a <span class="math"><em>ϕ</em><sub><em>f</em>(<em>i</em>)</sub></span> počítá celou <span class="math"><em>θ</em></span> a tedy patří do <span class="math"><em>I</em></span>.</p>
+<p>Tedy <span class="math"><em>i</em> ∈ <em>K</em>ʹ ≡ <em>f</em>(<em>i</em>) ∈ <em>I</em></span> a <span class="math"><em>I</em></span> nemůže být rekurzivně spočetná.</p>
+<p>Třetí Riceovu větu tedy zřejmě nejde použít, pokud <span class="math"><em>I</em></span> obsahuje prázdnou funkci. Ta je totiž konečným zúžením každé funkce.</p>
+<h2 id="časová-složitost">Časová složitost</h2>
+<h3 id="f-in-og"><span class="math"><em>f</em> ∈ <em>O</em>(<em>g</em>)</span></h3>
+<p>Funkce <span class="math"><em>f</em></span> roste nejvýše tak rychle jako <span class="math"><em>g</em></span>.</p>
+<blockquote>
+<p><span class="math">∃ <em>c</em>, <em>n</em><sub>0</sub> : ∀ <em>n</em> ≥ <em>n</em><sub>0</sub> : <em>f</em>(<em>n</em>) ≤ <em>c</em><em>g</em>(<em>n</em>)</span></p>
+</blockquote>
+<h3 id="f-in-og-1"><span class="math"><em>f</em> ∈ <em>o</em>(<em>g</em>)</span></h3>
+<p>Funkce <span class="math"><em>f</em></span> roste pomaleji než <span class="math"><em>g</em></span></p>
+<figure>
+<img src="../images/f-in-og.png" title="\lim{n \to \infty}\frac{f(n)}{g(n)} = 0" />
+</figure>
+<h3 id="f-in-omegag"><span class="math"><em>f</em> ∈ Ω (<em>g</em>)</span></h3>
+<p>Funkce <span class="math"><em>f</em></span> roste alespoň tak rychle jako <span class="math"><em>g</em></span></p>
+<figure>
+<img src="../images/f-in-Omega-g.png" title="\exists n_0, c: \forall n \geq n_0 : f(n) \geq \frac{1}{c} g(n)" />
+</figure>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>apostrofem označím doplněk množiny<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>a tedy všechny její indexy<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Nejdřív se začne paralelně (pomocí step counteru) počítat <span class="math"><em>θ</em>(<em>j</em>)</span> a <span class="math"><em>ϕ</em><sub><em>i</em></sub>(<em>i</em>)</span>. Pokud první skončí <span class="math"><em>θ</em>(<em>j</em>)</span>, vrátí se její výsledek. Pokud by první skončil výpočet <span class="math"><em>ϕ</em><sub><em>i</em></sub>(<em>i</em>)</span>, začne se přímo simulovat <span class="math"><em>θ</em>ʹ(<em>j</em>)</span>.<a href="#fnref3">↩</a></p></li>
+</ol>
+</section>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

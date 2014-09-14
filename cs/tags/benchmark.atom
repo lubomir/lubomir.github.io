@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako benchmark</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/benchmark.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/benchmark.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <entry>
+    <title>Rychlost prohledávání adresáře</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html</id>
+    <published>2012-01-24T00:00:00Z</published>
+    <updated>2012-01-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
+<h2 id="hřiště">Hřiště</h2>
+<p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
+<p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
+    <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
+<span class="kw">done</span>
+
+<span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+    <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
+<span class="kw">done</span></code></pre>
+<h2 id="metody">Metody</h2>
+<p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
+<p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
+<p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+{
+    <span class="kw">struct</span> DIR *dir = opendir(path);
+    <span class="kw">if</span> (dir == NULL) {
+        <span class="kw">return</span> <span class="dv">0</span>;
+    } <span class="kw">else</span> {
+        closedir(dir);
+        <span class="kw">return</span> <span class="dv">1</span>;
+    }
+}</code></pre>
+<p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
+<p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
+<ul>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
+</ul>
+<h2 id="výsledky">Výsledky</h2>
+<p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
+<table>
+<tr><th></th>           <th>
+Soubory
+</th> <th>
+Adresáře
+</th> <th>
+Mix
+</th></tr>
+<tr><th>
+dvojitý průchod
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,109
+</td>   <td>
+0,106
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,133
+</td>   <td>
+0,177
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,043
+</td>   <td>
+0,040
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Pole
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,054
+</td>   <td>
+0,057
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,067
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,021
+</td>   <td>
+0,021
+</td>    <td>
+0
+</td></tr>
+<tr><th>
+Seznam
+</th><th></th><th></th><th></th></tr>
+<tr><td>
+<code>stat()</code>
+</td>   <td>
+0,053
+</td>   <td>
+0,060
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>opendir()</code>
+</td><td>
+0,065
+</td>   <td>
+0,091
+</td>    <td>
+0
+</td></tr>
+<tr><td>
+<code>d_type</code>
+</td>   <td>
+0,020
+</td>   <td>
+0,029
+</td>    <td>
+0
+</td></tr>
+</table>
+
+<p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
+<p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
+</entry>
+
+</feed>

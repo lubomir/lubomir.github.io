@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Posts tagged Haskell</title>
+    <link href="http://fi.muni.cz/~xsedlar3//en/tags/haskell.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//en/tags/haskell.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2014-08-31T00:00:00Z</updated>
+    <entry>
+    <title>Simulating an elevator</title>
+    <link href="http://fi.muni.cz/~xsedlar3//en/2014-08-31-simulating-an-elevator.html" />
+    <id>http://fi.muni.cz/~xsedlar3//en/2014-08-31-simulating-an-elevator.html</id>
+    <published>2014-08-31T00:00:00Z</published>
+    <updated>2014-08-31T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>
+<p>There were two elevators, each equipped with a single button that should tell the elevator to come to your floor. However, if the elevator is currently going somewhere, it will ignore your request. You have to wait for it to stop and press the button again. Should someone press it faster, you are out of luck and have to wait for next try.</p>
+<p>Obviously, the two elevators do not communicate in any way, so in fact you gamble with two elevators at the same time.</p>
+<p>This system seemed very stupid to me, so I decided to create a simple model to verify how much better it would be if the elevator was somewhat smarter.</p>
+<h2 id="the-model">The model</h2>
+<p>So let's model a building with a single elevator. The simulation will run in turns. At the beginning of each turn, a person can appear at each floor with some probability. All people want to go to the lowest floor (think busy morning). Next, the elevator must decide whether to go up, down, load or unload people or wait.</p>
+<p>We will test three different elevator logics. In the simulation, the elevator is represented by a <code>Haskell</code> function with type <code>Building -&gt; Decision</code>, where <code>Building</code> is a data type with information about waiting people and actual position of the elevator.</p>
+<p>Note that even the simplest elevator in the simulation is still more elaborate than the one in my building. To simulate that, it would be necessary to choose floor to pick people up at random. This would require the elevator logic to retain some state between each call, which currently is not possible.</p>
+<h2 id="the-elevators">The elevators</h2>
+<p>The simplest elevator is called <code>dumbElevator</code>, but none-the-less it still is a bit smarter that the one in my former building. This elevator stores each request in a queue and works in a first-come-first-served fashion.</p>
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">dumbElevator b
+  <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b <span class="kw">then</span> <span class="dt">Unload</span> <span class="kw">else</span> <span class="dt">GoDown</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> (<span class="fu">==</span> b <span class="fu">^.</span> curPosition) <span class="ot">`fmap`</span> (b <span class="fu">^.</span> queue <span class="fu">^?</span> _head) <span class="kw">of</span>
+        <span class="dt">Just</span> <span class="dt">True</span>  <span class="ot">-&gt;</span> <span class="dt">Load</span>
+        <span class="dt">Just</span> <span class="dt">False</span> <span class="ot">-&gt;</span> <span class="dt">GoUp</span>
+        <span class="dt">Nothing</span>    <span class="ot">-&gt;</span> <span class="dt">Wait</span></code></pre>
+<p>If there are people on the elevator, it will take them to the basement and unload. Otherwise it will go to the next floor in the queue and load all the people there.</p>
+<p>We will improve this elevator with slightly nicer behavior in <code>niceElevator</code>: when it goes down through a floor with people, it will stop and let on.</p>
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">niceElevator b
+  <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b
+                    <span class="kw">then</span> <span class="dt">Unload</span>
+                    <span class="kw">else</span> <span class="kw">if</span> peopleOnCurrentFloor b <span class="kw">then</span> <span class="dt">Load</span> <span class="kw">else</span> <span class="dt">GoDown</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> dumbElevator b</code></pre>
+<p>The last modeled elevator behaves the same as <code>niceElevator</code> when going down. Where it differs is that when it decides where to start loading people, it ignores the order of requests and goes to the highest floor with waiting people.</p>
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">smartElevator b
+  <span class="fu">|</span> hasPeople b <span class="fu">=</span> niceElevator b
+  <span class="fu">|</span> any (<span class="fu">&gt;</span> b <span class="fu">^.</span> curPosition) (b <span class="fu">^.</span> queue) <span class="fu">=</span> <span class="dt">GoUp</span>
+  <span class="fu">|</span> peopleOnCurrentFloor b <span class="fu">=</span> <span class="dt">Load</span>
+  <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="dt">Wait</span></code></pre>
+<p>It does not preserve any state. In each turn, it will check if there is a floor above it with people. If so, it will go for them. If not and there are people on current floor, it lets them on, otherwise it will wait. Note that a situation when people are waiting below the elevator can never happen, as the elevator goes up only if it can pick someone up there.</p>
+<h2 id="results">Results</h2>
+<p>It should not be a surprise that the dumb elevator does not behave very well. The metric that I measured is the average waiting time. Every time a person got on the elevator, their waiting time (current time minus the appearance of this person) was recorded. This way we can determine how bad the elevator is. The number itself does not say much, but a comparison of different elevators does.</p>
+<p>The first graph displays the average waiting time with regards to the probability of a person appearing.</p>
+<figure>
+<img src="/images/elevator/wait-vs-prob-5.png" alt="In a 5 floor building" /><figcaption>In a 5 floor building</figcaption>
+</figure>
+<p>If the building has more floors, the trend remains the same. The wait time for <em>dumb</em> elevator goes much higher than for the other two elevators. However, the additional cunning of <em>smart</em> elevator does not seem to bring much.</p>
+<figure>
+<img src="/images/elevator/wait-vs-prob-10.png" alt="In a 10 floor building" /><figcaption>In a 10 floor building</figcaption>
+</figure>
+<p>It seems from the graphs that at certain point the elevators can no longer deal with the amount of people appearing in the building. The simulation was run for 10000 turns and people who were never picked up do not have any effect on the average time, thus the upper bound on the wait time.</p>
+<p>It might also be interesting to have a look at the relation between waiting time and number of floors.</p>
+<figure>
+<img src="/images/elevator/wait-vs-floors-5.png" alt="For probability 5 %" /><figcaption>For probability 5 %</figcaption>
+</figure>
+<p>Interestingly, the probability of people appearing has pretty much no influence on the results.</p>
+<figure>
+<img src="/images/elevator/wait-vs-floors-15.png" alt="For probability 15 %" /><figcaption>For probability 15 %</figcaption>
+</figure>
+<h2 id="conclusion">Conclusion</h2>
+<p>There is one positive result: I don't have to live a with a dumb elevator anymore. The simulation confirmed that a slight improvement in the logic -- letting people get on the elevator when it is going down -- can have significant impact on average waiting time.</p>
+<p>The code used for this is available at <a href="https://github.com/lubomir/elevator">GitHub</a>.</p>]]></summary>
+</entry>
+
+</feed>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Testování binárky</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Testování binárky</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>19. prosinec 2010</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/programovani.html">programování</a>, <a href="../cs/tags/bash.html">bash</a>, <a href="../cs/tags/testy.html">testy</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
+<h2 id="formát-testů">Formát testů</h2>
+<p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
+<dl>
+<dt><code>*.in</code></dt>
+<dd>toto přijde na standardní vstup
+</dd>
+<dt><code>*.args</code></dt>
+<dd>toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý argument má obsahovat mezeru.)
+</dd>
+<dt><code>*.out</code></dt>
+<dd>očekávaný výstup na stdout
+</dd>
+<dt><code>*.err</code></dt>
+<dd>očekávaný chybový výstup
+</dd>
+<dt><code>*.ret</code></dt>
+<dd>návratový kód programu
+</dd>
+</dl>
+<p>Pokud některý soubor neexistuje, tak se příslušná část netestuje.</p>
+<h2 id="použití">Použití</h2>
+<p>Stáhněte si <a href="../data/stest.tar.bz2">archiv s testovacím skriptem</a> a pomocným souborem, který umožňuje vypisovat výsledky barevně. Skript <code>stest</code> je dobré mít v cestě, <code>.term_colors</code> může být buď přímo v domovském adresáři nebo na stejném místě jako <code>stest</code>.</p>
+<p>K testování stačí spustit příkaz <code>stest ./NAZEV_BINARKY</code>, případně přidat ještě cestu k adresáři s testy. Další možnosti shrnuje nápověda <code>stest --help</code>.</p>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako Haskell</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/haskell.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/haskell.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2012-03-20T00:00:00Z</updated>
+    <entry>
+    <title>Derivací k regulárním výrazům</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
+    <published>2012-03-20T00:00:00Z</published>
+    <updated>2012-03-20T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math"><em>ε</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
+<p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
+<figure>
+<img src="/images/regex0.png" alt="a^*b+(c+d+e)a" /><figcaption><span class="math"><em>a</em><sup> * </sup><em>b</em> + (<em>c</em> + <em>d</em> + <em>e</em>)<em>a</em></span></figcaption>
+</figure>
+<h2 id="importujeme">Importujeme</h2>
+<p>Budeme potřebovat importovat několik modulů, většinu z nich pro parsování výrazu.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
+<span class="kw">import qualified</span> <span class="dt">Data.Set</span> <span class="kw">as</span> <span class="dt">S</span>
+<span class="kw">import </span><span class="dt">Text.Parsec.Char</span>
+<span class="kw">import </span><span class="dt">Text.Parsec.String</span>
+<span class="kw">import </span><span class="dt">Text.Parsec.Combinator</span>
+<span class="kw">import </span><span class="dt">Text.Parsec.Prim</span>
+<span class="kw">import </span><span class="dt">Text.Parsec.Expr</span>
+<span class="kw">import </span><span class="dt">Control.Applicative</span> ((&lt;*), (*&gt;))
+<span class="kw">import </span><span class="dt">Data.Maybe</span> (fromMaybe)
+<span class="kw">import </span><span class="dt">Data.List</span> (tails, foldl&#39;)</code></pre>
+<h2 id="datové-typy">Datové typy</h2>
+<p>Je potřeba nějak reprezentovat jak samotný regulární výraz, tak i výsledný automat. Regexp je možné reprezentovat jako strom. Listy jsou základní výrazy, uzly potom zřetězení, alternativa a iterace.</p>
+<p>Později budeme potřebovat určovat, jestli nějaký regulární výraz popisuje (mimo jiné) prázdné slovo. Pro urychlení tedy u těch konstruktorů, kde to není zřejmé, přidáme tuto informaci.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Regex</span> a <span class="fu">=</span> <span class="dt">Epsilon</span>
+             <span class="fu">|</span> <span class="dt">Zero</span>
+             <span class="fu">|</span> <span class="dt">Simple</span> a
+             <span class="fu">|</span> <span class="dt">Plus</span> <span class="dt">Bool</span> (<span class="dt">Regex</span> a) (<span class="dt">Regex</span> a)
+             <span class="fu">|</span> <span class="dt">Conc</span> <span class="dt">Bool</span> (<span class="dt">Regex</span> a) (<span class="dt">Regex</span> a)
+             <span class="fu">|</span> <span class="dt">Iter</span> (<span class="dt">Regex</span> a)
+             <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Ord</span>, <span class="dt">Show</span>)</code></pre>
+<p>Pro konečný automat bude potřeba další typ. Automat má nějaké přechody, množinu stavů a počáteční stav. Položka <code>isAccepting</code> je funkce, která pro stav řekne, jestli je akceptující.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">Node</span> <span class="fu">=</span> <span class="dt">Regex</span> <span class="dt">Char</span>  <span class="co">-- ^ Popisek stavu</span>
+
+<span class="kw">data</span> <span class="dt">FiniteAutomaton</span> <span class="fu">=</span> <span class="dt">FiniteAutomaton</span>
+                     {<span class="ot"> transitions ::</span> <span class="dt">M.Map</span> (<span class="dt">Node</span>,<span class="dt">Char</span>) <span class="dt">Node</span>
+                     ,<span class="ot"> states      ::</span> <span class="dt">S.Set</span> <span class="dt">Node</span>
+                     ,<span class="ot"> startNode   ::</span> <span class="dt">Node</span>
+                     ,<span class="ot"> isAccepting ::</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+                     }</code></pre>
+<p>V první řadě nadefinujeme tři pomocné funkce pro spojování regexpů, které se postarají o korektní vyplnění pomocné boolovské části a taky zabrání vzniku několika patologických výrazů – např. nemá smysl řetězit něco s prázdným slovem. Jiný příklad je výraz <code>(E*)*</code>, který je ekvivalentní s <code>E*</code> (a navíc vede k zacyklení).</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">plus ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+plus <span class="dt">Zero</span> x <span class="fu">=</span> x
+plus x <span class="dt">Zero</span> <span class="fu">=</span> x
+plus x y    <span class="fu">=</span> <span class="dt">Plus</span> (canBeEpsilon x <span class="fu">||</span> canBeEpsilon y) x y
+
+<span class="ot">conc ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+conc <span class="dt">Epsilon</span> x <span class="fu">=</span> x
+conc x <span class="dt">Epsilon</span> <span class="fu">=</span> x
+conc <span class="dt">Zero</span> _    <span class="fu">=</span> <span class="dt">Zero</span>
+conc _ <span class="dt">Zero</span>    <span class="fu">=</span> <span class="dt">Zero</span>
+conc x y       <span class="fu">=</span> <span class="dt">Conc</span> (canBeEpsilon x <span class="fu">&amp;&amp;</span> canBeEpsilon y) x y
+
+<span class="ot">iter ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+iter (<span class="dt">Iter</span> x) <span class="fu">=</span> <span class="dt">Iter</span> x
+iter x        <span class="fu">=</span> <span class="dt">Iter</span> x</code></pre>
+<p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math"><em>E</em></span> určit, jestli <span class="math"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math"><em>ε</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">canBeEpsilon ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+canBeEpsilon <span class="dt">Epsilon</span>      <span class="fu">=</span> <span class="dt">True</span>
+canBeEpsilon <span class="dt">Zero</span>         <span class="fu">=</span> <span class="dt">False</span>
+canBeEpsilon (<span class="dt">Simple</span> _)   <span class="fu">=</span> <span class="dt">False</span>
+canBeEpsilon (<span class="dt">Conc</span> e _ _) <span class="fu">=</span> e
+canBeEpsilon (<span class="dt">Plus</span> e _ _) <span class="fu">=</span> e
+canBeEpsilon (<span class="dt">Iter</span> _)     <span class="fu">=</span> <span class="dt">True</span></code></pre>
+<h2 id="parsování">Parsování</h2>
+<p>A nyní hurá na parsování. <code>Parsec</code> nabízí úžasné možnosti, jak parsovat aritmetické i jiné výrazy. Jediná složitější věc je tady parser pro jednotlivý znak, protože umožňuje využít zpětného lomítka k escapování znaků hvězdičky, plusu a závorek, které by jinak měly speciální význam.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">regexP, termP,<span class="ot"> simpleP ::</span> <span class="dt">Parser</span> (<span class="dt">Regex</span> <span class="dt">Char</span>)
+regexP <span class="fu">=</span> buildExpressionParser table termP
+termP <span class="fu">=</span> simpleP <span class="fu">&lt;|&gt;</span> char <span class="ch">&#39;(&#39;</span> <span class="fu">*&gt;</span> regexP <span class="fu">&lt;*</span> char <span class="ch">&#39;)&#39;</span>
+table <span class="fu">=</span> [ [ <span class="dt">Postfix</span> <span class="fu">$</span> char <span class="ch">&#39;*&#39;</span> <span class="fu">&gt;&gt;</span> return iter ]
+        , [<span class="dt">Infix</span> (return conc) <span class="dt">AssocLeft</span>]
+        , [<span class="dt">Infix</span> (char <span class="ch">&#39;+&#39;</span> <span class="fu">&gt;&gt;</span> return plus) <span class="dt">AssocLeft</span>]
+        ]
+simpleP <span class="fu">=</span> <span class="kw">do</span>
+    c&#39; <span class="ot">&lt;-</span> noneOf <span class="st">&quot;()+*&quot;</span>
+    c <span class="ot">&lt;-</span> <span class="kw">if</span> c&#39; <span class="fu">==</span> <span class="ch">&#39;\\&#39;</span>
+            <span class="kw">then</span> anyChar
+            <span class="kw">else</span> return c&#39;
+    return (<span class="dt">Simple</span> c)</code></pre>
+<p>Parser <code>regexP</code> teď můžeme obalit pomocnou funkcí.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fromString ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span>
+fromString str <span class="fu">=</span> <span class="kw">case</span> parse (regexP <span class="fu">&lt;*</span> eof) <span class="st">&quot;&quot;</span> str <span class="kw">of</span>
+    <span class="dt">Left</span> _  <span class="ot">-&gt;</span> <span class="dt">Zero</span>
+    <span class="dt">Right</span> r <span class="ot">-&gt;</span> r</code></pre>
+<h2 id="derivace">Derivace</h2>
+<p>Funkce pro derivaci regulárních výrazů je skoro doslovným přepisem definice ze <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">slidů</a>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">derive ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+derive <span class="dt">Zero</span>    _      <span class="fu">=</span> <span class="dt">Zero</span>
+derive <span class="dt">Epsilon</span> _      <span class="fu">=</span> <span class="dt">Zero</span>
+derive (<span class="dt">Simple</span> x) y
+    <span class="fu">|</span> x <span class="fu">==</span> y          <span class="fu">=</span> <span class="dt">Epsilon</span>
+    <span class="fu">|</span> otherwise       <span class="fu">=</span> <span class="dt">Zero</span>
+derive (<span class="dt">Plus</span> _ p q) x <span class="fu">=</span> plus (derive p x) (derive q x)
+derive (<span class="dt">Conc</span> _ p q) x
+    <span class="fu">|</span> canBeEpsilon p  <span class="fu">=</span> plus (conc (derive p x) q) (derive q x)
+    <span class="fu">|</span> otherwise       <span class="fu">=</span> conc (derive p x) q
+derive (<span class="dt">Iter</span> p) x     <span class="fu">=</span> conc (derive p x) (iter p)</code></pre>
+<h2 id="konstrukce-automatu">Konstrukce automatu</h2>
+<p>A můžeme budovat automat! Samotný algoritmus běží v cyklu <code>run</code>, v kterém postupně vytvoříme jak množinu stavů, tak tabulku přechodů.</p>
+<p>V každé iteraci vezmeme všechny regulární výrazy z fronty <code>q</code> a každý zderivujeme každým písmenem abecedy. Z těchto všech derivací přidáme nové stavy a přechody mezi ty, co už jsme napočítali. Zároveň nově přidané stavy tvoří novou frontu.</p>
+<p>Nemá smysl přidávat žádné hrany, které vedou do stavu odpovídajícího regexpu <code>Zero</code>, tím se jenom zbytečně zvětšuje tabulka přechodů.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">toFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
+toFA alphabet re <span class="fu">=</span> <span class="dt">FiniteAutomaton</span> { startNode <span class="fu">=</span> re
+                                   , transitions <span class="fu">=</span> allTransitions
+                                   , states <span class="fu">=</span> allStates
+                                   , isAccepting <span class="fu">=</span> canBeEpsilon
+                                   }
+  <span class="kw">where</span>
+    (allStates, allTransitions) <span class="fu">=</span> run (S.singleton re, M.empty) [re]
+
+    run res []  <span class="fu">=</span> res
+    run (s,t) q <span class="fu">=</span> run (newStates, newTransitions) newQueue
+        <span class="kw">where</span>
+            allD           <span class="fu">=</span> [ ((r,a), derive r a) <span class="fu">|</span> r <span class="ot">&lt;-</span> q, a <span class="ot">&lt;-</span> alphabet ]
+            derivedStates  <span class="fu">=</span> S.fromList <span class="fu">$</span> map snd allD
+            newStates      <span class="fu">=</span> s <span class="ot">`S.union`</span> derivedStates
+            newTransitions <span class="fu">=</span> M.union t <span class="fu">$</span> M.fromList <span class="fu">$</span> filter ((<span class="fu">/=</span> <span class="dt">Zero</span>) <span class="fu">.</span> snd) allD
+            newQueue       <span class="fu">=</span> S.toList <span class="fu">$</span> S.difference derivedStates s</code></pre>
+<h2 id="práce-s-automatem">Práce s automatem</h2>
+<p>Když má automat přejít pod nějakým znakem z jednoho stavu do dalšího, podíváme se do tabulky a pokud je přechod nedefinovaný, interpretujeme to jako přechod do stavu <code>Zero</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">transition ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Node</span>
+transition fa q a <span class="fu">=</span> fromMaybe <span class="dt">Zero</span> <span class="fu">$</span> M.lookup (q,a) (transitions fa)</code></pre>
+<p>Pro spuštění automatu nad nějakým slovem tedy začneme v počátečním stavu a postupně automat krmíme znaky ze vstupu. Nakonec stačí zkontrolovat, jestli jsme došli do akceptujícího stavu.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runFA ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+runFA fa str <span class="fu">=</span> isAccepting fa <span class="fu">$</span> foldl&#39; (transition fa) (startNode fa) str</code></pre>
+<p>Teď už můžeme zabalit vytváření automatu do jediné funkce.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">strToFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
+strToFA str <span class="fu">=</span>  toFA (getAlphabet str) <span class="fu">$</span> fromString str
+  <span class="kw">where</span>
+    getAlphabet <span class="fu">=</span> filter (<span class="ot">`notElem`</span> <span class="st">&quot;()*+&quot;</span>)</code></pre>
+<p>Pomocí této funkce můžeme vytvořit jednoduchý operátor, který porovná řetězec s regulárním výrazem <span class="math"><em>E</em></span> a zjistí, jestli dané slovo patří do <span class="math"><em>L</em>(<em>E</em>)</span>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(=~) ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+str <span class="fu">=~</span> regex <span class="fu">=</span> runFA (strToFA regex) str</code></pre>
+<p>Nalezení všech odpovídajících podřetězců je maličko složitější. Postupně spustíme automat na všechny sufixy řetězce a zapamatujeme si, kde jsme došli do akceptujícího stavu. Zároveň ale zastavíme, když dorazíme do stavu <code>Zero</code>, protože z něj už není úniku.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">allMatches ::</span> <span class="dt">RE</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>, <span class="dt">Int</span>)]
+allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">$</span> run <span class="dv">1</span> (startNode fa)) starts
+  <span class="kw">where</span>
+    fa <span class="fu">=</span> strToFA re
+    starts <span class="fu">=</span> zip [<span class="dv">0</span><span class="fu">..</span>] (tails str)
+
+    run _ _    _ []        <span class="fu">=</span> []
+    run _ <span class="dt">Zero</span> _ _         <span class="fu">=</span> []
+    run end q start (a<span class="fu">:</span>as) <span class="fu">=</span> <span class="kw">let</span> newQ <span class="fu">=</span> transition fa q a
+                             <span class="kw">in</span> <span class="kw">if</span> isAccepting fa newQ
+                                    <span class="kw">then</span> (start, end) <span class="fu">:</span> run (end <span class="fu">+</span> <span class="dv">1</span>) newQ start as
+                                    <span class="kw">else</span>                run (end <span class="fu">+</span> <span class="dv">1</span>) newQ start as</code></pre>
+<h2 id="další-úpravy">Další úpravy</h2>
+<p>V tomhle stavu program při výpočtu tráví naprostou většinu času porovnáváním regulárních výrazů. Bylo by pěkné zbavit se jich a místo nich používat pro označování stavů čísla. To už ale dělat nebudu.</p>
+<figure>
+<img src="/images/regex1.png" alt="tis+ti+iti" /><figcaption>tis+ti+iti</figcaption>
+</figure>
+<h2 id="aktualizace">Aktualizace</h2>
+<dl>
+<dt>2012–07</dt>
+<dd>upraveno tak, aby <code>(E*)*</code> nevedlo k zacyklení; doplněn odkaz na původní článek
+</dd>
+</dl>]]></summary>
+</entry>
+<entry>
+    <title>Kódování čísel</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-06-06-kodovani-cisel.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-06-06-kodovani-cisel.html</id>
+    <published>2011-06-06T00:00:00Z</published>
+    <updated>2011-06-06T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
+<h2 id="varianty">Varianty</h2>
+<p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>
+<p>Nejjednodušší variantou, jak toho dosáhnout, je použít <em>unární</em> kódování. Číslo <span class="math"><em>n</em></span> zakóduje pomocí <span class="math"><em>n</em></span> nul následovaných jedničkou. Zřejmě je tedy bezprefixové, ale zároveň i paměťově neefektivní, protože délka kódu je lineární k velikosti kódovaného čísla.</p>
+<p>Jako lepší nápad vypadá zapsání čísla binárně a přidání jeho délky pomocí nějakého bezprefixového kódu. To ale také není optimální, protože bychom nevyužili mnoho možností. Konkrétně jde o slova, která začínají nulami. V klasickém dvojkovém zápisu jsou čísla 00 a 0 stejná. Z našeho pohledu je ale užitečné je rozlišit. Proto pro každou délku kódu využijeme všechny možnosti, tedy pro slovem délky jedna budeme kódovat dvě čísla, délkou dvě čtyři atd.</p>
+<p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
+<h2 id="implementace">Implementace</h2>
+<p>Nejdříve tedy definice typů.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
+
+<span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bit</span> <span class="kw">where</span>
+    show <span class="dt">Zero</span> <span class="fu">=</span> <span class="st">&quot;0&quot;</span>
+    show <span class="dt">One</span>  <span class="fu">=</span> <span class="st">&quot;1&quot;</span>
+
+<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre>
+<p>Typy požadovaných funkcí vypadají následovně. Kódovací funkce pro číslo vrátí posloupnost bitů, dekódovací naopak z proudy bitů vytáhnou první číslo a vrátí ho společně se zbytkem proudu. Funkce <code>fromBinary</code> se liší v tom, že zpracuje celý proud.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+parseUnary, parseGamma,<span class="ot"> parseDelta ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
+<p>Unární kódování je velice jednoduché. Operátor <code>(***) :: (a -&gt; b) -&gt; (c -&gt; d) -&gt; (a, c) -&gt; (b, d)</code> se nachází v modulu <code>Control.Arrow</code> a jeho jediný účel je aplikace funkcí na složky dvojice.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
+parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre>
+<p>Funkce pro binární kódování čísla jsou trošku složitější, ale pořád tam není žádná magie. Provádí klasický přepis čísla do dvojkové soustavy. Pomocná funkce <code>binary'</code> navíc výsledný kód doplní zleva do požadované délky nulami. Také 0 při délce kódu 0 reprezentuje prázdným seznamem.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
+  <span class="kw">where</span>
+    bin acc <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">:</span> acc
+    bin acc <span class="dv">1</span> <span class="fu">=</span> <span class="dt">One</span>  <span class="fu">:</span> acc
+    bin acc n <span class="fu">=</span> bin ((<span class="kw">if</span> odd n <span class="kw">then</span> <span class="dt">One</span> <span class="kw">else</span> <span class="dt">Zero</span>) <span class="fu">:</span> acc) (n <span class="ot">`div`</span> <span class="dv">2</span>)
+
+<span class="ot">binary&#39; ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+binary&#39; <span class="dv">0</span> <span class="dv">0</span> <span class="fu">=</span> []
+binary&#39; len n <span class="fu">=</span> padding <span class="fu">++</span> code
+  <span class="kw">where</span> code <span class="fu">=</span> binary n
+        padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
+
+fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre>
+<p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary&#39; len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
+  <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
+
+<span class="ot">parseWith ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
+parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
+  <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
+        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre>
+<p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
+parseGamma <span class="fu">=</span> parseWith parseUnary
+
+delta <span class="fu">=</span> encodeWith gamma
+parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre>
+<p>Odtud už je jednoduché napsat funkci, které bude kódovat nebo dekódovat seznam čísel.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+encode <span class="fu">=</span> concatMap
+
+<span class="ot">decode ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
+decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span class="fu">=</span> f s
+             <span class="kw">in</span> <span class="kw">case</span> ss <span class="kw">of</span>
+                  [] <span class="ot">-&gt;</span> [n]
+                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre>
+<p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>]]></summary>
+</entry>
+<entry>
+    <title>XMonad a okna s pevnou velikostí</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
+    <published>2011-04-04T00:00:00Z</published>
+    <updated>2011-04-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
+<p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
+<p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
+<p>Společným znakem oken, která mají fixní velikost, je nastavení minimální a maximální velikosti okna na stejnou hodnotu. Toto nastavení je v <code>WM_NORMAL_HINTS</code> a dá se zjistit třeba přes <code>xprop</code>. Toto pole má typ <code>XSizeHints</code> a nejpřesnější popis, který jsem našel, vypadá takto:</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span> {
+    long flags;                <span class="co">/* marks which fields in this</span>
+<span class="co">                                  structure are defined */</span>
+    int x, y;                  <span class="co">/* Obsolete */</span>
+    int width, height;         <span class="co">/* Obsolete */</span>
+    int min_width, min_height;
+    int max_width, max_height;
+    int width_inc, height_inc;
+    struct {
+           <span class="dt">int</span> x;              <span class="co">/* numerator */</span>
+           <span class="dt">int</span> y;              <span class="co">/* denominator */</span>
+    } min_aspect, max_aspect;
+    int base_width, base_height;
+    int win_gravity;
+    <span class="co">/* this structure may be extended in the future */</span>
+} XSizeHints;</code></pre>
+<p>To jistě není žádný zázrak, ale už se s tím dá něco dělat. Zajímavé hodnoty jsou ty s prefixem <code>min_</code> a <code>max_</code>. Pokud jsou nastavené na jinou hodnotu než 0 a zároveň se rovnají odpovídající si hodnoty, okno má zřejmě nastavenou fixní velikost.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isFixed ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+isFixed h <span class="fu">=</span> minWidth h <span class="fu">==</span> maxWidth h
+         <span class="fu">&amp;&amp;</span> minHeight h <span class="fu">==</span> maxHeight h
+         <span class="fu">&amp;&amp;</span> all (<span class="fu">&gt;</span><span class="dv">0</span>) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre>
+<p>V modulu <code>XMonad.Util.WindowProperties</code> je k dispozici funkce <code>getProp32s :: String -&gt; Window -&gt; X (Maybe [CLong])</code>, s jejíž pomocí už se dá napsat potřebná funkce pro manage hook. Definice typu <code>CLong</code> je v modulu <code>Foreign.C.Types</code>.</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isNonResizable ::</span> <span class="dt">Query</span> <span class="dt">Bool</span>
+isNonResizable <span class="fu">=</span> ask <span class="fu">&gt;&gt;=</span> \w <span class="ot">-&gt;</span> liftX <span class="fu">$</span> <span class="kw">do</span>
+    atom <span class="ot">&lt;-</span> getProp32s <span class="st">&quot;WM_NORMAL_HINTS&quot;</span> w
+    return <span class="fu">$</span> <span class="kw">case</span> atom <span class="kw">of</span>
+        <span class="dt">Just</span> hints  <span class="ot">-&gt;</span> hasFixedSize hints
+        <span class="dt">Nothing</span>     <span class="ot">-&gt;</span> <span class="dt">False</span></code></pre>
+<p>Poslední chybějící kus jsou funkce na vrácení požadovaných rozměrů. Vlastně jde jenom o čitelnější zápisy vytažení příslušné hodnoty ze seznamu:</p>
+<pre class="sourceCode haskell"><code class="sourceCode haskell">minWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+minHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">6</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">7</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre>
+<p>A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem nepozoroval. <a href="/data/HandleFixedWindows.hs">Kompletní soubor</a> stačí nakopírovat do <code>~/.xmonad/lib/</code>, naimportovat do konfiguračního souboru a použít.</p>]]></summary>
+</entry>
+
+</feed>

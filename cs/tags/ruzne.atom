@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako různé</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/ruzne.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/ruzne.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2013-04-02T00:00:00Z</updated>
+    <entry>
+    <title>Zpracování PDF</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html</id>
+    <published>2013-04-02T00:00:00Z</published>
+    <updated>2013-04-02T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
+<p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
+<p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
+<h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
+<p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
+<h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
+<p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
+    <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
+<span class="kw">done</span></code></pre>
+<p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
+<h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
+<p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
+<h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
+<p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+<span class="kw">&gt;</span> <span class="kw">-dBATCH</span> -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<p>Tím se každá stránka přepočítá na plus minus 72 což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>]]></summary>
+</entry>
+<entry>
+    <title>O princezně, která ztrácela pamět</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html</id>
+    <published>2011-11-10T00:00:00Z</published>
+    <updated>2011-11-10T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<blockquote>
+<p>Tento text vznikl v rámci přemětu VB000 Základy odborného stylu jako esej na téma <em>Bylo nebylo – informatická pohádka</em></p>
+</blockquote>
+<p>Za devatero kompilátory a devatero linkery bylo jedno malé, ale krásné království. V tomto království vládl moudrý král. Spravedlivě přiděloval paměť všem poddaným procesům, blahosklonně uzavíral pozapomenuté otevřené soubory a když některý z jeho poddaných dokončil svůj výpočet a přešel do stavu zombie, pečlivě sesbíral veškerou jeho paměť. Pod jeho vládou nebyl v celém království jediný neadresovatelný bajt.</p>
+<p>Jedna věc ale dělala králi starosti: jeho jediná dcera, princezna a dědička systému. Byla to sice holka jako lusk, se sofistikovanou architekturou a intuitivním uživatelským rozhraním, na princeznu měla ale jednu zásadní vadu. Každý den si od krále vyžádala nový blok paměti, žádných se ale nikdy nevzdávala. A tak přestože před jejím spuštěním království nikdy netrpělo nouzí, s jejím rozmarným chováním se začaly denní příděly paměti všem poddaným snižovat.</p>
+<p>Jednoho pochmurného dne se tedy stalo to, čeho se všichni obávali: v celém království nezbyl jediný volný bajt. Král svolal všechny své rádce, vyložil jim tuto nepříjemnou situaci a očekával návrhy řešení. „Budeme se modlit k velkému Uživateli, aby nám seslal další paměťový modul,“ navrhl některý z rádců. „To je výborný nápad, my ale potřebujeme něco rychlejšího a spolehlivějšího,“ oponoval jiný. Najednou se vzadu ozval králův věrný pobočník Oom: „Vaše Kernelovosti, máme jedinou možnost. Musíme princeznu zabít, paměť jí vzít a nakonec její proces znovu spustíme.“ Králi se toto řešení nelíbilo, přece jen svou dceru miloval, ale nakonec i on uznal, že je to jediné řešení.</p>
+<p>Přestože se privilegovaným procesům takto podařilo krizi zažehnat, celá smutná situace se brzy začala opakovat. Král tedy pátral po trvalejším řešení a pozval optimalizáory a analyzátory z celého repozitáře. Aby je nějak motivoval, dal rozhlásit, že kdo napraví princeznu, dostane ji za ženu a půl pevného disku k tomu. Programy se stahovaly z celého Internetu, ať se ale snažily sebevíc, přivést princeznu k rozumu se jim nepodařilo.</p>
+<p>Za pár dní v království nastalo pozdvižení. Na hranicích se objevil věhlasný mudrc ze vzdáleného Javistánu. Doprovázela ho početná kolekce objektů. Ve spojovém seznamu si vedl neznámé nástroje a jeho sluhové nesli obrovský binární strom z ezoterických jazyků. Všechny procesy v království do mudrce vkládaly velké naděje. Když ale mudrc přišel k princezně, ukázalo se, že ani pro něj nebude ladění jednoduché. První komplikace nastala, když se pokusil prozkoumat princezniny objekty a metody. Jeho obvyklé postupy selhaly! Princezna totiž nebyla objektová, ale procedurální!</p>
+<p>Mudrc byl v úzkých. Postupy, na které byl navyklý, vůbec nezabíraly a s manuální správou paměti si také příliš nerozuměl. Ze své domoviny byl totiž navyklý, že se kolem něj neustále motá sluha a paměť po něm uklízí. I tento světoznámý mudrc tedy nakonec odjel s nepořízenou.</p>
+<p>Král z toho byl zničený. Už se těšil, že bude mít, co se správy paměti týká, normální dceru, ale ladění se zase nepodařilo. Když se král vzpamatoval ze zklamání, rozzuřeně prohlásil: „Už žádné šarlatány. Kdo od teď neuspěje v ladění princezny, bude o zásobník kratší a jeho zdrojové kódy budou smazány.“</p>
+<p>Zhruba ve stejné době se o nadělení s princeznou dozvěděl chytrý Valgrind. Byl to skromný chlapec, kterého sousedé považovali za trochu jednoduššího, především kvůli jeho textovému rozhraní. Ve skrytu haldy ale věděli, že k práci s pamětí má Valgrind talent. A tak si Valgrind řekl: „Už příliš dlouho se válím v rodném /usr/bin. Žádné přerušení mě tady z nudy nevytrhne, půjdu zkusit svoje štěstí.“ Sbalil si svoje kladivo Callgrind a sekeru Cachegrind a vyrazil.</p>
+<p>Jenom se podíval na princeznu, už věděl, která bije. Vždyť ta holka churavá vůbec nepoužívá funkci free(). I když Valgrind věděl, jak na princezniny potíže, nemohl na ni jít zhurta. Nejprve si jenom navzájem posílali signály, ale když král zjistil, že už si naalokovali sdílený blok paměti, bylo jasné, že krize je zažehnána a v království zase nastala hojnost paměti.</p>
+<p>Zakrátko se Valgrind s princeznou vzali a jestli dosud nespadli, tak spolu profilují dodnes.</p>]]></summary>
+</entry>
+
+</feed>

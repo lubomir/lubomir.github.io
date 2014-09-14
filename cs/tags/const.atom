@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako const</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/const.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/const.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <entry>
+    <title>Jak se projevuje 'const'</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
+
+<span class="dt">int</span> main (<span class="dt">void</span>)
+{
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+
+  str1 = NULL;
+  str2 = NULL;
+  str3 = NULL;
+
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+</table>
+
+<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
+
+]]></summary>
+</entry>
+
+</feed>

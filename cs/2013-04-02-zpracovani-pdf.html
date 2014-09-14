@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Zpracování PDF</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Zpracování PDF</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>2. duben 2013</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/pdf.html">pdf</a>, <a href="../cs/tags/unix.html">unix</a>, <a href="../cs/tags/bash.html">bash</a>, <a href="../cs/tags/ruzne.html">různé</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
+<p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
+<p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
+<h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
+<p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
+<h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
+<p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
+    <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
+    <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
+<span class="kw">done</span></code></pre>
+<p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
+<h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
+<p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
+<h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
+<p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
+<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+<span class="kw">&gt;</span> <span class="kw">-dBATCH</span> -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<p>Tím se každá stránka přepočítá na plus minus 72 což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Jak se projevuje 'const'</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Jak se projevuje 'const'</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>19. prosinec 2010</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/c.html">C</a>, <a href="../cs/tags/programovani.html">programování</a>, <a href="../cs/tags/const.html">const</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
+<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<span class="ot">#include &lt;stdlib.h&gt;</span>
+<span class="ot">#include &lt;string.h&gt;</span>
+
+<span class="dt">int</span> main (<span class="dt">void</span>)
+{
+  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+
+  str1 = NULL;
+  str2 = NULL;
+  str3 = NULL;
+
+  strcpy(str1, <span class="st">&quot;a&quot;</span>);
+  strcpy(str2, <span class="st">&quot;a&quot;</span>);
+  strcpy(str3, <span class="st">&quot;a&quot;</span>);
+
+  <span class="kw">return</span> <span class="dv">0</span>;
+}</code></pre>
+<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+</table>
+
+<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
+<table>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char const *const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char const *const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
+
+
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

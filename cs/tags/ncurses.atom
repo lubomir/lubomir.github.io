@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>~xsedlar3 – Příspěvky označené jako ncurses</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/ncurses.atom" rel="self" />
+    <link href="http://fi.muni.cz/~xsedlar3/" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/tags/ncurses.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lsedlar@mail.muni.cz</email>
+    </author>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <entry>
+    <title>Inicializační funkce NCurses</title>
+    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html" />
+    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html</id>
+    <published>2010-12-19T00:00:00Z</published>
+    <updated>2010-12-19T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
+<h2 id="inicializační-funkce">4 Inicializační funkce</h2>
+<ol type="1">
+<li><p><strong>raw() a cbreak()</strong></p>
+<p>Normálně ovladač terminálu ukládá uživatelem zadané znaky do bufferu, dokud uživatel nestiskne enter. Většina programů ale potřebuje, aby byly znaky dostupné hned, když je uživatel zadá. Tyto dvě funkce zakazují bufferování řádků. Rozdíl mezi nimi je ve zpracování ovládacích znaků zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou tyto znaky interpretovány přímo ovladačem terminálu.</p></li>
+<li><p><strong>echo() a noecho()</strong></p>
+<p>Tyto funkce ovládají, jestli se znaky zadávané uživatelem zobrazují na obrazovku či nikoli. Většina interaktivních programů volá na začátku noecho() a pokud to potřebuje, tak znaky vypisuje kontrolovaně sama.</p></li>
+<li><p><strong>keypad()</strong></p>
+<p>Tato inicializační funkce umožňuje čtení funkčních kláves jako F1,, kurzorové klávesy atd. Téměř každý interaktivní program toto povoluje, protože šipky jsou zásadní částí každé uživatelského rozhraní. Abyste povolili tuto vlastnost pro standardní obrazovku (stdscr), zavolejte <code>keypad(stdscr,TRUE)</code>.</p></li>
+<li><p><strong>halfdelay()</strong></p>
+<p>Přestože tato funkce není používaná příliš často, je občas velice užitečná. Vstup je okamžitě předán programu jako po zavolání <code>cbreak()</code> s tím rozdílem, že čeká X desetin sekundy na vstup a jestliže potom není vstup dostupný, vrátí ERR. X je interval zadaný jako argument při volání halfdelay(). Tato funkce je užitečná, pokud potřebujete nějaký vstup, ale když uživatel neodpoví dostatečně rychle, chcete udělat něco jiného.</p></li>
+</ol>]]></summary>
+</entry>
+
+</feed>

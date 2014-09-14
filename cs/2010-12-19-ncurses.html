@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Inicializační funkce NCurses</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Inicializační funkce NCurses</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">zpět na hlavní stránku</a>
+    </div>
+    <div class="col-md-4">
+        <strong>19. prosinec 2010</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Označeno jako: <a href="../cs/tags/c.html">C</a>, <a href="../cs/tags/programovani.html">programování</a>, <a href="../cs/tags/ncurses.html">ncurses</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
+<h2 id="inicializační-funkce">4 Inicializační funkce</h2>
+<ol type="1">
+<li><p><strong>raw() a cbreak()</strong></p>
+<p>Normálně ovladač terminálu ukládá uživatelem zadané znaky do bufferu, dokud uživatel nestiskne enter. Většina programů ale potřebuje, aby byly znaky dostupné hned, když je uživatel zadá. Tyto dvě funkce zakazují bufferování řádků. Rozdíl mezi nimi je ve zpracování ovládacích znaků zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou tyto znaky interpretovány přímo ovladačem terminálu.</p></li>
+<li><p><strong>echo() a noecho()</strong></p>
+<p>Tyto funkce ovládají, jestli se znaky zadávané uživatelem zobrazují na obrazovku či nikoli. Většina interaktivních programů volá na začátku noecho() a pokud to potřebuje, tak znaky vypisuje kontrolovaně sama.</p></li>
+<li><p><strong>keypad()</strong></p>
+<p>Tato inicializační funkce umožňuje čtení funkčních kláves jako F1,, kurzorové klávesy atd. Téměř každý interaktivní program toto povoluje, protože šipky jsou zásadní částí každé uživatelského rozhraní. Abyste povolili tuto vlastnost pro standardní obrazovku (stdscr), zavolejte <code>keypad(stdscr,TRUE)</code>.</p></li>
+<li><p><strong>halfdelay()</strong></p>
+<p>Přestože tato funkce není používaná příliš často, je občas velice užitečná. Vstup je okamžitě předán programu jako po zavolání <code>cbreak()</code> s tím rozdílem, že čeká X desetin sekundy na vstup a jestliže potom není vstup dostupný, vrátí ERR. X je interval zadaný jako argument při volání halfdelay(). Tato funkce je užitečná, pokud potřebujete nějaký vstup, ale když uživatel neodpoví dostatečně rychle, chcete udělat něco jiného.</p></li>
+</ol>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Domů</a></li>
+          <li><a href="#top">Nahoru</a></li>
+          <li class="last"><a href="mailto:lsedlar@mail.muni.cz">Kontakt</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licencováno jako Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>
