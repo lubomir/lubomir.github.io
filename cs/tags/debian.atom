@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>~xsedlar3 – Příspěvky označené jako Debian</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/debian.atom" rel="self" />
-    <link href="http://fi.muni.cz/~xsedlar3/" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/tags/debian.atom</id>
+    <title>lsedlar – Příspěvky označené jako Debian</title>
+    <link href="http://lubomir.github.io//cs/tags/debian.atom" rel="self" />
+    <link href="http://lubomir.github.io/" />
+    <id>http://lubomir.github.io//cs/tags/debian.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lsedlar@mail.muni.cz</email>
@@ -11,8 +11,8 @@
     <updated>2011-02-26T00:00:00Z</updated>
     <entry>
     <title>Znásilňování SICStus Prologu</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-02-26-znasilnovani-sicstus-prologu.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2011-02-26-znasilnovani-sicstus-prologu.html</id>
+    <link href="http://lubomir.github.io//cs/2011-02-26-znasilnovani-sicstus-prologu.html" />
+    <id>http://lubomir.github.io//cs/2011-02-26-znasilnovani-sicstus-prologu.html</id>
     <published>2011-02-26T00:00:00Z</published>
     <updated>2011-02-26T00:00:00Z</updated>
     <summary type="html"><![CDATA[<h2 id="instalace">Instalace</h2>
@@ -44,7 +44,7 @@
 <h2 id="vim">Vim</h2>
 <p>Vim sám o sobě Prolog moc nepodporuje. Nakopírováním těch <a href="https://github.com/adimit/prolog.vim">správných souborů</a> do <code>~/.vim/</code> se ale změní do celkem použitelné formy: sympaticky zvýrazňuje syntaxi, automaticky odsazuje řádky a sám pozná, kde začínají a končí foldy.</p>
 <p>Poslední drobný zádrhel je v tom, že si většinou splete typ souboru s Perlem, který taky používá příponu <code>.pl</code>. Dá se to obejít přidáním modeline na konec souboru:</p>
-<pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="co">% vim: ft=prolog</span></code></pre>]]></summary>
+<pre class="prolog"><code>% vim: ft=prolog</code></pre>]]></summary>
 </entry>
 
 </feed>

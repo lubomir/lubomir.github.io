@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>~xsedlar3 – Příspěvky označené jako různé</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/ruzne.atom" rel="self" />
-    <link href="http://fi.muni.cz/~xsedlar3/" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/tags/ruzne.atom</id>
+    <title>lsedlar – Příspěvky označené jako různé</title>
+    <link href="http://lubomir.github.io//cs/tags/ruzne.atom" rel="self" />
+    <link href="http://lubomir.github.io/" />
+    <id>http://lubomir.github.io//cs/tags/ruzne.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lsedlar@mail.muni.cz</email>
@@ -11,8 +11,8 @@
     <updated>2013-04-02T00:00:00Z</updated>
     <entry>
     <title>Zpracování PDF</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2013-04-02-zpracovani-pdf.html</id>
+    <link href="http://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html" />
+    <id>http://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
     <updated>2013-04-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
@@ -20,29 +20,29 @@
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
 <h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
 <p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<pre class="bash"><code>$ pdftk VSTUPNI.PDF burst</code></pre>
 <p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
 <h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
 <p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
-    <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
-    <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
-<span class="kw">done</span></code></pre>
+<pre class="bash"><code>for i in pg_*pdf; do
+    pdftoppm $i &gt;${i/pdf/ppm}
+    convert $(i/pdf/ppm} -crop 50%x100% +repage vystup-$i
+done</code></pre>
 <p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
 <h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
 <p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<pre class="bash"><code>$ pdftk vystup-* cat output spojeny.pdf</code></pre>
 <p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
 <h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
 <p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
-<span class="kw">&gt;</span> <span class="kw">-dBATCH</span> -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<pre class="bash"><code>$ gs -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+&gt; -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
 <p>Tím se každá stránka přepočítá na plus minus 72 což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>]]></summary>
 </entry>
 <entry>
     <title>O princezně, která ztrácela pamět</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html</id>
+    <link href="http://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
+    <id>http://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
     <updated>2011-11-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<blockquote>

@@ -31,40 +31,36 @@
 <p>Tento text je výcuc z mých poznatků, které jsem nabyl při vypracování projektu do jistého matematického předmětu.</p>
 <h2 id="načítání-dat-a-první-průzkum">Načítání dat a první průzkum</h2>
 <p>V první řadě je potřeba načíst soubor s daty. Za předpokladu, že máme data ve formátu CSV, se nám bude hodit příkaz <code>read.csv</code> (jak nečekané…). Taky by bylo dobré zjistit, jak vlastně data vypadají, tedy jaké jsou názvy atributů a jak vypadá prvních pár záznamů.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;nazev_souboru.csv&quot;</span>)
-&gt;<span class="st"> </span><span class="kw">names</span>(data)
+<pre class="R"><code>&gt; data &lt;- read.csv(&quot;nazev_souboru.csv&quot;)
+&gt; names(data)
 ...
-&gt;<span class="st"> </span><span class="kw">head</span>(data)
+&gt; head(data)
 ...</code></pre>
 <p>Jednotlivé atributy je potom možné adresovat přes notaci se znakem <code>$</code>, tedy třeba <code>data$atr1</code>. Funkce <code>nrow(data)</code> nám prozradí, kolik je v datovém rámci záznamů.</p>
 <p>Pro kvalitativní atributy se hodí výpis hodnot s příslušnou četností. To se dá udělat pomocí funkce <code>table</code>. Pokud bychom chtěli relativní četnosti, stačí celou tabulku podělit počtem řádků.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(data$class)
+<pre class="R"><code>&gt; table(data$class)
 
-   <span class="dv">1</span>    <span class="dv">2</span>
- <span class="dv">700</span>  <span class="dv">300</span>
-&gt;<span class="st"> </span><span class="kw">table</span>(data$class) /<span class="st"> </span><span class="kw">nrow</span>(data)
+   1    2
+ 700  300
+&gt; table(data$class) / nrow(data)
 
-  <span class="dv">1</span>   <span class="dv">2</span>
-<span class="fl">0.7</span> <span class="fl">0.3</span></code></pre>
+  1   2
+0.7 0.3</code></pre>
 <p>Pro atributy s větším počtem hodnot než jenom dvě je možné vygenerovat tabulku kumulativních relativních četností pomocí funkce <code>cumsum()</code>.</p>
 <p>Pro vizualizaci kvalitativních atributů se hodí např. sloupkový diagram, který je možné vytvořit pomocí funkce <code>barplot</code> aplikované na tabulku četností (třeba i kumulativních). Jiná možnost je polygon četností – funkce <code>plot</code>, jejíž první argument je tabulka, kterou chceme vizualizovat. Polygon četností navíc vyžaduje argument <code>type=&quot;b&quot;</code>, tedy typ grafu <em>both</em>, což znamená puntíky spojené čarami.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">barplot</span>(<span class="kw">table</span>(data$class))
-&gt;<span class="st"> </span><span class="kw">plot</span>(<span class="kw">table</span>(data$at7), <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)</code></pre>
+<pre class="R"><code>&gt; barplot(table(data$class))
+&gt; plot(table(data$at7), type=&quot;b&quot;)</code></pre>
 <p>Další užitečné atributy pro grafy jsou:</p>
 <dl>
 <dt><code>main</code></dt>
-<dd>hlavní titulek umístěný nad grafem
+<dd>hlavní titulek umístěný nad grafem <code>xlab</code>, <code>ylab</code>
 </dd>
-<dt><code>xlab</code>, <code>ylab</code></dt>
-<dd>popisek osy x, resp. osy y
+<dd>popisek osy x, resp. osy y <code>col</code>
 </dd>
-<dt><code>col</code></dt>
-<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code>
+<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code> <code>pch</code>
 </dd>
-<dt><code>pch</code></dt>
-<dd>typ puntíku
+<dd>typ puntíku <code>cex</code>
 </dd>
-<dt><code>cex</code></dt>
 <dd>velikost vykreslovaných puntíků
 </dd>
 </dl>
@@ -72,42 +68,42 @@
 <p>Závislosti mezi jednotlivými atributy je možné zkoumat třeba pomocí kontingenční tabulky. Tu opět produkuje funkce <code>table</code>, tentokrát se dvěma argumenty. První argument (a tedy datová sada) určuje řádky, druhý argument jsou sloupce.</p>
 <p>Z této tabulky je možné dopočítat kontingenční tabulku řádkově (nebo sloupcově) podmíněných četností. Nenašel jsem k tomu ale vestavěnou funkci, takže to bude vyžadovat trochu černé magie.</p>
 <p>Pro řádkově podmíněné četnosti stačí každou hodnotu v kontingenční tabulce absolutních četností podělit součtem hodnot na příslušném řádku. Součty po řádcích je možné vyprodukovat pomocí funkce <code>rowSums</code>. Tabulky potom stačí podělit.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2) /<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">table</span>(atribut1, atribut2))</code></pre>
+<pre class="R"><code>&gt; table(atribut1, atribut2) / rowSums(table(atribut1, atribut2))</code></pre>
 <p>Se sloupcově podmíněnými četnosti je to trochu horší. Existuje funkce <code>colSums</code>, která spočítá sumy přes sloupce, jednoduché dělení jako v předchozím případě ale nebude fungovat, protože tabulky si nebudou rozměrově správně odpovídat. Řešením je využít funkci s lakonickým názvem <code>t</code>, která transponuje svůj jediný argument.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>tab &lt;-<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2)
-&gt;<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(tab) /<span class="st"> </span><span class="kw">colSums</span>(tab))</code></pre>
+<pre class="R"><code>&gt; tab &lt;- table(atribut1, atribut2)
+&gt; t(t(tab) / colSums(tab))</code></pre>
 <p>Správnost výsledků se dá ověřit například pomocí dalšího volání <code>rowSums</code>, V tabulce řádkově podmíněných četností by měla být suma na každém řádku rovna 1, obdobně pro sloupce pro sloupcově podmíněné četnosti.</p>
 <h2 id="generování-histogramů">Generování histogramů</h2>
 <p>Základní histogram se dá udělat pomocí funkce <code>hist</code>. Bez nějakých dalších argumentů ale vytvoří nehezkou obludu. Hlavní kámen úrazu této funkce je nastavování počtu intervalů. Pomocí argumenty <code>breaks</code> je sice možné zadat číslo nebo název metody, ale je to jenom doporučení a funkce se tím nemusí přesně řídit. Navíc výchozí nastavení vygeneruje nepříliš přehlednou osu <span class="math"><em>x</em></span>, ze které se těžko odečítají hranice intervalů.</p>
 <p>Nicméně můžeme tady využít možnosti definice vlastních funkcí a napsat vlastní vykreslování histogramů. Tato funkce bude očekávat data ve stejném formátu jako standardní <code>hist</code>, počet intervalů, a volitelný popisek osy <span class="math"><em>x</em></span>.</p>
-<pre class="sourceCode R"><code class="sourceCode r">myhist &lt;-<span class="st"> </span>function(data, num_bins, <span class="dt">lab=</span><span class="st">'data'</span>) {
-    <span class="co"># Spočítáme šířku intervalu s přesností na jedno desetinné místo</span>
-    width &lt;-<span class="st"> </span><span class="kw">round</span>((<span class="kw">max</span>(data) -<span class="st"> </span><span class="kw">min</span>(data)) /<span class="st"> </span>num_bins, <span class="dt">digits=</span><span class="dv">1</span>)
-    <span class="co"># Uděláme vektor bodů, kde začínají a končí intervaly</span>
-    breaks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="kw">min</span>(data), <span class="kw">min</span>(data) +<span class="st"> </span>num_bins *<span class="st"> </span>width, <span class="dt">by=</span>width)
-    <span class="co"># Pro jistotu vypíšeme šířku intervalu na výstup</span>
-    <span class="kw">cat</span>(<span class="st">'Bin width = '</span>, width, <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>)
+<pre class="R"><code>myhist &lt;- function(data, num_bins, lab='data') {
+    # Spočítáme šířku intervalu s přesností na jedno desetinné místo
+    width &lt;- round((max(data) - min(data)) / num_bins, digits=1)
+    # Uděláme vektor bodů, kde začínají a končí intervaly
+    breaks &lt;- seq(min(data), min(data) + num_bins * width, by=width)
+    # Pro jistotu vypíšeme šířku intervalu na výstup
+    cat('Bin width = ', width, '\n')
 
-    <span class="co"># Nastavíme okraje</span>
-    <span class="kw">par</span>(<span class="dt">mar=</span><span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">2</span>))
-    <span class="kw">hist</span>(data, <span class="dt">breaks=</span>breaks,
-        <span class="dt">xaxt=</span><span class="st">'n'</span>,               <span class="co"># Nechceme osu X</span>
-        <span class="dt">xlab=</span><span class="st">''</span>,                <span class="co"># Ani její popisek</span>
-        <span class="dt">main=</span><span class="st">''</span>,                <span class="co"># I hlavní titulek vynecháme</span>
-        <span class="dt">col=</span><span class="st">'lightblue'</span>,        <span class="co"># Barva výplně sloupců</span>
-        <span class="dt">border=</span><span class="st">'blue'</span>,          <span class="co"># Barva rámečku sloupců</span>
-        <span class="dt">ylab=</span><span class="st">'Absolutní četnost'</span>)
-    <span class="co"># Přidáme vlastní osu</span>
-    <span class="kw">axis</span>(<span class="dv">1</span>,                     <span class="co"># Kreslíme osu X</span>
-        <span class="dt">at=</span>breaks,              <span class="co"># Chceme značky na hranicích intervalů</span>
-        <span class="dt">las=</span><span class="dv">2</span>)                  <span class="co"># Test bude vertikálně, aby se to tam vešlo</span>
-    <span class="co"># Vykreslíme popisek pod osou</span>
-    <span class="kw">mtext</span>(lab, <span class="dt">side=</span><span class="dv">1</span>, <span class="dt">line=</span><span class="dv">4</span>)  <span class="co"># Číslo u line udává, jak daleko bude text od</span>
-                                <span class="co"># grafu</span>
+    # Nastavíme okraje
+    par(mar=c(6, 4, 1, 2))
+    hist(data, breaks=breaks,
+        xaxt='n',               # Nechceme osu X
+        xlab='',                # Ani její popisek
+        main='',                # I hlavní titulek vynecháme
+        col='lightblue',        # Barva výplně sloupců
+        border='blue',          # Barva rámečku sloupců
+        ylab='Absolutní četnost')
+    # Přidáme vlastní osu
+    axis(1,                     # Kreslíme osu X
+        at=breaks,              # Chceme značky na hranicích intervalů
+        las=2)                  # Test bude vertikálně, aby se to tam vešlo
+    # Vykreslíme popisek pod osou
+    mtext(lab, side=1, line=4)  # Číslo u line udává, jak daleko bude text od
+                                # grafu
 
-    <span class="co"># Volitelně bychom mohli ještě do rohu přidat informaci o šířce intervalu</span>
-    leg &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">'Šířka intervalu'</span>, <span class="kw">format</span>(width))
-    <span class="kw">legend</span>(<span class="st">'topright'</span>, leg, <span class="dt">box.lty=</span><span class="dv">0</span>)
+    # Volitelně bychom mohli ještě do rohu přidat informaci o šířce intervalu
+    leg &lt;- paste('Šířka intervalu', format(width))
+    legend('topright', leg, box.lty=0)
 }</code></pre>
 <p>Jako argumenty <code>col</code> a <code>border</code> funkce <code>hist</code> by bylo možné zadat i vektory barev, kdybychom to chtěli oživit. Nechceme.</p>
 <p>Velikost fontu se dá ovlivnit parametrem <code>cex</code>. Je potřeba ho zadat u <code>par</code> a <code>mtext</code>.</p>
@@ -117,15 +113,15 @@
 <h2 id="korelace-a-regresní-přímka">Korelace a regresní přímka</h2>
 <p>Když už máme dva numerické atributy, můžeme mezi nimi hledat hledat nějaké vztahy. Korelační koeficienty se dají počítat funkcí <code>cor(atribut1, atribut2, method=&quot;pearson&quot;)</code>. Další dostupné metody jsou <code>spearman</code> a <code>kendall</code>.</p>
 <p>Vypočítat koeficienty regresní přímky lze pomocí funkce <code>lm</code>. Vykreslení do grafu potom provede funkce <code>abline</code> aplikovaná na to, co vrátí <code>lm</code>.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">lm</span>(loans ~<span class="st"> </span>ages)
+<pre class="R"><code>&gt; lm(loans ~ ages)
 ...
 Coefficients:
 (Intercept)         ages
-   <span class="fl">2982.684</span>        <span class="fl">8.118</span>
-&gt;<span class="st"> </span><span class="kw">abline</span>(<span class="kw">lm</span>(loans ~<span class="st"> </span>ages))</code></pre>
+   2982.684        8.118
+&gt; abline(lm(loans ~ ages))</code></pre>
 <p>Před samotným vykreslením přímky je možné si nachystat třeba tečkový diagram atributů, jejichž závislost hledáme.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">plot</span>(ages,        <span class="co"># Co bude na ose X</span>
-       loans)       <span class="co"># Co bude na ose Y</span></code></pre>
+<pre class="R"><code>&gt; plot(ages,        # Co bude na ose X
+       loans)       # Co bude na ose Y</code></pre>
 <h2 id="ukládání-do-souborů">Ukládání do souborů</h2>
 <p>Uložení vytvořeného grafu do souboru je vlastně naprosto triviální. Před voláním vykreslovacích funkcí je potřeba přesměrovat výstup do požadovaného souboru pomocí funkce, jejíž název určí formát výstupu a jediný argument název výstupního souboru. Dostupné jsou minimálně <code>pdf</code> a <code>png</code>. Až je dokresleno, zavolání <code>dev.off()</code> zase přesměruje výstup na obrazovku.</p>
 <h2 id="další-užitečné-funkce">Další užitečné funkce</h2>

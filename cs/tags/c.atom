@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>~xsedlar3 – Příspěvky označené jako C</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/tags/c.atom" rel="self" />
-    <link href="http://fi.muni.cz/~xsedlar3/" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/tags/c.atom</id>
+    <title>lsedlar – Příspěvky označené jako C</title>
+    <link href="http://lubomir.github.io//cs/tags/c.atom" rel="self" />
+    <link href="http://lubomir.github.io/" />
+    <id>http://lubomir.github.io//cs/tags/c.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lsedlar@mail.muni.cz</email>
@@ -11,35 +11,35 @@
     <updated>2012-01-24T00:00:00Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2012-01-24-prochazeni-adresare.html</id>
+    <link href="http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
     <updated>2012-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
 <p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
-    <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
-    <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
-<span class="kw">done</span>
+<pre class="bash"><code>for i in $(seq 1 30000); do
+    touch bench1/file-$i
+    mkdir bench2/dir-$i
+done
 
-<span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
-    <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
-    <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
-<span class="kw">done</span></code></pre>
+for i in $(seq 1 15000); do
+    touch bench3/$(mkpasswd &quot;file-$i&quot; | sed &quot;s@/@_@g&quot;)
+    mkdir bench3/$(mkpasswd &quot;dir-$i&quot; | sed &quot;s@/@_@g&quot;)
+done</code></pre>
 <h2 id="metody">Metody</h2>
 <p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
 <p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
 <p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+<pre class="c"><code>int is_dir(const char *path)
 {
-    <span class="kw">struct</span> DIR *dir = opendir(path);
-    <span class="kw">if</span> (dir == NULL) {
-        <span class="kw">return</span> <span class="dv">0</span>;
-    } <span class="kw">else</span> {
+    struct DIR *dir = opendir(path);
+    if (dir == NULL) {
+        return 0;
+    } else {
         closedir(dir);
-        <span class="kw">return</span> <span class="dv">1</span>;
+        return 1;
     }
 }</code></pre>
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
@@ -51,112 +51,150 @@
 <h2 id="výsledky">Výsledky</h2>
 <p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
 <table>
-<tr><th></th>           <th>
-Soubory
-</th> <th>
-Adresáře
-</th> <th>
-Mix
-</th></tr>
-<tr><th>
+<tr>
+<th>
+</th>
+<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 dvojitý průchod
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,109
-</td>   <td>
+</td>
+<td>
 0,106
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,133
-</td>   <td>
+</td>
+<td>
 0,177
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,043
-</td>   <td>
+</td>
+<td>
 0,040
-</td>    <td>
-0
-</td></tr>
-<tr><th>
+</td>
+<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 Pole
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,054
-</td>   <td>
+</td>
+<td>
 0,057
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,067
-</td>   <td>
+</td>
+<td>
 0,091
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,021
-</td>   <td>
+</td>
+<td>
 0,021
-</td>    <td>
-0
-</td></tr>
-<tr><th>
+</td>
+<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 Seznam
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,053
-</td>   <td>
+</td>
+<td>
 0,060
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,065
-</td>   <td>
+</td>
+<td>
 0,091
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,020
-</td>   <td>
+</td>
+<td>
 0,029
-</td>    <td>
-0
-</td></tr>
+</td>
+<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
 </table>
-
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
 </entry>
 <entry>
     <title>O princezně, která ztrácela pamět</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2011-11-10-o-princezne.html</id>
+    <link href="http://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
+    <id>http://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
     <updated>2011-11-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<blockquote>
@@ -175,8 +213,8 @@ Seznam
 </entry>
 <entry>
     <title>Inicializační funkce NCurses</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-ncurses.html</id>
+    <link href="http://lubomir.github.io//cs/2010-12-19-ncurses.html" />
+    <id>http://lubomir.github.io//cs/2010-12-19-ncurses.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
@@ -194,125 +232,83 @@ Seznam
 </entry>
 <entry>
     <title>Jak se projevuje 'const'</title>
-    <link href="http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html" />
-    <id>http://fi.muni.cz/~xsedlar3//cs/2010-12-19-const.html</id>
+    <link href="http://lubomir.github.io//cs/2010-12-19-const.html" />
+    <id>http://lubomir.github.io//cs/2010-12-19-const.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
-<span class="ot">#include &lt;stdlib.h&gt;</span>
-<span class="ot">#include &lt;string.h&gt;</span>
+<pre class="c"><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
 
-<span class="dt">int</span> main (<span class="dt">void</span>)
+int main (void)
 {
-  <span class="dt">const</span> <span class="dt">char</span> *       str1 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
-  <span class="dt">char</span> * <span class="dt">const</span>       str2 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
-  <span class="dt">const</span> <span class="dt">char</span> * <span class="dt">const</span> str3 = (<span class="dt">char</span>*) malloc(<span class="dv">10</span>*<span class="kw">sizeof</span>(<span class="dt">char</span>));
+  const char *       str1 = (char*) malloc(10*sizeof(char));
+  char * const       str2 = (char*) malloc(10*sizeof(char));
+  const char * const str3 = (char*) malloc(10*sizeof(char));
 
   str1 = NULL;
   str2 = NULL;
   str3 = NULL;
 
-  strcpy(str1, <span class="st">&quot;a&quot;</span>);
-  strcpy(str2, <span class="st">&quot;a&quot;</span>);
-  strcpy(str3, <span class="st">&quot;a&quot;</span>);
+  strcpy(str1, &quot;a&quot;);
+  strcpy(str2, &quot;a&quot;);
+  strcpy(str3, &quot;a&quot;);
 
-  <span class="kw">return</span> <span class="dv">0</span>;
+  return 0;
 }</code></pre>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
 <table>
-  <tr>
-    <th></th>
-    <th>
-<code>x = NULL</code>
-</th>
-    <th>
-<code>strcpy(x, „a”)</code>
-</th>
-  </tr>
-  <tr>
-    <th>
-<code>const char *</code>
-</th>
-    <td>
-OK
-</td>
-    <td>
-<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
-</td>
-  </tr>
-  <tr>
-    <th>
-<code>char * const</code>
-</th>
-    <td>
-<code>error: assignment to read-only variable</code>
-</td>
-    <td>
-OK
-</td>
-  </tr>
-  <tr>
-    <th>
-<code>const char * const</code>
-</th>
-    <td>
-<code>error: assignment to read-only variable</code>
-</td>
-    <td>
-<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
-</td>
-  </tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;OK&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;OK&lt;/td&gt;</code></pre>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+</tr>
 </table>
-
 <h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
 <table>
-  <tr>
-    <th></th>
-    <th>
-<code>x = NULL</code>
-</th>
-    <th>
-<code>strcpy(x, „a”)</code>
-</th>
-  </tr>
-  <tr>
-    <th>
-<code>const char *</code>
-</th>
-    <td>
-OK
+<tr>
+<pre><code>&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
+&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;OK&lt;/td&gt;
+&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
+note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
+</pre>
 </td>
-    <td><pre><code class="long">error: no matching function for call to 'strcpy'
-note: candidate function not viable: 1st argument
-('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
-  </tr>
-  <tr>
-    <th>
-<code>char * const</code>
-</th>
-    <td>
-<code>error: read-only variable is not assignable</code>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;OK&lt;/td&gt;</code></pre>
+</tr>
+<tr>
+<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
+&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
+note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
+</pre>
 </td>
-    <td>
-OK
-</td>
-  </tr>
-  <tr>
-    <th>
-<code>const char * const</code>
-</th>
-    <td>
-<code>error: read-only variable is not assignable</code>
-</td>
-    <td><pre><code class="long">error: no matching function for call to 'strcpy'
-note: candidate function not viable: 1st argument
-('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
-  </tr>
-</table>
-
-
-]]></summary>
+</tr>
+</table>]]></summary>
 </entry>
 
 </feed>
