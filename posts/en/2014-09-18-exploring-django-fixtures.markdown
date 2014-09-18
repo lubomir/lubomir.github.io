@@ -3,9 +3,9 @@ title: Exploring test case fixtures in Django
 tags: Python, Django
 ---
 
-Django has a nice feature for exploring the environment in which the
-tests run via the `testserver` command. You can give it paths to
-fixture files used in the test case you want and go crazy.
+[Django] has a nice feature for exploring the environment in which the tests
+run via the `testserver` command. You can give it paths to fixture files used
+in the test case you want and go crazy.
 
 However, this use case becomes really unpleasant once you need to load
 bigger number of fixtures. It would be much more user friendly if you
@@ -18,11 +18,11 @@ containing the tests and the actual test case name.
 
      run-test-server.py myapp.tests MyComplicatedTestCase
 
-The first idea how to proceed is to simply import the module and look
-at `fixtures` attribute of the test case. Sadly, it is not that easy.
-Importing the module fails with `ImproperlyConfiguredException` because
-simply importing a module would be too much to ask for without loading
-all the Django settings. This could be a whole other rant.
+The first idea how to proceed is to simply import the module and look at
+`fixtures` attribute of the test case. Sadly, it is not that easy. Importing
+the module fails with `ImproperlyConfiguredException` because simply importing
+a module would be too much to ask for without loading all the [Django]
+settings. This could be a whole other rant.
 
 Since `__import__` is slightly more complicated that necessary, let's offload
 the actual importing to `importlib.import_module` which works exactly as
@@ -79,3 +79,5 @@ This script could obviously use a bit more polish:
  * The help output could be more helpful.
  * If something breaks, the user is presented with a stack trace. Not
    nice.
+
+[Django]: https://www.djangoproject.com/
