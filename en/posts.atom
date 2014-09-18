@@ -8,8 +8,61 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2014-08-31T00:00:00Z</updated>
+    <updated>2014-09-18T00:00:00Z</updated>
     <entry>
+    <title>Exploring test case fixtures in Django</title>
+    <link href="http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
+    <id>http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
+    <published>2014-09-18T00:00:00Z</published>
+    <updated>2014-09-18T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
+<p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
+<p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>
+<pre><code> run-test-server.py myapp.tests MyComplicatedTestCase</code></pre>
+<p>The first idea how to proceed is to simply import the module and look at <code>fixtures</code> attribute of the test case. Sadly, it is not that easy. Importing the module fails with <code>ImproperlyConfiguredException</code> because simply importing a module would be too much to ask for without loading all the <a href="https://www.djangoproject.com/">Django</a> settings. This could be a whole other rant.</p>
+<p>Since <code>__import__</code> is slightly more complicated that necessary, let's offload the actual importing to <code>importlib.import_module</code> which works exactly as expected. However, it is only available since Python 2</p>
+<p>Once the module is imported, all that needs to be done is to retrieve the test case, its fixtures and fire out the <code>testserver</code> command with appropriate arguments.</p>
+<p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
+
+<span class="ch">import</span> argparse
+<span class="ch">from</span> subprocess <span class="ch">import</span> call
+<span class="ch">import</span> sys
+<span class="ch">import</span> importlib
+
+<span class="ch">from</span> django.conf <span class="ch">import</span> settings
+
+
+<span class="kw">def</span> get_fixtures(module, case):
+    settings.configure()
+    parts = module.split(<span class="st">&#39;.&#39;</span>)
+
+    app = importlib.import_module(module)
+    <span class="kw">return</span> <span class="dt">getattr</span>(app, case).fixtures
+
+
+<span class="kw">def</span> main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(<span class="st">&#39;MODULE&#39;</span>, <span class="dt">type</span>=<span class="dt">str</span>)
+    parser.add_argument(<span class="st">&#39;TEST_CASE&#39;</span>, <span class="dt">type</span>=<span class="dt">str</span>)
+
+    args = parser.parse_args()
+    fixtures = get_fixtures(args.MODULE, args.TEST_CASE)
+
+    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] + fixtures)
+
+
+<span class="kw">if</span> <span class="ot">__name__</span> == <span class="st">&#39;__main__&#39;</span>:
+    sys.path.append(<span class="st">&#39;.&#39;</span>)
+    main()</code></pre>
+<h2 id="further-improvements">Further improvements</h2>
+<p>This script could obviously use a bit more polish:</p>
+<ul>
+<li>The help output could be more helpful.</li>
+<li>If something breaks, the user is presented with a stack trace. Not nice.</li>
+</ul>]]></summary>
+</entry>
+<entry>
     <title>Simulating an elevator</title>
     <link href="http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
     <id>http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
@@ -25,7 +78,7 @@
 <p>Note that even the simplest elevator in the simulation is still more elaborate than the one in my building. To simulate that, it would be necessary to choose floor to pick people up at random. This would require the elevator logic to retain some state between each call, which currently is not possible.</p>
 <h2 id="the-elevators">The elevators</h2>
 <p>The simplest elevator is called <code>dumbElevator</code>, but none-the-less it still is a bit smarter that the one in my former building. This elevator stores each request in a queue and works in a first-come-first-served fashion.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">dumbElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">dumbElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b <span class="kw">then</span> <span class="dt">Unload</span> <span class="kw">else</span> <span class="dt">GoDown</span>
   <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> (<span class="fu">==</span> b <span class="fu">^.</span> curPosition) <span class="ot">`fmap`</span> (b <span class="fu">^.</span> queue <span class="fu">^?</span> _head) <span class="kw">of</span>
         <span class="dt">Just</span> <span class="dt">True</span>  <span class="ot">-&gt;</span> <span class="dt">Load</span>
@@ -33,13 +86,13 @@
         <span class="dt">Nothing</span>    <span class="ot">-&gt;</span> <span class="dt">Wait</span></code></pre>
 <p>If there are people on the elevator, it will take them to the basement and unload. Otherwise it will go to the next floor in the queue and load all the people there.</p>
 <p>We will improve this elevator with slightly nicer behavior in <code>niceElevator</code>: when it goes down through a floor with people, it will stop and let on.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">niceElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">niceElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b
                     <span class="kw">then</span> <span class="dt">Unload</span>
                     <span class="kw">else</span> <span class="kw">if</span> peopleOnCurrentFloor b <span class="kw">then</span> <span class="dt">Load</span> <span class="kw">else</span> <span class="dt">GoDown</span>
   <span class="fu">|</span> otherwise <span class="fu">=</span> dumbElevator b</code></pre>
 <p>The last modeled elevator behaves the same as <code>niceElevator</code> when going down. Where it differs is that when it decides where to start loading people, it ignores the order of requests and goes to the highest floor with waiting people.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">smartElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">smartElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> niceElevator b
   <span class="fu">|</span> any (<span class="fu">&gt;</span> b <span class="fu">^.</span> curPosition) (b <span class="fu">^.</span> queue) <span class="fu">=</span> <span class="dt">GoUp</span>
   <span class="fu">|</span> peopleOnCurrentFloor b <span class="fu">=</span> <span class="dt">Load</span>

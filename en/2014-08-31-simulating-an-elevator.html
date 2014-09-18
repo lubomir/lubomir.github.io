@@ -38,7 +38,7 @@
 <p>Note that even the simplest elevator in the simulation is still more elaborate than the one in my building. To simulate that, it would be necessary to choose floor to pick people up at random. This would require the elevator logic to retain some state between each call, which currently is not possible.</p>
 <h2 id="the-elevators">The elevators</h2>
 <p>The simplest elevator is called <code>dumbElevator</code>, but none-the-less it still is a bit smarter that the one in my former building. This elevator stores each request in a queue and works in a first-come-first-served fashion.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">dumbElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">dumbElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b <span class="kw">then</span> <span class="dt">Unload</span> <span class="kw">else</span> <span class="dt">GoDown</span>
   <span class="fu">|</span> otherwise <span class="fu">=</span> <span class="kw">case</span> (<span class="fu">==</span> b <span class="fu">^.</span> curPosition) <span class="ot">`fmap`</span> (b <span class="fu">^.</span> queue <span class="fu">^?</span> _head) <span class="kw">of</span>
         <span class="dt">Just</span> <span class="dt">True</span>  <span class="ot">-&gt;</span> <span class="dt">Load</span>
@@ -46,13 +46,13 @@
         <span class="dt">Nothing</span>    <span class="ot">-&gt;</span> <span class="dt">Wait</span></code></pre>
 <p>If there are people on the elevator, it will take them to the basement and unload. Otherwise it will go to the next floor in the queue and load all the people there.</p>
 <p>We will improve this elevator with slightly nicer behavior in <code>niceElevator</code>: when it goes down through a floor with people, it will stop and let on.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">niceElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">niceElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b
                     <span class="kw">then</span> <span class="dt">Unload</span>
                     <span class="kw">else</span> <span class="kw">if</span> peopleOnCurrentFloor b <span class="kw">then</span> <span class="dt">Load</span> <span class="kw">else</span> <span class="dt">GoDown</span>
   <span class="fu">|</span> otherwise <span class="fu">=</span> dumbElevator b</code></pre>
 <p>The last modeled elevator behaves the same as <code>niceElevator</code> when going down. Where it differs is that when it decides where to start loading people, it ignores the order of requests and goes to the highest floor with waiting people.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">smartElevator b
+<pre class="sourceCode Haskell"><code class="sourceCode haskell">smartElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> niceElevator b
   <span class="fu">|</span> any (<span class="fu">&gt;</span> b <span class="fu">^.</span> curPosition) (b <span class="fu">^.</span> queue) <span class="fu">=</span> <span class="dt">GoUp</span>
   <span class="fu">|</span> peopleOnCurrentFloor b <span class="fu">=</span> <span class="dt">Load</span>

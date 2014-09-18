@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Exploring test case fixtures in Django</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Exploring test case fixtures in Django</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>September 18, 2014</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/python.html">Python</a>, <a href="../en/tags/django.html">Django</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
+<p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
+<p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>
+<pre><code> run-test-server.py myapp.tests MyComplicatedTestCase</code></pre>
+<p>The first idea how to proceed is to simply import the module and look at <code>fixtures</code> attribute of the test case. Sadly, it is not that easy. Importing the module fails with <code>ImproperlyConfiguredException</code> because simply importing a module would be too much to ask for without loading all the <a href="https://www.djangoproject.com/">Django</a> settings. This could be a whole other rant.</p>
+<p>Since <code>__import__</code> is slightly more complicated that necessary, let's offload the actual importing to <code>importlib.import_module</code> which works exactly as expected. However, it is only available since Python 2</p>
+<p>Once the module is imported, all that needs to be done is to retrieve the test case, its fixtures and fire out the <code>testserver</code> command with appropriate arguments.</p>
+<p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
+<pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
+
+<span class="ch">import</span> argparse
+<span class="ch">from</span> subprocess <span class="ch">import</span> call
+<span class="ch">import</span> sys
+<span class="ch">import</span> importlib
+
+<span class="ch">from</span> django.conf <span class="ch">import</span> settings
+
+
+<span class="kw">def</span> get_fixtures(module, case):
+    settings.configure()
+    parts = module.split(<span class="st">'.'</span>)
+
+    app = importlib.import_module(module)
+    <span class="kw">return</span> <span class="dt">getattr</span>(app, case).fixtures
+
+
+<span class="kw">def</span> main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(<span class="st">'MODULE'</span>, <span class="dt">type</span>=<span class="dt">str</span>)
+    parser.add_argument(<span class="st">'TEST_CASE'</span>, <span class="dt">type</span>=<span class="dt">str</span>)
+
+    args = parser.parse_args()
+    fixtures = get_fixtures(args.MODULE, args.TEST_CASE)
+
+    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] + fixtures)
+
+
+<span class="kw">if</span> <span class="ot">__name__</span> == <span class="st">'__main__'</span>:
+    sys.path.append(<span class="st">'.'</span>)
+    main()</code></pre>
+<h2 id="further-improvements">Further improvements</h2>
+<p>This script could obviously use a bit more polish:</p>
+<ul>
+<li>The help output could be more helpful.</li>
+<li>If something breaks, the user is presented with a stack trace. Not nice.</li>
+</ul>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li class="last"><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>

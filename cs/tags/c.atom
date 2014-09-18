@@ -51,143 +51,105 @@
 <h2 id="výsledky">Výsledky</h2>
 <p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
 <table>
-<tr>
-<th>
-</th>
-<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<th>
+<tr><th></th>           <th>
+Soubory
+</th> <th>
+Adresáře
+</th> <th>
+Mix
+</th></tr>
+<tr><th>
 dvojitý průchod
-</th>
-<th>
-</th>
-<th>
-</th>
-<th>
-</th>
-</tr>
-<tr>
-<td>
+</th><th></th><th></th><th></th></tr>
+<tr><td>
 <code>stat()</code>
-</td>
-<td>
+</td>   <td>
 0,109
-</td>
-<td>
+</td>   <td>
 0,106
-</td>
-<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>opendir()</code>
-</td>
-<td>
+</td><td>
 0,133
-</td>
-<td>
+</td>   <td>
 0,177
-</td>
-<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>d_type</code>
-</td>
-<td>
+</td>   <td>
 0,043
-</td>
-<td>
+</td>   <td>
 0,040
-</td>
-<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<th>
+</td>    <td>
+0
+</td></tr>
+<tr><th>
 Pole
-</th>
-<th>
-</th>
-<th>
-</th>
-<th>
-</th>
-</tr>
-<tr>
-<td>
+</th><th></th><th></th><th></th></tr>
+<tr><td>
 <code>stat()</code>
-</td>
-<td>
+</td>   <td>
 0,054
-</td>
-<td>
+</td>   <td>
 0,057
-</td>
-<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>opendir()</code>
-</td>
-<td>
+</td><td>
 0,067
-</td>
-<td>
+</td>   <td>
 0,091
-</td>
-<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>d_type</code>
-</td>
-<td>
+</td>   <td>
 0,021
-</td>
-<td>
+</td>   <td>
 0,021
-</td>
-<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<th>
+</td>    <td>
+0
+</td></tr>
+<tr><th>
 Seznam
-</th>
-<th>
-</th>
-<th>
-</th>
-<th>
-</th>
-</tr>
-<tr>
-<td>
+</th><th></th><th></th><th></th></tr>
+<tr><td>
 <code>stat()</code>
-</td>
-<td>
+</td>   <td>
 0,053
-</td>
-<td>
+</td>   <td>
 0,060
-</td>
-<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>opendir()</code>
-</td>
-<td>
+</td><td>
 0,065
-</td>
-<td>
+</td>   <td>
 0,091
-</td>
-<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
-<tr>
-<td>
+</td>    <td>
+0
+</td></tr>
+<tr><td>
 <code>d_type</code>
-</td>
-<td>
+</td>   <td>
 0,020
-</td>
-<td>
+</td>   <td>
 0,029
-</td>
-<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
+</td>    <td>
+0
+</td></tr>
 </table>
+
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
 </entry>
@@ -259,56 +221,98 @@ Seznam
 }</code></pre>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
 <table>
-<tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
-</tr>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: assignment to read-only variable</code>
+</td>
+    <td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
+  </tr>
 </table>
+
 <h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
 <table>
-<tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
-</pre>
+  <tr>
+    <th></th>
+    <th>
+<code>x = NULL</code>
+</th>
+    <th>
+<code>strcpy(x, „a”)</code>
+</th>
+  </tr>
+  <tr>
+    <th>
+<code>const char *</code>
+</th>
+    <td>
+OK
 </td>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
-</tr>
-<tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
-</pre>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+  <tr>
+    <th>
+<code>char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
 </td>
-</tr>
-</table>]]></summary>
+    <td>
+OK
+</td>
+  </tr>
+  <tr>
+    <th>
+<code>const char * const</code>
+</th>
+    <td>
+<code>error: read-only variable is not assignable</code>
+</td>
+    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
+  </tr>
+</table>
+
+
+]]></summary>
 </entry>
 
 </feed>
