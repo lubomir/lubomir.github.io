@@ -30,6 +30,7 @@ mkContext (BlogConfig {..}) =
             , constField "listHeader" listHeader
             , constField "tagsHeader" tagsHeader
             , dateFormatter "date"
+            , dateField "shortDate" "%Y–%m–%d"
             , constField "homeLink" homeLink
             , constField "topLink" topLink
             , constField "contactLink" contactLink
