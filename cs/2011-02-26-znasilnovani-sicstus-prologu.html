@@ -39,7 +39,7 @@
 <li>klíč a podobné věci jsou v druhém staženém souboru</li>
 <li>pokud se zvolí vhodný adresář, není potřeba ani heslo roota</li>
 <li>instalovat Tk, jasper, odbc ani nic podobného není nezbytně nutné</li>
-<li>pokud se instaluje v systému s vyšší verzí GLibc než 2 je potřeba potvrdit, že opravdu chci instalovat</li>
+<li>pokud se instaluje v systému s vyšší verzí GLibc než 2.7, je potřeba potvrdit, že opravdu chci instalovat</li>
 </ul></li>
 </ol>
 <p>A to je asi tak vše. Další pokračování by mohla být instalace <a href="http://www.eclipse.org/">Eclipse</a> a IDE pro Prolog jménem <a href="http://www.sics.se/sicstus/spider/site/index.html">Spider</a>.</p>
@@ -51,7 +51,7 @@
 <h3 id="někdo-to-rád-barevné">Někdo to rád barevné</h3>
 <p>Rlwrap umožňuje pomocí přepínače <code>-p</code> (nebo <code>--promp-colour</code>) obarvit výzvu programu. Menší problém je ale v tom, že za prompt považuje i řádky, kde se vypisuje víc možných unifikací a interpret čeká na středník kvůli další možnosti. Osobně bych preferoval obarvení pouze klasické výzvy <code>| ?-</code> a podobných, které začínají znakem <code>|</code>.</p>
 <p>Naštěstí si tohle přání můžu splnit pomocí filtru. Stačí si uložit <a href="../data/prolog_filter">tento filtr</a> ideálně do adresáře <code>/usr/share/rlwrap/filters</code> a potom spouštět pomocí <code>rlwrap -z 'prolog_filter Blue' sicstus</code>. Možnosti barev jsou <code>black</code>, <code>red</code>, <code>green</code>, <code>yellow</code>, <code>blue</code>, <code>purple</code>, <code>cyan</code> a <code>white</code>. Pokud je alespoň první písmeno velké, použije se tučná varianta.</p>
-<h4 id="aktualizace-16.3.2011">Aktualizace 16</h4>
+<h4 id="aktualizace-16.3.2011">Aktualizace 16. 3. 2011</h4>
 <p>Existuje i výrazně jednodušší řešení. Rlwrap umožňuje přepínači nastavit, které výzvy má „vařit“. Je to přepínač <code>-O regexp</code>, kde potřebný regulární výraz je <code>'^\|'</code>. Potom stačí použít klasicky <code>-pBARVA</code> (stejný výčet jako je výše) a už to funguje.</p>
 <p>Taky se může hodit přidat přepínač <code>-g '^.$'</code>, což zakáže ukládání jednopísmenných odpovědí do historie.</p>
 <h2 id="vim">Vim</h2>

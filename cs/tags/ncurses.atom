@@ -16,7 +16,7 @@
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
-<h2 id="inicializační-funkce">4 Inicializační funkce</h2>
+<h2 id="inicializační-funkce">4.1 Inicializační funkce</h2>
 <ol type="1">
 <li><p><strong>raw() a cbreak()</strong></p>
 <p>Normálně ovladač terminálu ukládá uživatelem zadané znaky do bufferu, dokud uživatel nestiskne enter. Většina programů ale potřebuje, aby byly znaky dostupné hned, když je uživatel zadá. Tyto dvě funkce zakazují bufferování řádků. Rozdíl mezi nimi je ve zpracování ovládacích znaků zadávaných z klávesnice (např. Ctrl-Z, Ctrl-C). Po zavolání raw() jsou tyto znaky předány programu a nevygenerují signál. V režimu cbreak() jsou tyto znaky interpretovány přímo ovladačem terminálu.</p></li>

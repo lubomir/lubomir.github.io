@@ -49,7 +49,7 @@
 
   <span class="kw">return</span> <span class="dv">0</span>;
 }</code></pre>
-<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4</h2>
+<h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4.4.5</h2>
 <table>
 <tr>
 <pre><code>&lt;th&gt;&lt;/th&gt;
@@ -72,7 +72,7 @@
 &lt;td&gt;&lt;code&gt;error: invalid conversion from 'const char*' to 'char*'&lt;/code&gt;&lt;/td&gt;</code></pre>
 </tr>
 </table>
-<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1</h2>
+<h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1.1</h2>
 <table>
 <tr>
 <pre><code>&lt;th&gt;&lt;/th&gt;
@@ -83,7 +83,7 @@
 <pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
 &lt;td&gt;OK&lt;/td&gt;
 &lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to 'strcpy'</code></pre>
-note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
+note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
 </pre>
 </td>
 </tr>
@@ -96,7 +96,7 @@ note: candidate function not viable: 1 argument ('char const *const') would lo
 <pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
 &lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
 &lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to 'strcpy'</code></pre>
-note: candidate function not viable: 1 argument ('char const *const') would lose const qualifier</code>
+note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
 </pre>
 </td>
 </tr>
