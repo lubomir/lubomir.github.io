@@ -57,11 +57,6 @@ dashes = ["-", "–", "—"]
 isUnit :: String -> Bool
 isUnit u = u `elem` ["g", "dg", "dag", "kg", "ml", "l"]
 
-fixNumberOrRange :: String -> String
-fixNumberOrRange s = case parse numberRange "" s of
-    Left _ -> s
-    Right n -> n
-
 isNumberOrRange :: String -> Bool
 isNumberOrRange s = case parse numberRange "" s of
     Left _  -> False
@@ -108,11 +103,6 @@ pass2 q (Str s : xs) = let (s', q') = replaceQ q s
                        in Str s' : pass2 q' xs
 pass2 q (x:xs) = x : pass2 q xs
 
-pass3 :: [Inline] -> [Inline]
-pass3 [] = []
-pass3 (Str s : xs) = Str (fixNumberOrRange s) : pass3 xs
-pass3 (x:xs) = x : pass3 xs
-
 -- | Helper filter that adds smart typography to Czech texts.
 --
 --   * adds nonbreakable spaces after single letter conjunctions
@@ -120,11 +110,11 @@ pass3 (x:xs) = x : pass3 xs
 --
 --   * adds thin nonbreakable spaces between number and unit
 --
---   * converts - to – if surrounded by spaces or in number ranges
+--   * converts - to – if surrounded by spaces
 --
 --   * converts ... to …
 --
 --   * creates proper Czech quotes
 --
 czechPandocTransform :: Pandoc -> Pandoc
-czechPandocTransform = topDown (pass2 False . pass3 . pass1)
+czechPandocTransform = topDown (pass2 False . pass1)
