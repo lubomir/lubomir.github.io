@@ -18,6 +18,7 @@ before_script:
 - cd ..
 script: cabal run -j build
 after_script:
+- cp .travis.yml _site/
 - cd _site
 - export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
 - git remote add github https://${GH_TOKEN}@${REMOTE}
