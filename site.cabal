@@ -16,5 +16,4 @@ executable site
                      , hakyll
                      , old-locale
                      , pandoc
-                     , parsec
                      , filepath

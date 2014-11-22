@@ -4,14 +4,11 @@ module Czech ( stripDiacritics
              , czechPandocTransform
              ) where
 
-import Control.Arrow (first)
-import Control.Applicative ((<$>), (<*>))
 import Hakyll (dateFieldWith, Context(..))
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
 import System.Locale
 import Text.Pandoc (Pandoc(..), Inline(..), topDown)
-import Text.Parsec
 
 -- |Remove accents from above letters.
 stripDiacritics :: String -> String
@@ -50,71 +47,23 @@ cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa",
                 , time12Fmt = ""
                 }
 
-conjuctions, dashes :: [String]
+conjuctions :: [String]
 conjuctions = ["a", "i", "k", "o", "s", "u", "v", "z"]
-dashes = ["-", "–", "—"]
 
-isUnit :: String -> Bool
-isUnit u = u `elem` ["g", "dg", "dag", "kg", "ml", "l"]
-
-isNumberOrRange :: String -> Bool
-isNumberOrRange s = case parse numberRange "" s of
-    Left _  -> False
-    Right _ -> True
-
-numberRange, number, dash :: Monad m => ParsecT String () m String
-numberRange = (++) <$> number <*> option "" ((++) <$> dash <*> number)
-number = (++) <$> many1 digit <*> option "" ((:) <$> char ',' <*> many1 digit)
-dash = choice (map string dashes) >> return "–"
-
-isDash :: String -> Bool
-isDash s = s `elem` dashes
-
-nbsp, thinspace :: String
+nbsp :: String
 nbsp = " "
---nbsp = "×"
-thinspace = " "
---thinspace = "÷"
 
 pass1 :: [Inline] -> [Inline]
 pass1 [] = []
-pass1 (Str "..." : xs) = Str "…" : pass1 xs
-pass1 (Space : Str s : Space : xs)
-    | isDash s = Space : Str "–" : Space : pass1 xs
-    | otherwise = Space : pass1 (Str s : Space : xs)
-pass1 (Str s : Space : Str u : xs)
-    | isNumberOrRange s && isUnit u = Str s : Str thinspace : pass1 (Str u : xs)
-    | map toLower s `elem` conjuctions = Str s : Str nbsp : pass1 (Str u : xs)
-    | otherwise = Str s : pass1 (Space : Str u : xs)
 pass1 (Str s : Space : xs)
     | map toLower s `elem` conjuctions = Str s : Str nbsp : pass1 xs
     | otherwise = Str s : pass1 (Space : xs)
 pass1 (x:xs) = x : pass1 xs
-
-replaceQ :: Bool -> String -> (String, Bool)
-replaceQ q [] = ([], q)
-replaceQ q ('"' : xs) = first (quote++) $ replaceQ (not q) xs
-  where quote = if q then "”" else "„"
-replaceQ q (x : xs) = first (x:) $ replaceQ q xs
-
-pass2 :: Bool -> [Inline] -> [Inline]
-pass2 _ [] = []
-pass2 q (Str s : xs) = let (s', q') = replaceQ q s
-                       in Str s' : pass2 q' xs
-pass2 q (x:xs) = x : pass2 q xs
 
 -- | Helper filter that adds smart typography to Czech texts.
 --
 --   * adds nonbreakable spaces after single letter conjunctions
 --     and prepositions
 --
---   * adds thin nonbreakable spaces between number and unit
---
---   * converts - to – if surrounded by spaces
---
---   * converts ... to …
---
---   * creates proper Czech quotes
---
 czechPandocTransform :: Pandoc -> Pandoc
-czechPandocTransform = topDown (pass2 False . pass1)
+czechPandocTransform = topDown pass1

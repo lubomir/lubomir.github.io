@@ -38,10 +38,10 @@ Při instalaci se do adresáře `$PREFIX/bin` mimo jiné nainstaluje spustiteln�
 soubor `sicstus`, což je přímo interpret. Tu stačí spustit a jsem skoro tam,
 kde jsme chtěli být.
 
-To slovíčko &bdquo;skoro&ldquo; je poměrně důležité. Interpret sice běží, ale
+To slovíčko „skoro“ je poměrně důležité. Interpret sice běží, ale
 zdaleka se nechová tak, aby se dal pohodlně používat. Například kurzor se nedá
 posunout šipkami doprostřed psaného dotazu a opravit překlep, po ukončení
-zůstane nezalomený řádek a posunutý prompt, nikde žádná historie dotazů ...
+zůstane nezalomený řádek a posunutý prompt, nikde žádná historie dotazů …
 
 Naštěstí to není nezvratný stav. Stačí nainstalovat utilitu [rlwrap][rlwrap]
 třeba ze standardních repozitářů a potom spouštět `rlwrap sicsus`. Výsledkem je
@@ -68,7 +68,7 @@ první písmeno velké, použije se tučná varianta.
 #### Aktualizace 16. 3. 2011
 
 Existuje i výrazně jednodušší řešení. Rlwrap umožňuje přepínači nastavit, které
-výzvy má &bdquo;vařit&ldquo;. Je to přepínač `-O regexp`, kde potřebný
+výzvy má „vařit“. Je to přepínač `-O regexp`, kde potřebný
 regulární výraz je `'^\|'`. Potom stačí použít klasicky `-pBARVA` (stejný výčet
 jako je výše) a už to funguje.
 
