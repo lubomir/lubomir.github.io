@@ -281,6 +281,13 @@ table thead > tr > th {
   background-color: #428bca;
 }
 
+.recent, .navigation {
+  list-style-type: none;
+  padding-left: 0;
+}
+.recent li {
+  margin-left: 0;
+}
 .navigation li {
   display: inline-block;
   margin: 0;
