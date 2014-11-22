@@ -40,18 +40,14 @@
 <p>Další užitečné atributy pro grafy jsou:</p>
 <dl>
 <dt><code>main</code></dt>
-<dd>hlavní titulek umístěný nad grafem
+<dd>hlavní titulek umístěný nad grafem <code>xlab</code>, <code>ylab</code>
 </dd>
-<dt><code>xlab</code>, <code>ylab</code></dt>
-<dd>popisek osy x, resp. osy y
+<dd>popisek osy x, resp. osy y <code>col</code>
 </dd>
-<dt><code>col</code></dt>
-<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code>
+<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code> <code>pch</code>
 </dd>
-<dt><code>pch</code></dt>
-<dd>typ puntíku
+<dd>typ puntíku <code>cex</code>
 </dd>
-<dt><code>cex</code></dt>
 <dd>velikost vykreslovaných puntíků
 </dd>
 </dl>

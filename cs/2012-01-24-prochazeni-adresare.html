@@ -64,105 +64,143 @@
 <h2 id="výsledky">Výsledky</h2>
 <p>Každý z devíti programů jsem spustil stokrát a výsledné časy zprůměroval. Metodika nic moc, ale nějaká představa se z toho udělat dá.</p>
 <table>
-<tr><th></th>           <th>
-Soubory
-</th> <th>
-Adresáře
-</th> <th>
-Mix
-</th></tr>
-<tr><th>
+<tr>
+<th>
+</th>
+<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 dvojitý průchod
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,109
-</td>   <td>
+</td>
+<td>
 0,106
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,133
-</td>   <td>
+</td>
+<td>
 0,177
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,043
-</td>   <td>
+</td>
+<td>
 0,040
-</td>    <td>
-0
-</td></tr>
-<tr><th>
+</td>
+<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 Pole
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,054
-</td>   <td>
+</td>
+<td>
 0,057
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,067
-</td>   <td>
+</td>
+<td>
 0,091
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,021
-</td>   <td>
+</td>
+<td>
 0,021
-</td>    <td>
-0
-</td></tr>
-<tr><th>
+</td>
+<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<th>
 Seznam
-</th><th></th><th></th><th></th></tr>
-<tr><td>
+</th>
+<th>
+</th>
+<th>
+</th>
+<th>
+</th>
+</tr>
+<tr>
+<td>
 <code>stat()</code>
-</td>   <td>
+</td>
+<td>
 0,053
-</td>   <td>
+</td>
+<td>
 0,060
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>opendir()</code>
-</td><td>
+</td>
+<td>
 0,065
-</td>   <td>
+</td>
+<td>
 0,091
-</td>    <td>
-0
-</td></tr>
-<tr><td>
+</td>
+<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<tr>
+<td>
 <code>d_type</code>
-</td>   <td>
+</td>
+<td>
 0,020
-</td>   <td>
+</td>
+<td>
 0,029
-</td>    <td>
-0
-</td></tr>
+</td>
+<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
 </table>
-
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="../data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>
 </div>

@@ -28,7 +28,7 @@
 </div>
 
 <div class="post">
-<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math"><em>ε</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
+<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
 <p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
 <figure>
 <img src="../images/regex0.png" alt="a^*b+(c+d+e)a" /><figcaption><span class="math"><em>a</em><sup> * </sup><em>b</em> + (<em>c</em> + <em>d</em> + <em>e</em>)<em>a</em></span></figcaption>
@@ -80,7 +80,7 @@ conc x y       <span class="fu">=</span> <span class="dt">Conc</span> (canBeEpsi
 <span class="ot">iter ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
 iter (<span class="dt">Iter</span> x) <span class="fu">=</span> <span class="dt">Iter</span> x
 iter x        <span class="fu">=</span> <span class="dt">Iter</span> x</code></pre>
-<p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math"><em>E</em></span> určit, jestli <span class="math"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math"><em>ε</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
+<p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math"><em>E</em></span> určit, jestli <span class="math"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math"><em>ϵ</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
 <pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">canBeEpsilon ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 canBeEpsilon <span class="dt">Epsilon</span>      <span class="fu">=</span> <span class="dt">True</span>
 canBeEpsilon <span class="dt">Zero</span>         <span class="fu">=</span> <span class="dt">False</span>

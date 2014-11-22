@@ -36,7 +36,7 @@
 <h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
 <p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
 <pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
-<span class="kw">&gt;</span> <span class="kw">-dBATCH</span> -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<span class="kw">&gt;</span> -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
 <p>Tím se každá stránka přepočítá na plus minus 72 což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>]]></summary>
 </entry>
 <entry>
