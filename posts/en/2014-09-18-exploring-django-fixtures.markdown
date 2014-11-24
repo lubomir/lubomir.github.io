@@ -16,7 +16,9 @@ The `--help` output is silent on this, so let's roll our own solution
 to this. The script will have two mandatory arguments: module
 containing the tests and the actual test case name.
 
-     run-test-server.py myapp.tests MyComplicatedTestCase
+``` bash
+run-test-server.py myapp.tests MyComplicatedTestCase
+```
 
 The first idea how to proceed is to simply import the module and look at
 `fixtures` attribute of the test case. Sadly, it is not that easy. Importing
