@@ -354,6 +354,7 @@ pre.sourceCode {
   color: #eeeeec;
   border: 5px solid #2e3436;
   font-size: 0.8em;
+  overflow-x: auto;
 }
 pre code {
   background: inherit;
