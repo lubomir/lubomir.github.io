@@ -351,12 +351,12 @@ dt {
 }
 pre {
   overflow-x: auto;
+  font-size: 0.8em;
 }
 pre.sourceCode {
   background-color: #2e3436;
   color: #eeeeec;
   border: 5px solid #2e3436;
-  font-size: 0.8em;
 }
 pre code {
   background: inherit;
