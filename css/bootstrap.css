@@ -349,12 +349,14 @@ dt {
 .tagcloud {
   margin-bottom: 2em;
 }
+pre {
+  overflow-x: auto;
+}
 pre.sourceCode {
   background-color: #2e3436;
   color: #eeeeec;
   border: 5px solid #2e3436;
   font-size: 0.8em;
-  overflow-x: auto;
 }
 pre code {
   background: inherit;
