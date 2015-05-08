@@ -33,54 +33,54 @@ int main (void)
 ## Jak to vidí [GCC](http://gcc.gnu.org/) 4.4.5
 
 <table>
-  <tr>
-    <th></th>
-    <th><code>x = NULL</code></th>
-    <th><code>strcpy(x, "a")</code></th>
-  </tr>
-  <tr>
-    <th><code>const char *</code></th>
-    <td>OK</td>
-    <td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
-  </tr>
-  <tr>
-    <th><code>char * const</code></th>
-    <td><code>error: assignment to read-only variable</code></td>
-    <td>OK</td>
-  </tr>
-  <tr>
-    <th><code>const char * const</code></th>
-    <td><code>error: assignment to read-only variable</code></td>
-    <td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
-  </tr>
+<tr>
+<th></th>
+<th><code>x = NULL</code></th>
+<th><code>strcpy(x, "a")</code></th>
+</tr>
+<tr>
+<th><code>const char *</code></th>
+<td>OK</td>
+<td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
+</tr>
+<tr>
+<th><code>char * const</code></th>
+<td><code>error: assignment to read-only variable</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<th><code>const char * const</code></th>
+<td><code>error: assignment to read-only variable</code></td>
+<td><code>error: invalid conversion from 'const char*' to 'char*'</code></td>
+</tr>
 </table>
 
 ## Jak to vidí [CLang](http://clang.llvm.org/) 1.1
 
 <table>
-  <tr>
-    <th></th>
-    <th><code>x = NULL</code></th>
-    <th><code>strcpy(x, "a")</code></th>
-  </tr>
-  <tr>
-    <th><code>const char *</code></th>
-    <td>OK</td>
-    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+<tr>
+<th></th>
+<th><code>x = NULL</code></th>
+<th><code>strcpy(x, "a")</code></th>
+</tr>
+<tr>
+<th><code>const char *</code></th>
+<td>OK</td>
+<td><pre><code class="long">error: no matching function for call to 'strcpy'
 note: candidate function not viable: 1st argument
 ('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
-  </tr>
-  <tr>
-    <th><code>char * const</code></th>
-    <td><code>error: read-only variable is not assignable</code></td>
-    <td>OK</td>
-  </tr>
-  <tr>
-    <th><code>const char * const</code></th>
-    <td><code>error: read-only variable is not assignable</code></td>
-    <td><pre><code class="long">error: no matching function for call to 'strcpy'
+</tr>
+<tr>
+<th><code>char * const</code></th>
+<td><code>error: read-only variable is not assignable</code></td>
+<td>OK</td>
+</tr>
+<tr>
+<th><code>const char * const</code></th>
+<td><code>error: read-only variable is not assignable</code></td>
+<td><pre><code class="long">error: no matching function for call to 'strcpy'
 note: candidate function not viable: 1st argument
 ('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre></td>
-  </tr>
+</tr>
 </table>
 
