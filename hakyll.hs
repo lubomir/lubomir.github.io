@@ -173,7 +173,9 @@ postListCompiler bc title list feed =
         , defaultContext
         , constField "feed" feed
         , constField "backToMain" (backToMain bc)])
-    >=> defaultCompiler bc
+    >=> loadAndApplyTemplate "templates/default.html"
+                             (mconcat [constField "title" title, mkContext bc])
+    >=> relativizeUrls
 
 
 defaultCompiler :: BlogConfig -> Item String -> Compiler (Item String)
