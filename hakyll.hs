@@ -5,6 +5,7 @@ import Data.Char (toLower)
 import Data.Monoid
 import Prelude
 import System.FilePath
+import qualified Data.Set as S
 
 import Hakyll
 import Text.Pandoc
@@ -184,6 +185,7 @@ myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransfor
   where
     myWriterOptions = def { writerHtml5 = True
                           , writerHighlight = True
+                          , writerExtensions = S.fromList [Ext_definition_lists]
                           }
 
 postCtx :: BlogConfig -> Tags -> Context String

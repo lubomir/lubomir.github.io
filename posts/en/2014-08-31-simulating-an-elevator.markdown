@@ -127,8 +127,8 @@ on the results.
 ## Conclusion
 
 There is one positive result: I don't have to live a with a dumb elevator
-anymore. The simulation confirmed that a slight improvement in the logic --
-letting people get on the elevator when it is going down -- can have
+anymore. The simulation confirmed that a slight improvement in the logic –
+letting people get on the elevator when it is going down – can have
 significant impact on average waiting time.
 
 The code used for this is available at

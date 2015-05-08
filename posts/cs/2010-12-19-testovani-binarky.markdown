@@ -16,17 +16,21 @@ Všechny testy se ukládají do speciálního adresáře. Já používám název
 ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s
 názvy třeba `01_valid_input.*`. Přípona souboru specifikuje, co soubor testuje.
 
- `*.in`
-  : toto přijde na standardní vstup
- `*.args`
-  : toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý
+`*.in`
+:   toto přijde na standardní vstup
+
+`*.args`
+:   toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý
     argument má obsahovat mezeru.)
- `*.out`
-  : očekávaný výstup na stdout
- `*.err`
-  : očekávaný chybový výstup
- `*.ret`
-  : návratový kód programu
+
+`*.out`
+:   očekávaný výstup na stdout
+
+`*.err`
+:   očekávaný chybový výstup
+
+`*.ret`
+:   návratový kód programu
 
 Pokud některý soubor neexistuje, tak se příslušná část netestuje.
 

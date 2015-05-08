@@ -21,21 +21,24 @@ Další primitivní typ je třeba typ všech celých čísel `Int`.
 
 Z primitivních typů je možné pomocí operací vytvářet další, bohatší typy.
 
- Lift X
-  : přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než
+Lift X
+:   přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než
     všechny původní prvky v X a jinak se touto operací uspořádání nemění.
- X × Y
-  : kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a
+
+X × Y
+:   kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a
     druhá složka má typ Y). Pokud $x_1, x_2 \in X, x_1 \leq x_2$ a
     $y_1, y_2 \in Y, y_1 \leq y_2$, potom platí $(x_1,y_1) \leq (x_2,y_2)$.
     ^[drobný detail: pokaždé se jedná o jiné $\leq$, protože se porovnává
     v jiné doméně]
- X + Y
-  : disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu
+
+X + Y
+:   disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu
     typu X, nebo hodnotu typu Y (např. takto funguje `union` v C nebo `Either`
     v Haskellu)
- X → Y
-  : mocninný typ; typ všech spojitých funkcí, které hodnotu typu X zobrazí na
+
+X → Y
+:   mocninný typ; typ všech spojitých funkcí, které hodnotu typu X zobrazí na
     hodnotu typu Y
 
 Další příklady jsou ve slidech z přednášky na straně 167.
