@@ -18,12 +18,12 @@
     <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
 <p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
 <p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">run-test-server.py</span> myapp.tests MyComplicatedTestCase</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">run-test-server.py</span> myapp.tests MyComplicatedTestCase</code></pre></div>
 <p>The first idea how to proceed is to simply import the module and look at <code>fixtures</code> attribute of the test case. Sadly, it is not that easy. Importing the module fails with <code>ImproperlyConfiguredException</code> because simply importing a module would be too much to ask for without loading all the <a href="https://www.djangoproject.com/">Django</a> settings. This could be a whole other rant.</p>
 <p>Since <code>__import__</code> is slightly more complicated that necessary, let's offload the actual importing to <code>importlib.import_module</code> which works exactly as expected. However, it is only available since Python 2.7.</p>
 <p>Once the module is imported, all that needs to be done is to retrieve the test case, its fixtures and fire out the <code>testserver</code> command with appropriate arguments.</p>
 <p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
-<pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
 
 <span class="ch">import</span> argparse
 <span class="ch">from</span> subprocess <span class="ch">import</span> call
@@ -54,7 +54,7 @@
 
 <span class="kw">if</span> <span class="ot">__name__</span> == <span class="st">&#39;__main__&#39;</span>:
     sys.path.append(<span class="st">&#39;.&#39;</span>)
-    main()</code></pre>
+    main()</code></pre></div>
 <h2 id="further-improvements">Further improvements</h2>
 <p>This script could obviously use a bit more polish:</p>
 <ul>

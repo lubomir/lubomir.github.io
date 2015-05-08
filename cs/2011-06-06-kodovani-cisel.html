@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
@@ -36,22 +37,22 @@
 <p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
 <h2 id="implementace">Implementace</h2>
 <p>Nejdříve tedy definice typů.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
 
 <span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bit</span> <span class="kw">where</span>
     show <span class="dt">Zero</span> <span class="fu">=</span> <span class="st">&quot;0&quot;</span>
     show <span class="dt">One</span>  <span class="fu">=</span> <span class="st">&quot;1&quot;</span>
 
-<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre>
+<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre></div>
 <p>Typy požadovaných funkcí vypadají následovně. Kódovací funkce pro číslo vrátí posloupnost bitů, dekódovací naopak z proudy bitů vytáhnou první číslo a vrátí ho společně se zbytkem proudu. Funkce <code>fromBinary</code> se liší v tom, že zpracuje celý proud.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 parseUnary, parseGamma,<span class="ot"> parseDelta ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
-<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
+<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre></div>
 <p>Unární kódování je velice jednoduché. Operátor <code>(***) :: (a -&gt; b) -&gt; (c -&gt; d) -&gt; (a, c) -&gt; (b, d)</code> se nachází v modulu <code>Control.Arrow</code> a jeho jediný účel je aplikace funkcí na složky dvojice.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
-parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
+parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre></div>
 <p>Funkce pro binární kódování čísla jsou trošku složitější, ale pořád tam není žádná magie. Provádí klasický přepis čísla do dvojkové soustavy. Pomocná funkce <code>binary'</code> navíc výsledný kód doplní zleva do požadované délky nulami. Také 0 při délce kódu 0 reprezentuje prázdným seznamem.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
   <span class="kw">where</span>
     bin acc <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">:</span> acc
     bin acc <span class="dv">1</span> <span class="fu">=</span> <span class="dt">One</span>  <span class="fu">:</span> acc
@@ -63,31 +64,31 @@ binary' len n <span class="fu">=</span> padding <span class="fu">++</span> code
   <span class="kw">where</span> code <span class="fu">=</span> binary n
         padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
 
-fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre>
+fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre></div>
 <p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary' len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
   <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
 
 <span class="ot">parseWith ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
 parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
   <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
-        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre>
+        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre></div>
 <p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
 parseGamma <span class="fu">=</span> parseWith parseUnary
 
 delta <span class="fu">=</span> encodeWith gamma
-parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre>
+parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre></div>
 <p>Odtud už je jednoduché napsat funkci, které bude kódovat nebo dekódovat seznam čísel.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 encode <span class="fu">=</span> concatMap
 
 <span class="ot">decode ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
 decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span class="fu">=</span> f s
              <span class="kw">in</span> <span class="kw">case</span> ss <span class="kw">of</span>
                   [] <span class="ot">-&gt;</span> [n]
-                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre>
+                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre></div>
 <p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>
 </div>
 

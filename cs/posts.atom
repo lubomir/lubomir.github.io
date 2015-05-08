@@ -18,25 +18,25 @@
     <summary type="html"><![CDATA[<p>Tento text je výcuc z mých poznatků, které jsem nabyl při vypracování projektu do jistého matematického předmětu.</p>
 <h2 id="načítání-dat-a-první-průzkum">Načítání dat a první průzkum</h2>
 <p>V první řadě je potřeba načíst soubor s daty. Za předpokladu, že máme data ve formátu CSV, se nám bude hodit příkaz <code>read.csv</code> (jak nečekané…). Taky by bylo dobré zjistit, jak vlastně data vypadají, tedy jaké jsou názvy atributů a jak vypadá prvních pár záznamů.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;nazev_souboru.csv&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;nazev_souboru.csv&quot;</span>)
 &gt;<span class="st"> </span><span class="kw">names</span>(data)
 ...
 &gt;<span class="st"> </span><span class="kw">head</span>(data)
-...</code></pre>
+...</code></pre></div>
 <p>Jednotlivé atributy je potom možné adresovat přes notaci se znakem <code>$</code>, tedy třeba <code>data$atr1</code>. Funkce <code>nrow(data)</code> nám prozradí, kolik je v datovém rámci záznamů.</p>
 <p>Pro kvalitativní atributy se hodí výpis hodnot s příslušnou četností. To se dá udělat pomocí funkce <code>table</code>. Pokud bychom chtěli relativní četnosti, stačí celou tabulku podělit počtem řádků.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(data$class)
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(data$class)
 
    <span class="dv">1</span>    <span class="dv">2</span>
  <span class="dv">700</span>  <span class="dv">300</span>
 &gt;<span class="st"> </span><span class="kw">table</span>(data$class) /<span class="st"> </span><span class="kw">nrow</span>(data)
 
   <span class="dv">1</span>   <span class="dv">2</span>
-<span class="fl">0.7</span> <span class="fl">0.3</span></code></pre>
+<span class="fl">0.7</span> <span class="fl">0.3</span></code></pre></div>
 <p>Pro atributy s větším počtem hodnot než jenom dvě je možné vygenerovat tabulku kumulativních relativních četností pomocí funkce <code>cumsum()</code>.</p>
 <p>Pro vizualizaci kvalitativních atributů se hodí např. sloupkový diagram, který je možné vytvořit pomocí funkce <code>barplot</code> aplikované na tabulku četností (třeba i kumulativních). Jiná možnost je polygon četností – funkce <code>plot</code>, jejíž první argument je tabulka, kterou chceme vizualizovat. Polygon četností navíc vyžaduje argument <code>type=&quot;b&quot;</code>, tedy typ grafu <em>both</em>, což znamená puntíky spojené čarami.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">barplot</span>(<span class="kw">table</span>(data$class))
-&gt;<span class="st"> </span><span class="kw">plot</span>(<span class="kw">table</span>(data$at7), <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">barplot</span>(<span class="kw">table</span>(data$class))
+&gt;<span class="st"> </span><span class="kw">plot</span>(<span class="kw">table</span>(data$at7), <span class="dt">type=</span><span class="st">&quot;b&quot;</span>)</code></pre></div>
 <p>Další užitečné atributy pro grafy jsou:</p>
 <dl>
 <dt><code>main</code></dt>
@@ -55,15 +55,15 @@
 <p>Závislosti mezi jednotlivými atributy je možné zkoumat třeba pomocí kontingenční tabulky. Tu opět produkuje funkce <code>table</code>, tentokrát se dvěma argumenty. První argument (a tedy datová sada) určuje řádky, druhý argument jsou sloupce.</p>
 <p>Z této tabulky je možné dopočítat kontingenční tabulku řádkově (nebo sloupcově) podmíněných četností. Nenašel jsem k tomu ale vestavěnou funkci, takže to bude vyžadovat trochu černé magie.</p>
 <p>Pro řádkově podmíněné četnosti stačí každou hodnotu v kontingenční tabulce absolutních četností podělit součtem hodnot na příslušném řádku. Součty po řádcích je možné vyprodukovat pomocí funkce <code>rowSums</code>. Tabulky potom stačí podělit.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2) /<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">table</span>(atribut1, atribut2))</code></pre>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2) /<span class="st"> </span><span class="kw">rowSums</span>(<span class="kw">table</span>(atribut1, atribut2))</code></pre></div>
 <p>Se sloupcově podmíněnými četnosti je to trochu horší. Existuje funkce <code>colSums</code>, která spočítá sumy přes sloupce, jednoduché dělení jako v předchozím případě ale nebude fungovat, protože tabulky si nebudou rozměrově správně odpovídat. Řešením je využít funkci s lakonickým názvem <code>t</code>, která transponuje svůj jediný argument.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>tab &lt;-<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2)
-&gt;<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(tab) /<span class="st"> </span><span class="kw">colSums</span>(tab))</code></pre>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span>tab &lt;-<span class="st"> </span><span class="kw">table</span>(atribut1, atribut2)
+&gt;<span class="st"> </span><span class="kw">t</span>(<span class="kw">t</span>(tab) /<span class="st"> </span><span class="kw">colSums</span>(tab))</code></pre></div>
 <p>Správnost výsledků se dá ověřit například pomocí dalšího volání <code>rowSums</code>, V tabulce řádkově podmíněných četností by měla být suma na každém řádku rovna 1, obdobně pro sloupce pro sloupcově podmíněné četnosti.</p>
 <h2 id="generování-histogramů">Generování histogramů</h2>
 <p>Základní histogram se dá udělat pomocí funkce <code>hist</code>. Bez nějakých dalších argumentů ale vytvoří nehezkou obludu. Hlavní kámen úrazu této funkce je nastavování počtu intervalů. Pomocí argumenty <code>breaks</code> je sice možné zadat číslo nebo název metody, ale je to jenom doporučení a funkce se tím nemusí přesně řídit. Navíc výchozí nastavení vygeneruje nepříliš přehlednou osu <span class="math"><em>x</em></span>, ze které se těžko odečítají hranice intervalů.</p>
 <p>Nicméně můžeme tady využít možnosti definice vlastních funkcí a napsat vlastní vykreslování histogramů. Tato funkce bude očekávat data ve stejném formátu jako standardní <code>hist</code>, počet intervalů, a volitelný popisek osy <span class="math"><em>x</em></span>.</p>
-<pre class="sourceCode R"><code class="sourceCode r">myhist &lt;-<span class="st"> </span>function(data, num_bins, <span class="dt">lab=</span><span class="st">&#39;data&#39;</span>) {
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">myhist &lt;-<span class="st"> </span>function(data, num_bins, <span class="dt">lab=</span><span class="st">&#39;data&#39;</span>) {
     <span class="co"># Spočítáme šířku intervalu s přesností na jedno desetinné místo</span>
     width &lt;-<span class="st"> </span><span class="kw">round</span>((<span class="kw">max</span>(data) -<span class="st"> </span><span class="kw">min</span>(data)) /<span class="st"> </span>num_bins, <span class="dt">digits=</span><span class="dv">1</span>)
     <span class="co"># Uděláme vektor bodů, kde začínají a končí intervaly</span>
@@ -91,7 +91,7 @@
     <span class="co"># Volitelně bychom mohli ještě do rohu přidat informaci o šířce intervalu</span>
     leg &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&#39;Šířka intervalu&#39;</span>, <span class="kw">format</span>(width))
     <span class="kw">legend</span>(<span class="st">&#39;topright&#39;</span>, leg, <span class="dt">box.lty=</span><span class="dv">0</span>)
-}</code></pre>
+}</code></pre></div>
 <p>Jako argumenty <code>col</code> a <code>border</code> funkce <code>hist</code> by bylo možné zadat i vektory barev, kdybychom to chtěli oživit. Nechceme.</p>
 <p>Velikost fontu se dá ovlivnit parametrem <code>cex</code>. Je potřeba ho zadat u <code>par</code> a <code>mtext</code>.</p>
 <figure>
@@ -100,15 +100,15 @@
 <h2 id="korelace-a-regresní-přímka">Korelace a regresní přímka</h2>
 <p>Když už máme dva numerické atributy, můžeme mezi nimi hledat hledat nějaké vztahy. Korelační koeficienty se dají počítat funkcí <code>cor(atribut1, atribut2, method=&quot;pearson&quot;)</code>. Další dostupné metody jsou <code>spearman</code> a <code>kendall</code>.</p>
 <p>Vypočítat koeficienty regresní přímky lze pomocí funkce <code>lm</code>. Vykreslení do grafu potom provede funkce <code>abline</code> aplikovaná na to, co vrátí <code>lm</code>.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">lm</span>(loans ~<span class="st"> </span>ages)
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">lm</span>(loans ~<span class="st"> </span>ages)
 ...
 Coefficients:
 (Intercept)         ages
    <span class="fl">2982.684</span>        <span class="fl">8.118</span>
-&gt;<span class="st"> </span><span class="kw">abline</span>(<span class="kw">lm</span>(loans ~<span class="st"> </span>ages))</code></pre>
+&gt;<span class="st"> </span><span class="kw">abline</span>(<span class="kw">lm</span>(loans ~<span class="st"> </span>ages))</code></pre></div>
 <p>Před samotným vykreslením přímky je možné si nachystat třeba tečkový diagram atributů, jejichž závislost hledáme.</p>
-<pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">plot</span>(ages,        <span class="co"># Co bude na ose X</span>
-       loans)       <span class="co"># Co bude na ose Y</span></code></pre>
+<div class="sourceCode"><pre class="sourceCode R"><code class="sourceCode r">&gt;<span class="st"> </span><span class="kw">plot</span>(ages,        <span class="co"># Co bude na ose X</span>
+       loans)       <span class="co"># Co bude na ose Y</span></code></pre></div>
 <h2 id="ukládání-do-souborů">Ukládání do souborů</h2>
 <p>Uložení vytvořeného grafu do souboru je vlastně naprosto triviální. Před voláním vykreslovacích funkcí je potřeba přesměrovat výstup do požadovaného souboru pomocí funkce, jejíž název určí formát výstupu a jediný argument název výstupního souboru. Dostupné jsou minimálně <code>pdf</code> a <code>png</code>. Až je dokresleno, zavolání <code>dev.off()</code> zase přesměruje výstup na obrazovku.</p>
 <h2 id="další-užitečné-funkce">Další užitečné funkce</h2>
@@ -133,23 +133,23 @@ Coefficients:
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
 <h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
 <p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre></div>
 <p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
 <h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
 <p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
     <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
-<span class="kw">done</span></code></pre>
+<span class="kw">done</span></code></pre></div>
 <p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
 <h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
 <p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre></div>
 <p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
 <h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
 <p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
-<span class="kw">&gt;</span> -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+<span class="kw">&gt;</span> -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre></div>
 <p>Tím se každá stránka přepočítá na plus minus 72 dpi, což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>]]></summary>
 </entry>
 <entry>
@@ -165,7 +165,7 @@ Coefficients:
 </figure>
 <h2 id="importujeme">Importujeme</h2>
 <p>Budeme potřebovat importovat několik modulů, většinu z nich pro parsování výrazu.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">import qualified</span> <span class="dt">Data.Map</span> <span class="kw">as</span> <span class="dt">M</span>
 <span class="kw">import qualified</span> <span class="dt">Data.Set</span> <span class="kw">as</span> <span class="dt">S</span>
 <span class="kw">import </span><span class="dt">Text.Parsec.Char</span>
 <span class="kw">import </span><span class="dt">Text.Parsec.String</span>
@@ -174,28 +174,28 @@ Coefficients:
 <span class="kw">import </span><span class="dt">Text.Parsec.Expr</span>
 <span class="kw">import </span><span class="dt">Control.Applicative</span> ((&lt;*), (*&gt;))
 <span class="kw">import </span><span class="dt">Data.Maybe</span> (fromMaybe)
-<span class="kw">import </span><span class="dt">Data.List</span> (tails, foldl&#39;)</code></pre>
+<span class="kw">import </span><span class="dt">Data.List</span> (tails, foldl&#39;)</code></pre></div>
 <h2 id="datové-typy">Datové typy</h2>
 <p>Je potřeba nějak reprezentovat jak samotný regulární výraz, tak i výsledný automat. Regexp je možné reprezentovat jako strom. Listy jsou základní výrazy, uzly potom zřetězení, alternativa a iterace.</p>
 <p>Později budeme potřebovat určovat, jestli nějaký regulární výraz popisuje (mimo jiné) prázdné slovo. Pro urychlení tedy u těch konstruktorů, kde to není zřejmé, přidáme tuto informaci.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Regex</span> a <span class="fu">=</span> <span class="dt">Epsilon</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Regex</span> a <span class="fu">=</span> <span class="dt">Epsilon</span>
              <span class="fu">|</span> <span class="dt">Zero</span>
              <span class="fu">|</span> <span class="dt">Simple</span> a
              <span class="fu">|</span> <span class="dt">Plus</span> <span class="dt">Bool</span> (<span class="dt">Regex</span> a) (<span class="dt">Regex</span> a)
              <span class="fu">|</span> <span class="dt">Conc</span> <span class="dt">Bool</span> (<span class="dt">Regex</span> a) (<span class="dt">Regex</span> a)
              <span class="fu">|</span> <span class="dt">Iter</span> (<span class="dt">Regex</span> a)
-             <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Ord</span>, <span class="dt">Show</span>)</code></pre>
+             <span class="kw">deriving</span> (<span class="dt">Eq</span>, <span class="dt">Ord</span>, <span class="dt">Show</span>)</code></pre></div>
 <p>Pro konečný automat bude potřeba další typ. Automat má nějaké přechody, množinu stavů a počáteční stav. Položka <code>isAccepting</code> je funkce, která pro stav řekne, jestli je akceptující.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">Node</span> <span class="fu">=</span> <span class="dt">Regex</span> <span class="dt">Char</span>  <span class="co">-- ^ Popisek stavu</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">type</span> <span class="dt">Node</span> <span class="fu">=</span> <span class="dt">Regex</span> <span class="dt">Char</span>  <span class="co">-- ^ Popisek stavu</span>
 
 <span class="kw">data</span> <span class="dt">FiniteAutomaton</span> <span class="fu">=</span> <span class="dt">FiniteAutomaton</span>
                      {<span class="ot"> transitions ::</span> <span class="dt">M.Map</span> (<span class="dt">Node</span>,<span class="dt">Char</span>) <span class="dt">Node</span>
                      ,<span class="ot"> states      ::</span> <span class="dt">S.Set</span> <span class="dt">Node</span>
                      ,<span class="ot"> startNode   ::</span> <span class="dt">Node</span>
                      ,<span class="ot"> isAccepting ::</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
-                     }</code></pre>
+                     }</code></pre></div>
 <p>V první řadě nadefinujeme tři pomocné funkce pro spojování regexpů, které se postarají o korektní vyplnění pomocné boolovské části a taky zabrání vzniku několika patologických výrazů – např. nemá smysl řetězit něco s prázdným slovem. Jiný příklad je výraz <code>(E*)*</code>, který je ekvivalentní s <code>E*</code> (a navíc vede k zacyklení).</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">plus ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">plus ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
 plus <span class="dt">Zero</span> x <span class="fu">=</span> x
 plus x <span class="dt">Zero</span> <span class="fu">=</span> x
 plus x y    <span class="fu">=</span> <span class="dt">Plus</span> (canBeEpsilon x <span class="fu">||</span> canBeEpsilon y) x y
@@ -209,18 +209,18 @@ conc x y       <span class="fu">=</span> <span class="dt">Conc</span> (canBeEpsi
 
 <span class="ot">iter ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
 iter (<span class="dt">Iter</span> x) <span class="fu">=</span> <span class="dt">Iter</span> x
-iter x        <span class="fu">=</span> <span class="dt">Iter</span> x</code></pre>
+iter x        <span class="fu">=</span> <span class="dt">Iter</span> x</code></pre></div>
 <p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math"><em>E</em></span> určit, jestli <span class="math"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math"><em>ϵ</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">canBeEpsilon ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">canBeEpsilon ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 canBeEpsilon <span class="dt">Epsilon</span>      <span class="fu">=</span> <span class="dt">True</span>
 canBeEpsilon <span class="dt">Zero</span>         <span class="fu">=</span> <span class="dt">False</span>
 canBeEpsilon (<span class="dt">Simple</span> _)   <span class="fu">=</span> <span class="dt">False</span>
 canBeEpsilon (<span class="dt">Conc</span> e _ _) <span class="fu">=</span> e
 canBeEpsilon (<span class="dt">Plus</span> e _ _) <span class="fu">=</span> e
-canBeEpsilon (<span class="dt">Iter</span> _)     <span class="fu">=</span> <span class="dt">True</span></code></pre>
+canBeEpsilon (<span class="dt">Iter</span> _)     <span class="fu">=</span> <span class="dt">True</span></code></pre></div>
 <h2 id="parsování">Parsování</h2>
 <p>A nyní hurá na parsování. <code>Parsec</code> nabízí úžasné možnosti, jak parsovat aritmetické i jiné výrazy. Jediná složitější věc je tady parser pro jednotlivý znak, protože umožňuje využít zpětného lomítka k escapování znaků hvězdičky, plusu a závorek, které by jinak měly speciální význam.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">regexP, termP,<span class="ot"> simpleP ::</span> <span class="dt">Parser</span> (<span class="dt">Regex</span> <span class="dt">Char</span>)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">regexP, termP,<span class="ot"> simpleP ::</span> <span class="dt">Parser</span> (<span class="dt">Regex</span> <span class="dt">Char</span>)
 regexP <span class="fu">=</span> buildExpressionParser table termP
 termP <span class="fu">=</span> simpleP <span class="fu">&lt;|&gt;</span> char <span class="ch">&#39;(&#39;</span> <span class="fu">*&gt;</span> regexP <span class="fu">&lt;*</span> char <span class="ch">&#39;)&#39;</span>
 table <span class="fu">=</span> [ [ <span class="dt">Postfix</span> <span class="fu">$</span> char <span class="ch">&#39;*&#39;</span> <span class="fu">&gt;&gt;</span> return iter ]
@@ -232,15 +232,15 @@ simpleP <span class="fu">=</span> <span class="kw">do</span>
     c <span class="ot">&lt;-</span> <span class="kw">if</span> c&#39; <span class="fu">==</span> <span class="ch">&#39;\\&#39;</span>
             <span class="kw">then</span> anyChar
             <span class="kw">else</span> return c&#39;
-    return (<span class="dt">Simple</span> c)</code></pre>
+    return (<span class="dt">Simple</span> c)</code></pre></div>
 <p>Parser <code>regexP</code> teď můžeme obalit pomocnou funkcí.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fromString ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">fromString ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span>
 fromString str <span class="fu">=</span> <span class="kw">case</span> parse (regexP <span class="fu">&lt;*</span> eof) <span class="st">&quot;&quot;</span> str <span class="kw">of</span>
     <span class="dt">Left</span> _  <span class="ot">-&gt;</span> <span class="dt">Zero</span>
-    <span class="dt">Right</span> r <span class="ot">-&gt;</span> r</code></pre>
+    <span class="dt">Right</span> r <span class="ot">-&gt;</span> r</code></pre></div>
 <h2 id="derivace">Derivace</h2>
 <p>Funkce pro derivaci regulárních výrazů je skoro doslovným přepisem definice ze <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">slidů</a>.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">derive ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">derive ::</span> <span class="dt">Eq</span> a <span class="ot">=&gt;</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
 derive <span class="dt">Zero</span>    _      <span class="fu">=</span> <span class="dt">Zero</span>
 derive <span class="dt">Epsilon</span> _      <span class="fu">=</span> <span class="dt">Zero</span>
 derive (<span class="dt">Simple</span> x) y
@@ -250,12 +250,12 @@ derive (<span class="dt">Plus</span> _ p q) x <span class="fu">=</span> plus (de
 derive (<span class="dt">Conc</span> _ p q) x
     <span class="fu">|</span> canBeEpsilon p  <span class="fu">=</span> plus (conc (derive p x) q) (derive q x)
     <span class="fu">|</span> otherwise       <span class="fu">=</span> conc (derive p x) q
-derive (<span class="dt">Iter</span> p) x     <span class="fu">=</span> conc (derive p x) (iter p)</code></pre>
+derive (<span class="dt">Iter</span> p) x     <span class="fu">=</span> conc (derive p x) (iter p)</code></pre></div>
 <h2 id="konstrukce-automatu">Konstrukce automatu</h2>
 <p>A můžeme budovat automat! Samotný algoritmus běží v cyklu <code>run</code>, v kterém postupně vytvoříme jak množinu stavů, tak tabulku přechodů.</p>
 <p>V každé iteraci vezmeme všechny regulární výrazy z fronty <code>q</code> a každý zderivujeme každým písmenem abecedy. Z těchto všech derivací přidáme nové stavy a přechody mezi ty, co už jsme napočítali. Zároveň nově přidané stavy tvoří novou frontu.</p>
 <p>Nemá smysl přidávat žádné hrany, které vedou do stavu odpovídajícího regexpu <code>Zero</code>, tím se jenom zbytečně zvětšuje tabulka přechodů.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">toFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">toFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Regex</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
 toFA alphabet re <span class="fu">=</span> <span class="dt">FiniteAutomaton</span> { startNode <span class="fu">=</span> re
                                    , transitions <span class="fu">=</span> allTransitions
                                    , states <span class="fu">=</span> allStates
@@ -271,24 +271,24 @@ toFA alphabet re <span class="fu">=</span> <span class="dt">FiniteAutomaton</spa
             derivedStates  <span class="fu">=</span> S.fromList <span class="fu">$</span> map snd allD
             newStates      <span class="fu">=</span> s <span class="ot">`S.union`</span> derivedStates
             newTransitions <span class="fu">=</span> M.union t <span class="fu">$</span> M.fromList <span class="fu">$</span> filter ((<span class="fu">/=</span> <span class="dt">Zero</span>) <span class="fu">.</span> snd) allD
-            newQueue       <span class="fu">=</span> S.toList <span class="fu">$</span> S.difference derivedStates s</code></pre>
+            newQueue       <span class="fu">=</span> S.toList <span class="fu">$</span> S.difference derivedStates s</code></pre></div>
 <h2 id="práce-s-automatem">Práce s automatem</h2>
 <p>Když má automat přejít pod nějakým znakem z jednoho stavu do dalšího, podíváme se do tabulky a pokud je přechod nedefinovaný, interpretujeme to jako přechod do stavu <code>Zero</code>.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">transition ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Node</span>
-transition fa q a <span class="fu">=</span> fromMaybe <span class="dt">Zero</span> <span class="fu">$</span> M.lookup (q,a) (transitions fa)</code></pre>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">transition ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">Node</span> <span class="ot">-&gt;</span> <span class="dt">Char</span> <span class="ot">-&gt;</span> <span class="dt">Node</span>
+transition fa q a <span class="fu">=</span> fromMaybe <span class="dt">Zero</span> <span class="fu">$</span> M.lookup (q,a) (transitions fa)</code></pre></div>
 <p>Pro spuštění automatu nad nějakým slovem tedy začneme v počátečním stavu a postupně automat krmíme znaky ze vstupu. Nakonec stačí zkontrolovat, jestli jsme došli do akceptujícího stavu.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runFA ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
-runFA fa str <span class="fu">=</span> isAccepting fa <span class="fu">$</span> foldl&#39; (transition fa) (startNode fa) str</code></pre>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runFA ::</span> <span class="dt">FiniteAutomaton</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+runFA fa str <span class="fu">=</span> isAccepting fa <span class="fu">$</span> foldl&#39; (transition fa) (startNode fa) str</code></pre></div>
 <p>Teď už můžeme zabalit vytváření automatu do jediné funkce.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">strToFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">strToFA ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">FiniteAutomaton</span>
 strToFA str <span class="fu">=</span>  toFA (getAlphabet str) <span class="fu">$</span> fromString str
   <span class="kw">where</span>
-    getAlphabet <span class="fu">=</span> filter (<span class="ot">`notElem`</span> <span class="st">&quot;()*+&quot;</span>)</code></pre>
+    getAlphabet <span class="fu">=</span> filter (<span class="ot">`notElem`</span> <span class="st">&quot;()*+&quot;</span>)</code></pre></div>
 <p>Pomocí této funkce můžeme vytvořit jednoduchý operátor, který porovná řetězec s regulárním výrazem <span class="math"><em>E</em></span> a zjistí, jestli dané slovo patří do <span class="math"><em>L</em>(<em>E</em>)</span>.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(=~) ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
-str <span class="fu">=~</span> regex <span class="fu">=</span> runFA (strToFA regex) str</code></pre>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(=~) ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+str <span class="fu">=~</span> regex <span class="fu">=</span> runFA (strToFA regex) str</code></pre></div>
 <p>Nalezení všech odpovídajících podřetězců je maličko složitější. Postupně spustíme automat na všechny sufixy řetězce a zapamatujeme si, kde jsme došli do akceptujícího stavu. Zároveň ale zastavíme, když dorazíme do stavu <code>Zero</code>, protože z něj už není úniku.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">allMatches ::</span> <span class="dt">RE</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>, <span class="dt">Int</span>)]
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">allMatches ::</span> <span class="dt">RE</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> [(<span class="dt">Int</span>, <span class="dt">Int</span>)]
 allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">$</span> run <span class="dv">1</span> (startNode fa)) starts
   <span class="kw">where</span>
     fa <span class="fu">=</span> strToFA re
@@ -299,7 +299,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
     run end q start (a<span class="fu">:</span>as) <span class="fu">=</span> <span class="kw">let</span> newQ <span class="fu">=</span> transition fa q a
                              <span class="kw">in</span> <span class="kw">if</span> isAccepting fa newQ
                                     <span class="kw">then</span> (start, end) <span class="fu">:</span> run (end <span class="fu">+</span> <span class="dv">1</span>) newQ start as
-                                    <span class="kw">else</span>                run (end <span class="fu">+</span> <span class="dv">1</span>) newQ start as</code></pre>
+                                    <span class="kw">else</span>                run (end <span class="fu">+</span> <span class="dv">1</span>) newQ start as</code></pre></div>
 <h2 id="další-úpravy">Další úpravy</h2>
 <p>V tomhle stavu program při výpočtu tráví naprostou většinu času porovnáváním regulárních výrazů. Bylo by pěkné zbavit se jich a místo nich používat pro označování stavů čísla. To už ale dělat nebudu.</p>
 <figure>
@@ -322,7 +322,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
 <p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
     <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
 <span class="kw">done</span>
@@ -330,12 +330,12 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 <span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
     <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
-<span class="kw">done</span></code></pre>
+<span class="kw">done</span></code></pre></div>
 <h2 id="metody">Metody</h2>
 <p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
 <p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
 <p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
 {
     <span class="kw">struct</span> DIR *dir = opendir(path);
     <span class="kw">if</span> (dir == NULL) {
@@ -344,7 +344,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
         closedir(dir);
         <span class="kw">return</span> <span class="dv">1</span>;
     }
-}</code></pre>
+}</code></pre></div>
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
 <p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
 <ul>
@@ -528,22 +528,22 @@ Seznam
 <p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
 <h2 id="implementace">Implementace</h2>
 <p>Nejdříve tedy definice typů.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
 
 <span class="kw">instance</span> <span class="dt">Show</span> <span class="dt">Bit</span> <span class="kw">where</span>
     show <span class="dt">Zero</span> <span class="fu">=</span> <span class="st">&quot;0&quot;</span>
     show <span class="dt">One</span>  <span class="fu">=</span> <span class="st">&quot;1&quot;</span>
 
-<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre>
+<span class="kw">type</span> <span class="dt">Stream</span> <span class="fu">=</span> [<span class="dt">Bit</span>]</code></pre></div>
 <p>Typy požadovaných funkcí vypadají následovně. Kódovací funkce pro číslo vrátí posloupnost bitů, dekódovací naopak z proudy bitů vytáhnou první číslo a vrátí ho společně se zbytkem proudu. Funkce <code>fromBinary</code> se liší v tom, že zpracuje celý proud.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">unary, binary, gamma,<span class="ot"> delta        ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 parseUnary, parseGamma,<span class="ot"> parseDelta ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
-<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre>
+<span class="ot">fromBinary ::</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> <span class="dt">Int</span></code></pre></div>
 <p>Unární kódování je velice jednoduché. Operátor <code>(***) :: (a -&gt; b) -&gt; (c -&gt; d) -&gt; (a, c) -&gt; (b, d)</code> se nachází v modulu <code>Control.Arrow</code> a jeho jediný účel je aplikace funkcí na složky dvojice.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
-parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">unary n    <span class="fu">=</span> replicate n <span class="dt">Zero</span> <span class="fu">++</span> [<span class="dt">One</span>]
+parseUnary <span class="fu">=</span> (length <span class="fu">***</span> tail) <span class="fu">.</span> span (<span class="fu">==</span> <span class="dt">Zero</span>)</code></pre></div>
 <p>Funkce pro binární kódování čísla jsou trošku složitější, ale pořád tam není žádná magie. Provádí klasický přepis čísla do dvojkové soustavy. Pomocná funkce <code>binary'</code> navíc výsledný kód doplní zleva do požadované délky nulami. Také 0 při délce kódu 0 reprezentuje prázdným seznamem.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">binary <span class="fu">=</span> bin []
   <span class="kw">where</span>
     bin acc <span class="dv">0</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">:</span> acc
     bin acc <span class="dv">1</span> <span class="fu">=</span> <span class="dt">One</span>  <span class="fu">:</span> acc
@@ -555,31 +555,31 @@ binary&#39; len n <span class="fu">=</span> padding <span class="fu">++</span> c
   <span class="kw">where</span> code <span class="fu">=</span> binary n
         padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
 
-fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre>
+fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre></div>
 <p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary&#39; len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
   <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
 
 <span class="ot">parseWith ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)
 parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
   <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
-        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre>
+        (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre></div>
 <p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
 parseGamma <span class="fu">=</span> parseWith parseUnary
 
 delta <span class="fu">=</span> encodeWith gamma
-parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre>
+parseDelta <span class="fu">=</span> parseWith parseGamma</code></pre></div>
 <p>Odtud už je jednoduché napsat funkci, které bude kódovat nebo dekódovat seznam čísel.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encode ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> [<span class="dt">Int</span>] <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 encode <span class="fu">=</span> concatMap
 
 <span class="ot">decode ::</span> (<span class="dt">Stream</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Stream</span>)) <span class="ot">-&gt;</span> <span class="dt">Stream</span> <span class="ot">-&gt;</span> [<span class="dt">Int</span>]
 decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span class="fu">=</span> f s
              <span class="kw">in</span> <span class="kw">case</span> ss <span class="kw">of</span>
                   [] <span class="ot">-&gt;</span> [n]
-                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre>
+                  _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre></div>
 <p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>]]></summary>
 </entry>
 <entry>
@@ -592,7 +592,7 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
 <p>Společným znakem oken, která mají fixní velikost, je nastavení minimální a maximální velikosti okna na stejnou hodnotu. Toto nastavení je v <code>WM_NORMAL_HINTS</code> a dá se zjistit třeba přes <code>xprop</code>. Toto pole má typ <code>XSizeHints</code> a nejpřesnější popis, který jsem našel, vypadá takto:</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span> {
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="kw">typedef</span> <span class="kw">struct</span> {
     long flags;                <span class="co">/* marks which fields in this</span>
 <span class="co">                                  structure are defined */</span>
     int x, y;                  <span class="co">/* Obsolete */</span>
@@ -607,24 +607,24 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
     int base_width, base_height;
     int win_gravity;
     <span class="co">/* this structure may be extended in the future */</span>
-} XSizeHints;</code></pre>
+} XSizeHints;</code></pre></div>
 <p>To jistě není žádný zázrak, ale už se s tím dá něco dělat. Zajímavé hodnoty jsou ty s prefixem <code>min_</code> a <code>max_</code>. Pokud jsou nastavené na jinou hodnotu než 0 a zároveň se rovnají odpovídající si hodnoty, okno má zřejmě nastavenou fixní velikost.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isFixed ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isFixed ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 isFixed h <span class="fu">=</span> minWidth h <span class="fu">==</span> maxWidth h
          <span class="fu">&amp;&amp;</span> minHeight h <span class="fu">==</span> maxHeight h
-         <span class="fu">&amp;&amp;</span> all (<span class="fu">&gt;</span><span class="dv">0</span>) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre>
+         <span class="fu">&amp;&amp;</span> all (<span class="fu">&gt;</span><span class="dv">0</span>) [minWidth h, maxWidth h, minHeight h, maxHeight h]</code></pre></div>
 <p>V modulu <code>XMonad.Util.WindowProperties</code> je k dispozici funkce <code>getProp32s :: String -&gt; Window -&gt; X (Maybe [CLong])</code>, s jejíž pomocí už se dá napsat potřebná funkce pro manage hook. Definice typu <code>CLong</code> je v modulu <code>Foreign.C.Types</code>.</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isNonResizable ::</span> <span class="dt">Query</span> <span class="dt">Bool</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">isNonResizable ::</span> <span class="dt">Query</span> <span class="dt">Bool</span>
 isNonResizable <span class="fu">=</span> ask <span class="fu">&gt;&gt;=</span> \w <span class="ot">-&gt;</span> liftX <span class="fu">$</span> <span class="kw">do</span>
     atom <span class="ot">&lt;-</span> getProp32s <span class="st">&quot;WM_NORMAL_HINTS&quot;</span> w
     return <span class="fu">$</span> <span class="kw">case</span> atom <span class="kw">of</span>
         <span class="dt">Just</span> hints  <span class="ot">-&gt;</span> hasFixedSize hints
-        <span class="dt">Nothing</span>     <span class="ot">-&gt;</span> <span class="dt">False</span></code></pre>
+        <span class="dt">Nothing</span>     <span class="ot">-&gt;</span> <span class="dt">False</span></code></pre></div>
 <p>Poslední chybějící kus jsou funkce na vrácení požadovaných rozměrů. Vlastně jde jenom o čitelnější zápisy vytažení příslušné hodnoty ze seznamu:</p>
-<pre class="sourceCode haskell"><code class="sourceCode haskell">minWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">minWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">5</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
 minHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">6</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
 maxWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">7</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
-maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre>
+maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre></div>
 <p>A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem nepozoroval. <a href="/data/HandleFixedWindows.hs">Kompletní soubor</a> stačí nakopírovat do <code>~/.xmonad/lib/</code>, naimportovat do konfiguračního souboru a použít.</p>]]></summary>
 </entry>
 <entry>
@@ -662,7 +662,7 @@ maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv"
 <h2 id="vim">Vim</h2>
 <p>Vim sám o sobě Prolog moc nepodporuje. Nakopírováním těch <a href="https://github.com/adimit/prolog.vim">správných souborů</a> do <code>~/.vim/</code> se ale změní do celkem použitelné formy: sympaticky zvýrazňuje syntaxi, automaticky odsazuje řádky a sám pozná, kde začínají a končí foldy.</p>
 <p>Poslední drobný zádrhel je v tom, že si většinou splete typ souboru s Perlem, který taky používá příponu <code>.pl</code>. Dá se to obejít přidáním modeline na konec souboru:</p>
-<pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="co">% vim: ft=prolog</span></code></pre>]]></summary>
+<div class="sourceCode"><pre class="sourceCode prolog"><code class="sourceCode prolog"><span class="co">% vim: ft=prolog</span></code></pre></div>]]></summary>
 </entry>
 <entry>
     <title>CPO a spojité funkce</title>

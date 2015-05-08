@@ -16,7 +16,7 @@
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
 <span class="ot">#include &lt;stdlib.h&gt;</span>
 <span class="ot">#include &lt;string.h&gt;</span>
 
@@ -35,7 +35,7 @@
   strcpy(str3, <span class="st">&quot;a&quot;</span>);
 
   <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
+}</code></pre></div>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4.4.5</h2>
 <table>
 <tr>

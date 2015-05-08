@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
@@ -32,7 +33,7 @@
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
 <p>Vygenerovat to jde dvěma jednoduchými cykly v Bashi.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 30000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">touch</span> bench1/file-<span class="ot">$i</span>
     <span class="kw">mkdir</span> bench2/dir-<span class="ot">$i</span>
 <span class="kw">done</span>
@@ -40,12 +41,12 @@
 <span class="kw">for</span> <span class="kw">i</span> in <span class="ot">$(</span><span class="kw">seq</span> 1 15000<span class="ot">)</span><span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">touch</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;file-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
     <span class="kw">mkdir</span> bench3/<span class="ot">$(</span><span class="kw">mkpasswd</span> <span class="st">&quot;dir-</span><span class="ot">$i</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="kw">sed</span> <span class="st">&quot;s@/@_@g&quot;</span><span class="ot">)</span>
-<span class="kw">done</span></code></pre>
+<span class="kw">done</span></code></pre></div>
 <h2 id="metody">Metody</h2>
 <p>První rozdíl v testovaných programech spočíval v tom, jak se zajistí, aby soubory byly vypsané dříve než adresáře. Nejjednodušší přístup spočívá v tom, že se adresář projde dvakrát, v prvním průchodu se ignorují adresáře, v druhém soubory.</p>
 <p>Druhá a třetí metoda adresář procházejí jenom jednou a nalezené adresáře si pro pozdější zpracování ukládají buď do pole nebo spojového seznamu. Pole je po naplnění vždycky potřeba zvětšit, pokud se ale jeho velikost vždycky zdvojnásobí, složitost uložení nakonec vyjde konstantní. Každý uložený řetězec je taky potřeba naalokovat. Spojový seznam má sice taky konstantní složitost přidání prvku, ovšem vyžaduje na rozdíl od pole dvě alokace paměti.</p>
 <p>Druhý rozdíl v testovaných programech spočívá v metodě určování typu položky. Použil jsem zase tři možnosti: pomocí funkce <code>stat()</code>, pomocí položky <code>d_type</code> ve struktuře <code>dirent</code> a pomocí lehce uhozené heuristiky s <code>opendir()</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> is_dir(<span class="dt">const</span> <span class="dt">char</span> *path)
 {
     <span class="kw">struct</span> DIR *dir = opendir(path);
     <span class="kw">if</span> (dir == NULL) {
@@ -54,7 +55,7 @@
         closedir(dir);
         <span class="kw">return</span> <span class="dv">1</span>;
     }
-}</code></pre>
+}</code></pre></div>
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
 <p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
 <ul>

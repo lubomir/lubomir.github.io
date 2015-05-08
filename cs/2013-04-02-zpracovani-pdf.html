@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
@@ -33,23 +34,23 @@
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
 <h2 id="nasekat-na-jemno-prosím">Nasekat na jemno, prosím</h2>
 <p>Nejdřív původní soubor nasekáme na jednotlivé stránky. Následující příkaz vytvoří z každé stránky v původním pdf jeden soubor.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> VSTUPNI.PDF burst</code></pre></div>
 <p>Tímto vznikne plus minus autobus milion souborů s názvy <code>pg_0001.pdf</code>.</p>
 <h2 id="protřepat-nemíchat">Protřepat, nemíchat</h2>
 <p>Následující krok by měl každý vytvořený soubor vertikálně rozpůlit. K tomu se dá použít třeba programů z balíku <code>poppler-utils</code>. Abychom se s tím zbytečně nepárali, vezmeme to všechno naráz.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">for</span> <span class="kw">i</span> in pg_*pdf<span class="kw">;</span> <span class="kw">do</span>
     <span class="kw">pdftoppm</span> <span class="ot">$i</span> <span class="kw">&gt;</span><span class="ot">${i/</span>pdf<span class="ot">/</span>ppm<span class="ot">}</span>
     <span class="kw">convert</span> <span class="ot">$(</span><span class="kw">i/pdf</span>/<span class="kw">ppm</span>} <span class="kw">-crop</span> 50%x100% +repage vystup-<span class="ot">$i</span>
-<span class="kw">done</span></code></pre>
+<span class="kw">done</span></code></pre></div>
 <p>Jakkoli děsivě ta substituce vypadá, dělá jen jednu věc: nahradí příponu <code>pdf</code> příponou <code>ppm</code>. Následující příkaz z balíku <code>imagemagick</code> potom akorát obrázek rozsekne napůl (tady se dá pohrát s konkrétním číslem) a výsledek uloží jako dvoustránkové PDF do souboru <code>vystup-pg_0001.pdf</code>.</p>
 <h2 id="matláma-patláma-paprčála">Matláma patláma paprčála</h2>
 <p>Teď už stačí znovu použít <code>pdftk</code> a všechno to zase nakombinovat do jednoho souboru.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">pdftk</span> vystup-* cat output spojeny.pdf</code></pre></div>
 <p>Zjevně není nutné vytvářet pouze jeden monolit, ale jde to rozdělit do souborů třeba po kapitolách. Taky je snadné vyhodit nezajímavé stránky.</p>
 <h2 id="optimalizace-velikosti">Optimalizace velikosti</h2>
 <p>Popis výš má zásadní problém: vytvořený soubor má rozměry slona po obědě. Možnou odtučňovací kůrou je třeba <code>ghostscript</code>.</p>
-<pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
-<span class="kw">&gt;</span> -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">gs</span> -dCompatibilityLevel=1.4 -dPDFSETTINGS=/screen -dNOPAUSE \
+<span class="kw">&gt;</span> -dBATCH -sDEVICE=pdfwrite -sOutputFile=output.pdf spojeny.pdf</code></pre></div>
 <p>Tím se každá stránka přepočítá na plus minus 72 dpi, což je dost pro monitor. Na tisk už to ale stačit nebude. Další možnosti jsou <code>/ebook</code>, <code>/printer</code>, <code>/prepress</code>.</p>
 </div>
 

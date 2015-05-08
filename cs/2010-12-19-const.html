@@ -3,6 +3,7 @@
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
@@ -29,7 +30,7 @@
 
 <div class="post">
 <p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
-<pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
 <span class="ot">#include &lt;stdlib.h&gt;</span>
 <span class="ot">#include &lt;string.h&gt;</span>
 
@@ -48,7 +49,7 @@
   strcpy(str3, <span class="st">&quot;a&quot;</span>);
 
   <span class="kw">return</span> <span class="dv">0</span>;
-}</code></pre>
+}</code></pre></div>
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4.4.5</h2>
 <table>
 <tr>
