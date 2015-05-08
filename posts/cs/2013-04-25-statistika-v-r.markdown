@@ -58,16 +58,16 @@ spojené čarami.
 
 Další užitečné atributy pro grafy jsou:
 
- `main`
+`main`
   : hlavní titulek umístěný nad grafem
- `xlab`, `ylab`
+`xlab`, `ylab`
   : popisek osy x, resp. osy y
- `col`
+`col`
   : vektor barev použitý pro graf, případně jedna barva jako řetězec,  význam
     se zřejmě liší pro jednotlivé typy grafu; např. `col=c("red","green","blue")`
- `pch`
+`pch`
   : typ puntíku
- `cex`
+`cex`
   : velikost vykreslovaných puntíků
 
 
