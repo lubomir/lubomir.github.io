@@ -42,12 +42,15 @@
 <p>Z primitivních typů je možné pomocí operací vytvářet další, bohatší typy.</p>
 <dl>
 <dt>Lift X</dt>
-<dd>přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než všechny původní prvky v X a jinak se touto operací uspořádání nemění. X × Y
+<dd>přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než všechny původní prvky v X a jinak se touto operací uspořádání nemění.
 </dd>
-<dd>kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a druhá složka má typ Y). Pokud <span class="math"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub> ∈ <em>X</em>, <em>x</em><sub>1</sub> ≤ <em>x</em><sub>2</sub></span> a <span class="math"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub> ∈ <em>Y</em>, <em>y</em><sub>1</sub> ≤ <em>y</em><sub>2</sub></span>, potom platí <span class="math">(<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>) ≤ (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> X + Y
+<dt>X × Y</dt>
+<dd>kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a druhá složka má typ Y). Pokud <span class="math"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub> ∈ <em>X</em>, <em>x</em><sub>1</sub> ≤ <em>x</em><sub>2</sub></span> a <span class="math"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub> ∈ <em>Y</em>, <em>y</em><sub>1</sub> ≤ <em>y</em><sub>2</sub></span>, potom platí <span class="math">(<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>) ≤ (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>
 </dd>
-<dd>disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu typu X, nebo hodnotu typu Y (např. takto funguje <code>union</code> v C nebo <code>Either</code> v Haskellu) X → Y
+<dt>X + Y</dt>
+<dd>disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu typu X, nebo hodnotu typu Y (např. takto funguje <code>union</code> v C nebo <code>Either</code> v Haskellu)
 </dd>
+<dt>X → Y</dt>
 <dd>mocninný typ; typ všech spojitých funkcí, které hodnotu typu X zobrazí na hodnotu typu Y
 </dd>
 </dl>

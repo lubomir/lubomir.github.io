@@ -39,52 +39,96 @@
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4.4.5</h2>
 <table>
 <tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+<th>
+</th>
+<th>
+<code>x = NULL</code>
+</th>
+<th>
+<code>strcpy(x, &quot;a&quot;)</code>
+</th>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+<th>
+<code>const char *</code>
+</th>
+<td>
+OK
+</td>
+<td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
+<th>
+<code>char * const</code>
+</th>
+<td>
+<code>error: assignment to read-only variable</code>
+</td>
+<td>
+OK
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+<th>
+<code>const char * const</code>
+</th>
+<td>
+<code>error: assignment to read-only variable</code>
+</td>
+<td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
 </tr>
 </table>
 <h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1.1</h2>
 <table>
 <tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+<th>
+</th>
+<th>
+<code>x = NULL</code>
+</th>
+<th>
+<code>strcpy(x, &quot;a&quot;)</code>
+</th>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
-</pre>
+<th>
+<code>const char *</code>
+</th>
+<td>
+OK
+</td>
+<td>
+<pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre>
 </td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
+<th>
+<code>char * const</code>
+</th>
+<td>
+<code>error: read-only variable is not assignable</code>
+</td>
+<td>
+OK
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
-</pre>
+<th>
+<code>const char * const</code>
+</th>
+<td>
+<code>error: read-only variable is not assignable</code>
+</td>
+<td>
+<pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre>
 </td>
 </tr>
 </table>]]></summary>

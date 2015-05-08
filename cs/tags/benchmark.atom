@@ -45,7 +45,7 @@
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
 <p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
 <ul>
-<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code>)</li>
 <li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
 </ul>
 <h2 id="výsledky">Výsledky</h2>
@@ -54,7 +54,16 @@
 <tr>
 <th>
 </th>
-<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
+<th>
+Soubory
+</th>
+<th>
+Adresáře
+</th>
+<th>
+Mix
+</th>
+</tr>
 <tr>
 <th>
 dvojitý průchod
@@ -76,7 +85,10 @@ dvojitý průchod
 <td>
 0,106
 </td>
-<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.107
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -87,7 +99,10 @@ dvojitý průchod
 <td>
 0,177
 </td>
-<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.155
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -98,7 +113,10 @@ dvojitý průchod
 <td>
 0,040
 </td>
-<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.042
+</td>
+</tr>
 <tr>
 <th>
 Pole
@@ -120,7 +138,10 @@ Pole
 <td>
 0,057
 </td>
-<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.053
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -131,7 +152,10 @@ Pole
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.080
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -142,7 +166,10 @@ Pole
 <td>
 0,021
 </td>
-<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.020
+</td>
+</tr>
 <tr>
 <th>
 Seznam
@@ -164,7 +191,10 @@ Seznam
 <td>
 0,060
 </td>
-<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.058
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -175,7 +205,10 @@ Seznam
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.081
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -186,7 +219,10 @@ Seznam
 <td>
 0,029
 </td>
-<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.022
+</td>
+</tr>
 </table>
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>

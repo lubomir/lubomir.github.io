@@ -45,7 +45,7 @@
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
 <p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
 <ul>
-<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code>)</li>
 <li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
 </ul>
 <h2 id="výsledky">Výsledky</h2>
@@ -54,7 +54,16 @@
 <tr>
 <th>
 </th>
-<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
+<th>
+Soubory
+</th>
+<th>
+Adresáře
+</th>
+<th>
+Mix
+</th>
+</tr>
 <tr>
 <th>
 dvojitý průchod
@@ -76,7 +85,10 @@ dvojitý průchod
 <td>
 0,106
 </td>
-<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.107
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -87,7 +99,10 @@ dvojitý průchod
 <td>
 0,177
 </td>
-<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.155
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -98,7 +113,10 @@ dvojitý průchod
 <td>
 0,040
 </td>
-<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.042
+</td>
+</tr>
 <tr>
 <th>
 Pole
@@ -120,7 +138,10 @@ Pole
 <td>
 0,057
 </td>
-<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.053
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -131,7 +152,10 @@ Pole
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.080
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -142,7 +166,10 @@ Pole
 <td>
 0,021
 </td>
-<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.020
+</td>
+</tr>
 <tr>
 <th>
 Seznam
@@ -164,7 +191,10 @@ Seznam
 <td>
 0,060
 </td>
-<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.058
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -175,7 +205,10 @@ Seznam
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.081
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -186,7 +219,10 @@ Seznam
 <td>
 0,029
 </td>
-<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.022
+</td>
+</tr>
 </table>
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
@@ -377,14 +413,18 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 <p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
 <dl>
 <dt><code>*.in</code></dt>
-<dd>toto přijde na standardní vstup <code>*.args</code>
+<dd>toto přijde na standardní vstup
 </dd>
-<dd>toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý argument má obsahovat mezeru.) <code>*.out</code>
+<dt><code>*.args</code></dt>
+<dd>toto se předá jako argumenty (a zatím pořádně nefunguje, pokud některý argument má obsahovat mezeru.)
 </dd>
-<dd>očekávaný výstup na stdout <code>*.err</code>
+<dt><code>*.out</code></dt>
+<dd>očekávaný výstup na stdout
 </dd>
-<dd>očekávaný chybový výstup <code>*.ret</code>
+<dt><code>*.err</code></dt>
+<dd>očekávaný chybový výstup
 </dd>
+<dt><code>*.ret</code></dt>
 <dd>návratový kód programu
 </dd>
 </dl>
@@ -442,52 +482,96 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 <h2 id="jak-to-vidí-gcc-4.4.5">Jak to vidí <a href="http://gcc.gnu.org/">GCC</a> 4.4.5</h2>
 <table>
 <tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+<th>
+</th>
+<th>
+<code>x = NULL</code>
+</th>
+<th>
+<code>strcpy(x, &quot;a&quot;)</code>
+</th>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+<th>
+<code>const char *</code>
+</th>
+<td>
+OK
+</td>
+<td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
+<th>
+<code>char * const</code>
+</th>
+<td>
+<code>error: assignment to read-only variable</code>
+</td>
+<td>
+OK
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: assignment to read-only variable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;error: invalid conversion from &#39;const char*&#39; to &#39;char*&#39;&lt;/code&gt;&lt;/td&gt;</code></pre>
+<th>
+<code>const char * const</code>
+</th>
+<td>
+<code>error: assignment to read-only variable</code>
+</td>
+<td>
+<code>error: invalid conversion from 'const char<em>' to 'char</em>'</code>
+</td>
 </tr>
 </table>
 <h2 id="jak-to-vidí-clang-1.1">Jak to vidí <a href="http://clang.llvm.org/">CLang</a> 1.1</h2>
 <table>
 <tr>
-<pre><code>&lt;th&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;x = NULL&lt;/code&gt;&lt;/th&gt;
-&lt;th&gt;&lt;code&gt;strcpy(x, &quot;a&quot;)&lt;/code&gt;&lt;/th&gt;</code></pre>
+<th>
+</th>
+<th>
+<code>x = NULL</code>
+</th>
+<th>
+<code>strcpy(x, &quot;a&quot;)</code>
+</th>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char *&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;OK&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
-</pre>
+<th>
+<code>const char *</code>
+</th>
+<td>
+OK
+</td>
+<td>
+<pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre>
 </td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;OK&lt;/td&gt;</code></pre>
+<th>
+<code>char * const</code>
+</th>
+<td>
+<code>error: read-only variable is not assignable</code>
+</td>
+<td>
+OK
+</td>
 </tr>
 <tr>
-<pre><code>&lt;th&gt;&lt;code&gt;const char * const&lt;/code&gt;&lt;/th&gt;
-&lt;td&gt;&lt;code&gt;error: read-only variable is not assignable&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;&lt;pre&gt;&lt;code class=&quot;long&quot;&gt;error: no matching function for call to &#39;strcpy&#39;</code></pre>
-note: candidate function not viable: 1st argument ('char const *const') would lose const qualifier</code>
-</pre>
+<th>
+<code>const char * const</code>
+</th>
+<td>
+<code>error: read-only variable is not assignable</code>
+</td>
+<td>
+<pre><code class="long">error: no matching function for call to 'strcpy'
+note: candidate function not viable: 1st argument
+('char&nbsp;const&nbsp;*const') would lose const qualifier</code></pre>
 </td>
 </tr>
 </table>]]></summary>

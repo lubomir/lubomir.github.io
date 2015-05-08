@@ -40,14 +40,18 @@
 <p>Další užitečné atributy pro grafy jsou:</p>
 <dl>
 <dt><code>main</code></dt>
-<dd>hlavní titulek umístěný nad grafem <code>xlab</code>, <code>ylab</code>
+<dd>hlavní titulek umístěný nad grafem
 </dd>
-<dd>popisek osy x, resp. osy y <code>col</code>
+<dt><code>xlab</code>, <code>ylab</code></dt>
+<dd>popisek osy x, resp. osy y
 </dd>
-<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code> <code>pch</code>
+<dt><code>col</code></dt>
+<dd>vektor barev použitý pro graf, případně jedna barva jako řetězec, význam se zřejmě liší pro jednotlivé typy grafu; např. <code>col=c(&quot;red&quot;,&quot;green&quot;,&quot;blue&quot;)</code>
 </dd>
-<dd>typ puntíku <code>cex</code>
+<dt><code>pch</code></dt>
+<dd>typ puntíku
 </dd>
+<dt><code>cex</code></dt>
 <dd>velikost vykreslovaných puntíků
 </dd>
 </dl>
@@ -348,7 +352,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 <p>Tato heuristika má ovšem zásadní problém v tom, že i adresáře, které se nepodařilo otevřít třeba kvůli oprávněním, nahlásí jako soubory.</p>
 <p>Rozpoznávání pomocí <code>d_type</code> je nejjednodušší, ale opět má nevýhody:</p>
 <ul>
-<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code></li>
+<li>nemusí existovat (pozná se podle makra <code>_DIRENT_HAVE_D_TYPE</code>)</li>
 <li>i když existuje, může (v závislosti na souborovém systému) obsahovat hodnotu <code>DT_UNKNOWN</code> a tedy je potřeba se s tím vyrovnat</li>
 </ul>
 <h2 id="výsledky">Výsledky</h2>
@@ -357,7 +361,16 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 <tr>
 <th>
 </th>
-<pre><code>       &lt;th&gt;Soubory&lt;/th&gt; &lt;th&gt;Adresáře&lt;/th&gt; &lt;th&gt;Mix&lt;/th&gt;&lt;/tr&gt;</code></pre>
+<th>
+Soubory
+</th>
+<th>
+Adresáře
+</th>
+<th>
+Mix
+</th>
+</tr>
 <tr>
 <th>
 dvojitý průchod
@@ -379,7 +392,10 @@ dvojitý průchod
 <td>
 0,106
 </td>
-<pre><code>&lt;td&gt;0.107&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.107
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -390,7 +406,10 @@ dvojitý průchod
 <td>
 0,177
 </td>
-<pre><code>&lt;td&gt;0.155&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.155
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -401,7 +420,10 @@ dvojitý průchod
 <td>
 0,040
 </td>
-<pre><code>&lt;td&gt;0.042&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.042
+</td>
+</tr>
 <tr>
 <th>
 Pole
@@ -423,7 +445,10 @@ Pole
 <td>
 0,057
 </td>
-<pre><code>&lt;td&gt;0.053&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.053
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -434,7 +459,10 @@ Pole
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.080&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.080
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -445,7 +473,10 @@ Pole
 <td>
 0,021
 </td>
-<pre><code>&lt;td&gt;0.020&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.020
+</td>
+</tr>
 <tr>
 <th>
 Seznam
@@ -467,7 +498,10 @@ Seznam
 <td>
 0,060
 </td>
-<pre><code>&lt;td&gt;0.058&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.058
+</td>
+</tr>
 <tr>
 <td>
 <code>opendir()</code>
@@ -478,7 +512,10 @@ Seznam
 <td>
 0,091
 </td>
-<pre><code>&lt;td&gt;0.081&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.081
+</td>
+</tr>
 <tr>
 <td>
 <code>d_type</code>
@@ -489,7 +526,10 @@ Seznam
 <td>
 0,029
 </td>
-<pre><code>&lt;td&gt;0.022&lt;/td&gt;&lt;/tr&gt;</code></pre>
+<td>
+0.022
+</td>
+</tr>
 </table>
 <p>Ponaučení na závěr? Na metodě procházení příliš nezáleží. To, co se s nalezenými položkami bude dít, pravděpodobně zabere výrazně víc času, takže jinou metodou procházení se nedá nic ušetřit.</p>
 <p>Všechny <a href="/data/benchmark-dir.tar.bz2">zdrojové soubory</a> je možné si stáhnout včetně měřících skriptů. Skript <code>prepare.sh</code> vytvoří testovací složky, <code>measure.sh</code> spustí měření a <code>test.sh</code> ověřuje, že všechny programy dávají stejný výstup na třetím testovacím adresáři.</p>]]></summary>
@@ -683,12 +723,15 @@ maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv"
 <p>Z primitivních typů je možné pomocí operací vytvářet další, bohatší typy.</p>
 <dl>
 <dt>Lift X</dt>
-<dd>přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než všechny původní prvky v X a jinak se touto operací uspořádání nemění. X × Y
+<dd>přidá ⊥ jako nejméně definovaný prvek do typu X. Dno (⊥) je menší než všechny původní prvky v X a jinak se touto operací uspořádání nemění.
 </dd>
-<dd>kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a druhá složka má typ Y). Pokud <span class="math"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub> ∈ <em>X</em>, <em>x</em><sub>1</sub> ≤ <em>x</em><sub>2</sub></span> a <span class="math"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub> ∈ <em>Y</em>, <em>y</em><sub>1</sub> ≤ <em>y</em><sub>2</sub></span>, potom platí <span class="math">(<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>) ≤ (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> X + Y
+<dt>X × Y</dt>
+<dd>kartézský součin dvou typů (typ všech dvojic, kde první složka je typu X a druhá složka má typ Y). Pokud <span class="math"><em>x</em><sub>1</sub>, <em>x</em><sub>2</sub> ∈ <em>X</em>, <em>x</em><sub>1</sub> ≤ <em>x</em><sub>2</sub></span> a <span class="math"><em>y</em><sub>1</sub>, <em>y</em><sub>2</sub> ∈ <em>Y</em>, <em>y</em><sub>1</sub> ≤ <em>y</em><sub>2</sub></span>, potom platí <span class="math">(<em>x</em><sub>1</sub>, <em>y</em><sub>1</sub>) ≤ (<em>x</em><sub>2</sub>, <em>y</em><sub>2</sub>)</span>. <a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>
 </dd>
-<dd>disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu typu X, nebo hodnotu typu Y (např. takto funguje <code>union</code> v C nebo <code>Either</code> v Haskellu) X → Y
+<dt>X + Y</dt>
+<dd>disjunktní sjednocení, hodnota tohoto typu obsahuje buď nějakou hodnotu typu X, nebo hodnotu typu Y (např. takto funguje <code>union</code> v C nebo <code>Either</code> v Haskellu)
 </dd>
+<dt>X → Y</dt>
 <dd>mocninný typ; typ všech spojitých funkcí, které hodnotu typu X zobrazí na hodnotu typu Y
 </dd>
 </dl>
