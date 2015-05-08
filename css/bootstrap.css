@@ -342,6 +342,7 @@ code {
   background-color: #eeeeee;
   color: #000000;
   padding: .1em;
+  font-family: monospace;
 }
 dt {
   margin-top: 1em;
@@ -353,6 +354,7 @@ dt {
 pre {
   overflow-x: auto;
   font-size: 0.8em;
+  font-family: monospace;
 }
 pre.sourceCode {
   background-color: #2e3436;
