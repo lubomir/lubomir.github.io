@@ -306,6 +306,12 @@ table thead > tr > th {
 .post {
   margin-top: 1em;
 }
+.post a {
+    text-decoration: underline;
+}
+.post a:hover {
+    text-decoration: none;
+}
 .metainfo div {
   text-align: center;
 }
