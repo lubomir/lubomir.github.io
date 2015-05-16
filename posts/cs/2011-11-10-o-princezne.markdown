@@ -34,7 +34,7 @@ přece jen svou dceru miloval, ale nakonec i on uznal, že je to jediné řeše
 
 Přestože se privilegovaným procesům takto podařilo krizi zažehnat, celá smutná
 situace se brzy začala opakovat. Král tedy pátral po trvalejším řešení a pozval
-optimalizáory a analyzátory z celého repozitáře. Aby je nějak motivoval, dal
+optimalizátory a analyzátory z celého repozitáře. Aby je nějak motivoval, dal
 rozhlásit, že kdo napraví princeznu, dostane ji za ženu a půl pevného disku
 k tomu. Programy se stahovaly z celého Internetu, ať se ale snažily sebevíc,
 přivést princeznu k rozumu se jim nepodařilo.
