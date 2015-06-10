@@ -59,7 +59,7 @@ unload. Otherwise it will go to the next floor in the queue and load all the
 people there.
 
 We will improve this elevator with slightly nicer behavior in `niceElevator`:
-when it goes down through a floor with people, it will stop and let on.
+when it goes down through a floor with people, it will stop and let them on.
 
 ```Haskell
 niceElevator b
