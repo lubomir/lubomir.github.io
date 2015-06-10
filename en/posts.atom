@@ -85,7 +85,7 @@
         <span class="dt">Just</span> <span class="dt">False</span> <span class="ot">-&gt;</span> <span class="dt">GoUp</span>
         <span class="dt">Nothing</span>    <span class="ot">-&gt;</span> <span class="dt">Wait</span></code></pre></div>
 <p>If there are people on the elevator, it will take them to the basement and unload. Otherwise it will go to the next floor in the queue and load all the people there.</p>
-<p>We will improve this elevator with slightly nicer behavior in <code>niceElevator</code>: when it goes down through a floor with people, it will stop and let on.</p>
+<p>We will improve this elevator with slightly nicer behavior in <code>niceElevator</code>: when it goes down through a floor with people, it will stop and let them on.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">niceElevator b
   <span class="fu">|</span> hasPeople b <span class="fu">=</span> <span class="kw">if</span> inBasement b
                     <span class="kw">then</span> <span class="dt">Unload</span>
