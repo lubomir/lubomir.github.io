@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>lsedlar – Posts tagged GitHub</title>
+    <link href="http://lubomir.github.io//en/tags/github.atom" rel="self" />
+    <link href="http://lubomir.github.io/" />
+    <id>http://lubomir.github.io//en/tags/github.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lubomir.sedlar@gmail.com</email>
+    </author>
+    <updated>2015-08-01T00:00:00Z</updated>
+    <entry>
+    <title>Reviewing GitHub pull requests locally</title>
+    <link href="http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
+    <id>http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
+    <published>2015-08-01T00:00:00Z</published>
+    <updated>2015-08-01T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>GitHub is a great place to collaborate on open-source code. One thing I have struggled with a bit is how to perform code review for pull requests.</p>
+<p>If the contributor has access to the actual repository and requests a pull from a branch, it is really trivial. The real issue is with reviewing pull requests coming from forks.</p>
+<p>By reviewing, I don't mean just looking over the code. That could be done through the web interface easy enough. Usually, I want to see the code in action, play around with it a test it.</p>
+<p>The way GitHub recommends right next to the merge button is to add another remote and checkout a branch from it. This works, but it has the downside of cluttering your local repo with a bunch of not so useful remotes.</p>
+<p>Ideally, what I would like is to somehow just create one local branch with the proposed changes.</p>
+<p>Turns out GitHub allows just that. There is a ref pointing to the changes created by the pull request. It is easy enough to create a local branch by the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> fetch origin pull/PULL_REQUEST_ID/head:LOCAL_BRANCH</code></pre></div>
+<p>Obviously, the parts in all caps need to be changed to something more useful. After running the command, you can check out the local branch and do anything you want with it. When you are done, simply delete it and everything is the way it was before. It does not get much simpler than that.</p>]]></summary>
+</entry>
+
+</feed>

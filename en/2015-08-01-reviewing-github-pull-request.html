@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="http://fonts.googleapis.com/css?family=Source+Code+Pro|Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Reviewing GitHub pull requests locally</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Reviewing GitHub pull requests locally</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>August 1, 2015</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/github.html">GitHub</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+<p>GitHub is a great place to collaborate on open-source code. One thing I have struggled with a bit is how to perform code review for pull requests.</p>
+<p>If the contributor has access to the actual repository and requests a pull from a branch, it is really trivial. The real issue is with reviewing pull requests coming from forks.</p>
+<p>By reviewing, I don't mean just looking over the code. That could be done through the web interface easy enough. Usually, I want to see the code in action, play around with it a test it.</p>
+<p>The way GitHub recommends right next to the merge button is to add another remote and checkout a branch from it. This works, but it has the downside of cluttering your local repo with a bunch of not so useful remotes.</p>
+<p>Ideally, what I would like is to somehow just create one local branch with the proposed changes.</p>
+<p>Turns out GitHub allows just that. There is a ref pointing to the changes created by the pull request. It is easy enough to create a local branch by the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> fetch origin pull/PULL_REQUEST_ID/head:LOCAL_BRANCH</code></pre></div>
+<p>Obviously, the parts in all caps need to be changed to something more useful. After running the command, you can check out the local branch and do anything you want with it. When you are done, simply delete it and everything is the way it was before. It does not get much simpler than that.</p>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li class="last"><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+     </script>
+  </body>
+</html>
