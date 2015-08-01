@@ -28,3 +28,7 @@ after_script:
 env:
   global:
     secure: ZP0lLqds3bXOrlZ97K3cdx6/wgNKxcXDAtYL8KRE+nJnooqx60B/b7HMG7LSkWMf42ddqbkvJe/d46cw3+Mc5gl3QT0SL6TpyY8QoDW6hH7cdNWzfgcPuqFpgz7Q2ZT+WDbrT5V2TLZagXcNx42H1k2uVsBA+bFdZfylmjsKCr0=
+sudo: false
+cache:
+  directories:
+    - .cabal-sandbox
