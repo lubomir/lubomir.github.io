@@ -26,8 +26,8 @@ before_install:
 - chmod a+x ~/.local/bin/stack
 
 install:
-- ./travis_long stack --no-terminal --skip-ghc-check setup
-- ./travis_long stack --no-terminal --skip-ghc-check build --only-snapshot
+- stack --skip-ghc-check setup
+- stack --skip-ghc-check build --only-snapshot
 
 before_script:
 - git config --global user.email "$GH_EMAIL"
