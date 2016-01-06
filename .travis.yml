@@ -26,8 +26,8 @@ before_install:
 - chmod a+x ~/.local/bin/stack
 
 install:
-- stack --skip-ghc-check setup
-- stack --skip-ghc-check build --only-snapshot
+- stack --no-terminal --skip-ghc-check setup
+- stack --no-terminal --skip-ghc-check build --only-snapshot
 
 before_script:
 - git config --global user.email "$GH_EMAIL"
