@@ -3,3 +3,4 @@ _cache
 dist
 *.swp
 cabal.sandbox.config
+.stack-work
