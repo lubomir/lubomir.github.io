@@ -27,7 +27,7 @@ before_install:
 
 install:
 - stack --no-terminal --skip-ghc-check setup
-- stack --no-terminal --skip-ghc-check build --only-snapshot
+- stack --no-terminal --skip-ghc-check build
 
 before_script:
 - git config --global user.email "$GH_EMAIL"
