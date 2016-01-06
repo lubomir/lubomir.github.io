@@ -7,7 +7,7 @@ module Czech ( stripDiacritics
 import Hakyll (dateFieldWith, Context(..))
 import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
-import System.Locale
+import Data.Time.Format
 import Text.Pandoc (Pandoc(..), Inline(..), topDown)
 
 -- |Remove accents from above letters.
@@ -39,12 +39,12 @@ cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa",
                     ("duben", "dub"), ("květen", "kvě"), ("červen", "čer"),
                     ("červenec", "čec"), ("srpen", "srp"), ("září", "žá"),
                     ("říjen", "ří"), ("listopad", "lis"), ("prosinec", "pro") ]
-                , intervals = []
                 , amPm = ("am", "pm")
                 , dateTimeFmt = ""
                 , dateFmt = ""
                 , timeFmt = ""
                 , time12Fmt = ""
+                , knownTimeZones = []
                 }
 
 conjuctions :: [String]

@@ -14,7 +14,7 @@ executable site
   ghc-options:         -Wall
   build-depends:       base
                      , hakyll
-                     , old-locale
+                     , time
                      , pandoc
                      , filepath
                      , containers
