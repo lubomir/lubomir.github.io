@@ -3,7 +3,6 @@ language: haskell
 branches:
   only:
     - source
-    - stack
 
 sudo: false
 
@@ -46,7 +45,7 @@ after_script:
 - git remote add github https://${GH_TOKEN}@${REMOTE}
 - git add --all
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
-  #- git push -f github master:master | grep -v http
+- git push -f github master:master | grep -v http
 
 env:
   global:
