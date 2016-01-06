@@ -39,34 +39,34 @@
 <p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
 <div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
 
-<span class="ch">import</span> argparse
-<span class="ch">from</span> subprocess <span class="ch">import</span> call
-<span class="ch">import</span> sys
-<span class="ch">import</span> importlib
+<span class="im">import</span> argparse
+<span class="im">from</span> subprocess <span class="im">import</span> call
+<span class="im">import</span> sys
+<span class="im">import</span> importlib
 
-<span class="ch">from</span> django.conf <span class="ch">import</span> settings
+<span class="im">from</span> django.conf <span class="im">import</span> settings
 
 
 <span class="kw">def</span> get_fixtures(module, case):
     settings.configure()
-    parts = module.split(<span class="st">'.'</span>)
+    parts <span class="op">=</span> module.split(<span class="st">'.'</span>)
 
-    app = importlib.import_module(module)
-    <span class="kw">return</span> <span class="dt">getattr</span>(app, case).fixtures
+    app <span class="op">=</span> importlib.import_module(module)
+    <span class="cf">return</span> <span class="bu">getattr</span>(app, case).fixtures
 
 
 <span class="kw">def</span> main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument(<span class="st">'MODULE'</span>, <span class="dt">type</span>=<span class="dt">str</span>)
-    parser.add_argument(<span class="st">'TEST_CASE'</span>, <span class="dt">type</span>=<span class="dt">str</span>)
+    parser <span class="op">=</span> argparse.ArgumentParser()
+    parser.add_argument(<span class="st">'MODULE'</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
+    parser.add_argument(<span class="st">'TEST_CASE'</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
 
-    args = parser.parse_args()
-    fixtures = get_fixtures(args.MODULE, args.TEST_CASE)
+    args <span class="op">=</span> parser.parse_args()
+    fixtures <span class="op">=</span> get_fixtures(args.MODULE, args.TEST_CASE)
 
-    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] + fixtures)
+    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] <span class="op">+</span> fixtures)
 
 
-<span class="kw">if</span> <span class="ot">__name__</span> == <span class="st">'__main__'</span>:
+<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">'__main__'</span>:
     sys.path.append(<span class="st">'.'</span>)
     main()</code></pre></div>
 <h2 id="further-improvements">Further improvements</h2>

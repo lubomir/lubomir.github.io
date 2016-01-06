@@ -1,14 +1,33 @@
 language: haskell
-ghc: 7.8
+
 branches:
   only:
     - source
+
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.stack
+
+addons:
+  apt:
+    sources:
+    - hvr-ghc
+    packages:
+    - ghc-7.10.2
+
+before_install:
+# Download and unpack the stack executable
+- mkdir -p ~/.local/bin
+- export PATH=$HOME/.local/bin:/opt/ghc/7.10.2/bin:$PATH
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- chmod a+x ~/.local/bin/stack
+
 install:
-- cabal sandbox init
-- cabal install pandoc -fno-https -fhighlighting
-- cabal install hakyll -fno-watchserver -fno-previewserver -fno-checkexternal
-- cabal configure --disable-library-profiling --disable-tests --disable-library-coverage
-  --disable-benchmarks --disable-split-objs
+- stack --no-terminal --skip-ghc-check setup
+- stack --no-terminal --skip-ghc-check build
+
 before_script:
 - git config --global user.email "$GH_EMAIL"
 - git config --global user.name "Travis-CI"
@@ -16,7 +35,9 @@ before_script:
 - git checkout master
 - git pull origin master
 - cd ..
-script: cabal run -j build
+
+script: stack exec -- site build
+
 after_script:
 - cp .travis.yml _site/
 - cd _site
@@ -25,10 +46,7 @@ after_script:
 - git add --all
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
 - git push -f github master:master | grep -v http
+
 env:
   global:
     secure: ZP0lLqds3bXOrlZ97K3cdx6/wgNKxcXDAtYL8KRE+nJnooqx60B/b7HMG7LSkWMf42ddqbkvJe/d46cw3+Mc5gl3QT0SL6TpyY8QoDW6hH7cdNWzfgcPuqFpgz7Q2ZT+WDbrT5V2TLZagXcNx42H1k2uVsBA+bFdZfylmjsKCr0=
-sudo: false
-cache:
-  directories:
-    - .cabal-sandbox

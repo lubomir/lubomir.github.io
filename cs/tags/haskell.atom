@@ -15,10 +15,10 @@
     <id>http://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
     <published>2012-03-20T00:00:00Z</published>
     <updated>2012-03-20T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
+    <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
 <p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
 <figure>
-<img src="/images/regex0.png" alt="a^*b+(c+d+e)a" /><figcaption><span class="math"><em>a</em><sup> * </sup><em>b</em> + (<em>c</em> + <em>d</em> + <em>e</em>)<em>a</em></span></figcaption>
+<img src="/images/regex0.png" alt="a^*b+(c+d+e)a" /><figcaption><span class="math inline"><em>a</em><sup>*</sup><em>b</em> + (<em>c</em> + <em>d</em> + <em>e</em>)<em>a</em></span></figcaption>
 </figure>
 <h2 id="importujeme">Importujeme</h2>
 <p>Budeme potřebovat importovat několik modulů, většinu z nich pro parsování výrazu.</p>
@@ -67,7 +67,7 @@ conc x y       <span class="fu">=</span> <span class="dt">Conc</span> (canBeEpsi
 <span class="ot">iter ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Regex</span> a
 iter (<span class="dt">Iter</span> x) <span class="fu">=</span> <span class="dt">Iter</span> x
 iter x        <span class="fu">=</span> <span class="dt">Iter</span> x</code></pre></div>
-<p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math"><em>E</em></span> určit, jestli <span class="math"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math"><em>ϵ</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
+<p>Jak jsem psal výše, musíme být schopní pro daný výraz <span class="math inline"><em>E</em></span> určit, jestli <span class="math inline"><em>L</em>(<em>E</em>)</span> obsahuje <span class="math inline"><em>ϵ</em></span>. Vzhledem k tomu, kolikrát se tato funkce bude volat při derivování, by bylo dobré, aby dokázala fungovat v konstantním čase.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">canBeEpsilon ::</span> <span class="dt">Regex</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 canBeEpsilon <span class="dt">Epsilon</span>      <span class="fu">=</span> <span class="dt">True</span>
 canBeEpsilon <span class="dt">Zero</span>         <span class="fu">=</span> <span class="dt">False</span>
@@ -141,7 +141,7 @@ runFA fa str <span class="fu">=</span> isAccepting fa <span class="fu">$</span> 
 strToFA str <span class="fu">=</span>  toFA (getAlphabet str) <span class="fu">$</span> fromString str
   <span class="kw">where</span>
     getAlphabet <span class="fu">=</span> filter (<span class="ot">`notElem`</span> <span class="st">&quot;()*+&quot;</span>)</code></pre></div>
-<p>Pomocí této funkce můžeme vytvořit jednoduchý operátor, který porovná řetězec s regulárním výrazem <span class="math"><em>E</em></span> a zjistí, jestli dané slovo patří do <span class="math"><em>L</em>(<em>E</em>)</span>.</p>
+<p>Pomocí této funkce můžeme vytvořit jednoduchý operátor, který porovná řetězec s regulárním výrazem <span class="math inline"><em>E</em></span> a zjistí, jestli dané slovo patří do <span class="math inline"><em>L</em>(<em>E</em>)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">(=~) ::</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span>
 str <span class="fu">=~</span> regex <span class="fu">=</span> runFA (strToFA regex) str</code></pre></div>
 <p>Nalezení všech odpovídajících podřetězců je maličko složitější. Postupně spustíme automat na všechny sufixy řetězce a zapamatujeme si, kde jsme došli do akceptujícího stavu. Zároveň ale zastavíme, když dorazíme do stavu <code>Zero</code>, protože z něj už není úniku.</p>
@@ -178,9 +178,9 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
     <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
 <h2 id="varianty">Varianty</h2>
 <p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>
-<p>Nejjednodušší variantou, jak toho dosáhnout, je použít <em>unární</em> kódování. Číslo <span class="math"><em>n</em></span> zakóduje pomocí <span class="math"><em>n</em></span> nul následovaných jedničkou. Zřejmě je tedy bezprefixové, ale zároveň i paměťově neefektivní, protože délka kódu je lineární k velikosti kódovaného čísla.</p>
+<p>Nejjednodušší variantou, jak toho dosáhnout, je použít <em>unární</em> kódování. Číslo <span class="math inline"><em>n</em></span> zakóduje pomocí <span class="math inline"><em>n</em></span> nul následovaných jedničkou. Zřejmě je tedy bezprefixové, ale zároveň i paměťově neefektivní, protože délka kódu je lineární k velikosti kódovaného čísla.</p>
 <p>Jako lepší nápad vypadá zapsání čísla binárně a přidání jeho délky pomocí nějakého bezprefixového kódu. To ale také není optimální, protože bychom nevyužili mnoho možností. Konkrétně jde o slova, která začínají nulami. V klasickém dvojkovém zápisu jsou čísla 00 a 0 stejná. Z našeho pohledu je ale užitečné je rozlišit. Proto pro každou délku kódu využijeme všechny možnosti, tedy pro slovem délky jedna budeme kódovat dvě čísla, délkou dvě čtyři atd.</p>
-<p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math">2<sup><em>l</em></sup> − 1</span>.</p>
+<p>Pro každé číslo tedy určíme délku slova, odečteme od něj nějakou hodnotu a převedeme do dvojkové soustavy. Délku určíme jako <span class="math inline">⌊log<sub>2<sub></sub></sub>(<em>n</em> + 1)⌋</span>. Zároveň z délky můžeme určit, o kolik zmenšit kódované číslo před převodem: <span class="math inline">2<sup><em>l</em></sup> − 1</span>.</p>
 <h2 id="implementace">Implementace</h2>
 <p>Nejdříve tedy definice typů.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Bit</span> <span class="fu">=</span> <span class="dt">Zero</span> <span class="fu">|</span> <span class="dt">One</span> <span class="kw">deriving</span> (<span class="dt">Eq</span>)
@@ -211,7 +211,7 @@ binary&#39; len n <span class="fu">=</span> padding <span class="fu">++</span> c
         padding <span class="fu">=</span> replicate (len <span class="fu">-</span> length code) <span class="dt">Zero</span>
 
 fromBinary <span class="fu">=</span> foldl (\num x <span class="ot">-&gt;</span> num <span class="fu">*</span> <span class="dv">2</span> <span class="fu">+</span> (<span class="kw">if</span> x <span class="fu">==</span> <span class="dt">Zero</span> <span class="kw">then</span> <span class="dv">0</span> <span class="kw">else</span> <span class="dv">1</span>)) <span class="dv">0</span></code></pre></div>
-<p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math"><em>γ</em></span> a <span class="math"><em>δ</em></span> kódy. <span class="math"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
+<p>Myšlenku popsanou na začátku realizují mimo jiné <span class="math inline"><em>γ</em></span> a <span class="math inline"><em>δ</em></span> kódy. <span class="math inline"><em>γ</em></span>-kód pro délku slova používá unární kódování, <span class="math inline"><em>δ</em></span>-kód jde ještě dál a používá pro zapsání délky <span class="math inline"><em>γ</em></span>-kód. Zřejmě jsou si tedy v mnohém podobná a má smysl nejdřív napsat obecnější funkci.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">encodeWith ::</span> (<span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>) <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Stream</span>
 encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary&#39; len (n <span class="fu">-</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">+</span> <span class="dv">1</span>)
   <span class="kw">where</span> len <span class="fu">=</span> floor <span class="fu">.</span> logBase <span class="dv">2</span> <span class="fu">.</span> fromIntegral <span class="fu">$</span> n <span class="fu">+</span> <span class="dv">1</span>
@@ -220,7 +220,7 @@ encodeWith f n <span class="fu">=</span> f len <span class="fu">++</span> binary
 parseWith f s <span class="fu">=</span> (fromBinary bin <span class="fu">+</span> <span class="dv">2</span><span class="fu">^</span>len <span class="fu">-</span> <span class="dv">1</span>, ss)
   <span class="kw">where</span> (len, rest) <span class="fu">=</span> f s
         (bin, ss)   <span class="fu">=</span> splitAt len rest</code></pre></div>
-<p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math"><em>γ</em></span> i <span class="math"><em>δ</em></span> kódování poměrně triviální.</p>
+<p>S funkcemi <code>encodeWith</code>, <code>parseWith</code> je tedy implementace <span class="math inline"><em>γ</em></span> i <span class="math inline"><em>δ</em></span> kódování poměrně triviální.</p>
 <div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell">gamma <span class="fu">=</span> encodeWith unary
 parseGamma <span class="fu">=</span> parseWith parseUnary
 
