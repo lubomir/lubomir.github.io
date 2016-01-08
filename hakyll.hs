@@ -145,7 +145,7 @@ main = hakyll $ do
             getResourceBody >>= applyAsTemplate indexContext
                             >>= defaultCompiler englishConfig
 
-    forM_ ["403.html", "404.html"] $ \p ->
+    forM_ ["403.html", "404.html", "cookies.html"] $ \p ->
         match p $ do
             route   idRoute
             compile $ myCompiler
