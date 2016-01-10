@@ -312,6 +312,9 @@ table thead > tr > th {
 .post a:hover {
     text-decoration: none;
 }
+.post img {
+    max-width: 100%;
+}
 .metainfo div {
   text-align: center;
 }
