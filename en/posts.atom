@@ -8,8 +8,74 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-08-01T00:00:00Z</updated>
+    <updated>2016-01-24T00:00:00Z</updated>
     <entry>
+    <title>Watching process outputs with Haskell</title>
+    <link href="http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
+    <id>http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
+    <published>2016-01-24T00:00:00Z</published>
+    <updated>2016-01-24T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
+<p>A recent <a href="https://www.reddit.com/r/haskell/comments/41za4n/streaming_a_unix_tools_output_to_haskell/">post on Reddit</a> actually reminded me of that.</p>
+<p>I will call the program <code>race</code>, although there are not going to be any winners.</p>
+<p>The idea of the program is simple: it will run each process in a separate thread. This runner thread will read the output of the program (both <code>stdout</code> and <code>stderr</code>, I just don't care) and send this to the main thread. This way, there will always single thread writing the actual output.</p>
+<p>The communication between threads will happen through <code>Control.Concurrent.Chan</code>, and we will be sending simple messages:</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Msg</span> <span class="fu">=</span> <span class="dt">Quit</span>                 <span class="co">-- ^The process finished</span>
+         <span class="fu">|</span> <span class="dt">Msg</span> <span class="dt">Int</span> <span class="dt">ByteString</span>   <span class="co">-- ^A single line of output</span></code></pre></div>
+<p>The number in the message will indicate which child process is sending the line and will be used to pick a color.</p>
+<p>The thread for consuming these messages and printing the data is not too complex. It's a loop that keeps track of the number of running processes. In each iteration, we read a single message from the channel and depending on what it is, we either decrement the process counter or print the message wrapped in ANSI color sequences.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">printer ::</span> <span class="dt">Chan</span> <span class="dt">Msg</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+printer _ <span class="dv">0</span> <span class="fu">=</span> return ()
+printer chan num <span class="fu">=</span> <span class="kw">do</span>
+    msg <span class="ot">&lt;-</span> readChan chan
+    <span class="kw">case</span> msg <span class="kw">of</span>
+        <span class="dt">Quit</span> <span class="ot">-&gt;</span> printer chan (num <span class="fu">-</span> <span class="dv">1</span>)
+        <span class="dt">Msg</span> i d <span class="ot">-&gt;</span> <span class="kw">do</span>
+            B.putStr <span class="fu">$</span> colored i d
+            reader chan num
+
+<span class="ot">colored ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span>
+colored i d <span class="fu">=</span> <span class="kw">let</span> col <span class="fu">=</span> colors <span class="fu">!!</span> i
+              <span class="kw">in</span> <span class="st">&quot;\ESC[&quot;</span> <span class="fu">&lt;&gt;</span> col <span class="fu">&lt;&gt;</span> <span class="st">&quot;;1m&quot;</span> <span class="fu">&lt;&gt;</span> d <span class="fu">&lt;&gt;</span> <span class="st">&quot;\ESC[0m\n&quot;</span>
+  <span class="kw">where</span>
+    colors <span class="fu">=</span> cycle [<span class="st">&quot;36&quot;</span>, <span class="st">&quot;35&quot;</span>, <span class="st">&quot;32&quot;</span>, <span class="st">&quot;33&quot;</span>, <span class="st">&quot;34&quot;</span>, <span class="st">&quot;31&quot;</span>]</code></pre></div>
+<p>Reading the output of a random program is a bit more involved. As input, we will submit the channel, process number and a string with the command.</p>
+<p>There is a very <a href="https://www.schoolofhaskell.com/user/snoyberg/library-documentation/data-conduit-process">helpful tutorial</a> for <code>Data.Conduit.Process</code> which contains an example. We can adapt this to our needs.</p>
+<p>The biggest hurdle here is that <em>glibc</em> will by default line-buffer standard output if it goes to interactive terminal, but as soon as we redirect it to a pipe, it gets fully buffered in 4 KiB blocks.</p>
+<p>This is definitely not what we want. There are a few ways to mitigate this: the easiest is to use <code>stdbuf</code> executable, which modifies the buffering mode. The problem with it is that it does not work for all cases, especially for commands involving piping data between multiple processes.</p>
+<p>Another attempt that I made was to use a pseudoterminal. This approach is however quite complex, and I failed to get it running reliably.</p>
+<p>In the end I settled for <code>script</code> command. By using the <code>-c</code> argument it can run a complex command and it handles buffering just the way I wanted.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runProcess ::</span> <span class="dt">Chan</span> <span class="dt">Msg</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
+runProcess chan&#39; i cmd <span class="fu">=</span> <span class="kw">do</span>
+    <span class="kw">let</span> cmd&#39; <span class="fu">=</span> <span class="st">&quot;script -qfc \&quot;&quot;</span> <span class="fu">&lt;&gt;</span> cmd <span class="fu">&lt;&gt;</span> <span class="st">&quot;\&quot; /dev/null&quot;</span>
+    (<span class="dt">ClosedStream</span>, fromProcess, fromProcessErr, cph) <span class="ot">&lt;-</span>
+        streamingProcess (shell cmd&#39;)
+
+    <span class="kw">let</span> output h <span class="fu">=</span> CB.sourceHandle h <span class="fu">$$</span> CB.lines <span class="fu">=$</span> CL.mapM_
+            (writeChan chan <span class="fu">.</span> <span class="dt">Msg</span> i)
+
+    _ <span class="ot">&lt;-</span> runConcurrently <span class="fu">$</span>
+        <span class="dt">Concurrently</span> (output fromProcess) <span class="fu">*&gt;</span>
+        <span class="dt">Concurrently</span> (output fromProcessErr) <span class="fu">*&gt;</span>
+        <span class="dt">Concurrently</span> (waitForStreamingProcess cph)
+
+    writeChan chan <span class="dt">Quit</span></code></pre></div>
+<p>All that is left to do is to tie it all together: get command line arguments, spawn a thread for each one and run the printer function in the main thread. We will create the channel with one duplicate: the copy will be shared by all worker threads.</p>
+<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">main ::</span> <span class="dt">IO</span> ()
+main <span class="fu">=</span> <span class="kw">do</span>
+    args <span class="ot">&lt;-</span> getArgs
+    readEnd <span class="ot">&lt;-</span> newChan
+    writeEnd <span class="ot">&lt;-</span> dupChan readEnd
+
+    mapM_ (forkIO <span class="fu">.</span> uncurry (runProcess writeEnd)) (zip [<span class="dv">0</span><span class="fu">..</span>] args)
+
+    reader readEnd (length args)</code></pre></div>
+<p>The program can now be used like this:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">race</span> <span class="st">&quot;python -m SimpleHTTPServer&quot;</span> <span class="st">&quot;make rebuild-on-change&quot;</span></code></pre></div>
+<p>Arguably, it is just a glorified wrapper for the <code>&amp;</code> Bash functionality and <code>wait</code> command. Nonetheless, I still consider it useful.</p>
+<p>You can get <a href="https://github.com/lubomir/race">the whole project</a> including cabal file with list of dependencies on GitHub.</p>]]></summary>
+</entry>
+<entry>
     <title>Reviewing GitHub pull requests locally</title>
     <link href="http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
     <id>http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
