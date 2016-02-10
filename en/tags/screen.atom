@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>lsedlar – Posts tagged screen</title>
+    <link href="http://lubomir.github.io//en/tags/screen.atom" rel="self" />
+    <link href="http://lubomir.github.io/" />
+    <id>http://lubomir.github.io//en/tags/screen.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lubomir.sedlar@gmail.com</email>
+    </author>
+    <updated>2016-02-12T00:00:00Z</updated>
+    <entry>
+    <title>Today I Learned: Scrolling in screen</title>
+    <link href="http://lubomir.github.io//en/2016-02-12-TIL-scrolling-in-screen.html" />
+    <id>http://lubomir.github.io//en/2016-02-12-TIL-scrolling-in-screen.html</id>
+    <published>2016-02-12T00:00:00Z</published>
+    <updated>2016-02-12T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
+<p>This mode can be entered by pressing the regular prefix combination (<code>^A</code>), and then hitting <code>Esc</code>. Moving around is possible with arrow keys. To get back to regular mode hit <code>Esc</code> twice.</p>
+<p><a href="http://unix.stackexchange.com/questions/40242/scroll-inside-screen-or-pause-output">Source at Unix Stack Exchange</a>.</p>
+<p>Even better option is to put following into <code>.screenrc</code>:</p>
+<pre><code>termcapinfo xterm* ti@:te@</code></pre>
+<p>This will enable regular scrolling with mouse wheel or terminal scrollbar.</p>
+<p><a href="http://unix.stackexchange.com/questions/18006/can-mouse-wheel-scrolling-work-in-a-screen-session">Source at Unix Stack Exchange</a></p>]]></summary>
+</entry>
+
+</feed>
