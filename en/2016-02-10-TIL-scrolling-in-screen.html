@@ -7,43 +7,36 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
-    <title>All posts</title>
+    <title>Today I Learned: Scrolling in screen</title>
   </head>
 
   <body id="top">
 
     <div class="container">
-      <h1>All posts</h1>
+      <h1>Today I Learned: Scrolling in screen</h1>
 
-<p class="navigation">
-  <a href="../">back to main page</a>
-</p>
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>February 10, 2016</strong>
+    </div>
 
-<ul class="postlist">
-    <li>
-    <a href="../en/2016-02-12-TIL-validating-xml.html">Today I Learned: Validating XML</a> <span class="date">(2016–02–12)</span>
-</li>
-<li>
-    <a href="../en/2016-02-10-TIL-scrolling-in-screen.html">Today I Learned: Scrolling in screen</a> <span class="date">(2016–02–10)</span>
-</li>
-<li>
-    <a href="../en/2016-01-24-watching-process-outputs.html">Watching process outputs with Haskell</a> <span class="date">(2016–01–24)</span>
-</li>
-<li>
-    <a href="../en/2015-08-01-reviewing-github-pull-request.html">Reviewing GitHub pull requests locally</a> <span class="date">(2015–08–01)</span>
-</li>
-<li>
-    <a href="../en/2014-09-18-exploring-django-fixtures.html">Exploring test case fixtures in Django</a> <span class="date">(2014–09–18)</span>
-</li>
-<li>
-    <a href="../en/2014-08-31-simulating-an-elevator.html">Simulating an elevator</a> <span class="date">(2014–08–31)</span>
-</li>
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/til.html">TIL</a>, <a href="../en/tags/screen.html">screen</a>.</span>
+    </div>
+</div>
 
-</ul>
-
-<ul class="navigation">
-  <li><a href="posts.atom"><img src="../images/feed-icon-14x14.png" alt="Atom" width="14"></a></li>
-</ul>
+<div class="post">
+<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
+<p>This mode can be entered by pressing the regular prefix combination (<code>^A</code>), and then hitting <code>Esc</code>. Moving around is possible with arrow keys. To get back to regular mode hit <code>Esc</code> twice.</p>
+<p><a href="http://unix.stackexchange.com/questions/40242/scroll-inside-screen-or-pause-output">Source at Unix Stack Exchange</a>.</p>
+<p>Even better option is to put following into <code>.screenrc</code>:</p>
+<pre><code>termcapinfo xterm* ti@:te@</code></pre>
+<p>This will enable regular scrolling with mouse wheel or terminal scrollbar.</p>
+<p><a href="http://unix.stackexchange.com/questions/18006/can-mouse-wheel-scrolling-work-in-a-screen-session">Source at Unix Stack Exchange</a></p>
+</div>
 
     </div><!-- .container -->
 
