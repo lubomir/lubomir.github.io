@@ -17,7 +17,8 @@
     <updated>2016-02-12T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>This is not rocket science nor brain surgery. I just never needed this and found it practical to note this for further reference.</p>
 <p>Setup: I have an XML file and a doctype, each in some place on my hard drive. I want to check whether the document validates against the doctype.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">xmllint</span> --path ./path/to/dir/with/doctype path/to/my.xml --valid</code></pre></div>]]></summary>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">xmllint</span> --path ./path/to/dir/with/doctype path/to/my.xml --valid</code></pre></div>
+<p>If I don't want the formatted output (which I usually don't), there is an option for that: <code>--noout</code> will suppress printing of the result tree.</p>]]></summary>
 </entry>
 <entry>
     <title>Today I Learned: Scrolling in screen</title>
