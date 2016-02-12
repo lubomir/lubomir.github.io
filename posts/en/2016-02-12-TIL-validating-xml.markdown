@@ -12,3 +12,6 @@ want to check whether the document validates against the doctype.
 ```bash
 xmllint --path ./path/to/dir/with/doctype path/to/my.xml --valid
 ```
+
+If I don't want the formatted output (which I usually don't), there is an
+option for that: `--noout` will suppress printing of the result tree.
