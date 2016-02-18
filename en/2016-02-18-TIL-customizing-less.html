@@ -7,46 +7,33 @@
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
     <link rel="alternate" type="application/rss+xml" href="../rss.xml">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
-    <title>All posts</title>
+    <title>Today I Learned: Customizing less</title>
   </head>
 
   <body id="top">
 
     <div class="container">
-      <h1>All posts</h1>
+      <h1>Today I Learned: Customizing less</h1>
 
-<p class="navigation">
-  <a href="../">back to main page</a>
-</p>
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>February 18, 2016</strong>
+    </div>
 
-<ul class="postlist">
-    <li>
-    <a href="../en/2016-02-18-TIL-customizing-less.html">Today I Learned: Customizing less</a> <span class="date">(2016–02–18)</span>
-</li>
-<li>
-    <a href="../en/2016-02-12-TIL-validating-xml.html">Today I Learned: Validating XML</a> <span class="date">(2016–02–12)</span>
-</li>
-<li>
-    <a href="../en/2016-02-10-TIL-scrolling-in-screen.html">Today I Learned: Scrolling in screen</a> <span class="date">(2016–02–10)</span>
-</li>
-<li>
-    <a href="../en/2016-01-24-watching-process-outputs.html">Watching process outputs with Haskell</a> <span class="date">(2016–01–24)</span>
-</li>
-<li>
-    <a href="../en/2015-08-01-reviewing-github-pull-request.html">Reviewing GitHub pull requests locally</a> <span class="date">(2015–08–01)</span>
-</li>
-<li>
-    <a href="../en/2014-09-18-exploring-django-fixtures.html">Exploring test case fixtures in Django</a> <span class="date">(2014–09–18)</span>
-</li>
-<li>
-    <a href="../en/2014-08-31-simulating-an-elevator.html">Simulating an elevator</a> <span class="date">(2014–08–31)</span>
-</li>
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/til.html">TIL</a>, <a href="../en/tags/less.html">less</a>.</span>
+    </div>
+</div>
 
-</ul>
-
-<ul class="navigation">
-  <li><a href="posts.atom"><img src="../images/feed-icon-14x14.png" alt="Atom" width="14"></a></li>
-</ul>
+<div class="post">
+<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
+<p>Ever since I set this, I've had trouble with <code>git</code> paging its output even when it would fit on a single page. This has bothered me, but I did not connect it to the <code>LESS</code> setting.</p>
+<p>It turns out that <code>git</code> is quite sophisticated. When its output is paged via <code>less</code>, it looks if <code>LESS</code> env var is set, and sets it to <code>-FRX</code> if it is not.</p>
+<p>The <code>-F</code> part is the important one. If tells <code>less</code> to not do anything if the output fits on screen.</p>
+</div>
 
     </div><!-- .container -->
 
