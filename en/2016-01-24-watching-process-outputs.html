@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
+    <article>
+        <p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
 <p>A recent <a href="https://www.reddit.com/r/haskell/comments/41za4n/streaming_a_unix_tools_output_to_haskell/">post on Reddit</a> actually reminded me of that.</p>
 <p>I will call the program <code>race</code>, although there are not going to be any winners.</p>
 <p>The idea of the program is simple: it will run each process in a separate thread. This runner thread will read the output of the program (both <code>stdout</code> and <code>stderr</code>, I just don't care) and send this to the main thread. This way, there will always single thread writing the actual output.</p>
@@ -88,6 +89,24 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">race</span> <span class="st">&quot;python -m SimpleHTTPServer&quot;</span> <span class="st">&quot;make rebuild-on-change&quot;</span></code></pre></div>
 <p>Arguably, it is just a glorified wrapper for the <code>&amp;</code> Bash functionality and <code>wait</code> command. Nonetheless, I still consider it useful.</p>
 <p>You can get <a href="https://github.com/lubomir/race">the whole project</a> including cabal file with list of dependencies on GitHub.</p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html";
+            this.page.identifier = "/en/2016-01-24-watching-process-outputs.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

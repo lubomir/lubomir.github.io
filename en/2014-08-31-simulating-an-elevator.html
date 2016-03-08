@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>
+    <article>
+        <p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>
 <p>There were two elevators, each equipped with a single button that should tell the elevator to come to your floor. However, if the elevator is currently going somewhere, it will ignore your request. You have to wait for it to stop and press the button again. Should someone press it faster, you are out of luck and have to wait for next try.</p>
 <p>Obviously, the two elevators do not communicate in any way, so in fact you gamble with two elevators at the same time.</p>
 <p>This system seemed very stupid to me, so I decided to create a simple model to verify how much better it would be if the elevator was somewhat smarter.</p>
@@ -81,6 +82,24 @@
 <h2 id="conclusion">Conclusion</h2>
 <p>There is one positive result: I don't have to live a with a dumb elevator anymore. The simulation confirmed that a slight improvement in the logic – letting people get on the elevator when it is going down – can have significant impact on average waiting time.</p>
 <p>The code used for this is available at <a href="https://github.com/lubomir/elevator">GitHub</a>.</p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html";
+            this.page.identifier = "/en/2014-08-31-simulating-an-elevator.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

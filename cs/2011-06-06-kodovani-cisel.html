@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
+    <article>
+        <p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
 <h2 id="varianty">Varianty</h2>
 <p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>
 <p>Nejjednodušší variantou, jak toho dosáhnout, je použít <em>unární</em> kódování. Číslo <span class="math inline"><em>n</em></span> zakóduje pomocí <span class="math inline"><em>n</em></span> nul následovaných jedničkou. Zřejmě je tedy bezprefixové, ale zároveň i paměťově neefektivní, protože délka kódu je lineární k velikosti kódovaného čísla.</p>
@@ -90,6 +91,24 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
                   [] <span class="ot">-&gt;</span> [n]
                   _  <span class="ot">-&gt;</span> n <span class="fu">:</span> decode f ss</code></pre></div>
 <p><strong>Upozornění</strong>: toto není úplně ideální implementace, protože umožňuje práci pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, takže je to velice pomalé. Taky chybí jakákoli kontrola chyb.</p>
+    </article>
+
+    <h2 class="comments-header">Komentáře</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html";
+            this.page.identifier = "/cs/2011-06-06-kodovani-cisel.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

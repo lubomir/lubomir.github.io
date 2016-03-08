@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
+    <article>
+        <p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
 <p>Já používám knihovnu <a href="http://unittest-cpp.sourceforge.net/">UnitTest++</a>, která je rozumným kompromisem mezi funkcionalitou a jednoduchostí.</p>
 <h2 id="použití">Použití</h2>
 <p>Testy pomocí UnitTest++ je možné psát do libovolného souboru s příponou <code>.cpp</code> i <code>.cc</code>, jak je komu libo. Pro kompilaci je potřeba kompilátoru předat informace o tom, kde najde příslušné hlavičkové soubory a potom i knihovnu. Obojí jsem zkompiloval a je na Aise dostupné v adresáři <code>/home/~xsedlar3/include</code>.</p>
@@ -84,6 +85,24 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
     list.swap(it5, it6, it2, it3);
     CHECK_EQUAL(<span class="st">&quot;{ 10, 20, 30, 40, 50, 60, 70 }&quot;</span>, to_str());
 }</code></pre></div>
+    </article>
+
+    <h2 class="comments-header">Komentáře</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//cs/2010-12-19-unittest.html";
+            this.page.identifier = "/cs/2010-12-19-unittest.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
+    <article>
+        <p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
 <p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
 <figure>
 <img src="../images/regex0.png" alt="a^*b+(c+d+e)a" /><figcaption><span class="math inline"><em>a</em><sup>*</sup><em>b</em> + (<em>c</em> + <em>d</em> + <em>e</em>)<em>a</em></span></figcaption>
@@ -182,6 +183,24 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 <dd>upraveno tak, aby <code>(E*)*</code> nevedlo k zacyklení; doplněn odkaz na původní článek
 </dd>
 </dl>
+    </article>
+
+    <h2 class="comments-header">Komentáře</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html";
+            this.page.identifier = "/cs/2012-03-20-derivaci-k-regularnim-vyrazum.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

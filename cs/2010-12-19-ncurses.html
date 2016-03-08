@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
+    <article>
+        <p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
 <h2 id="inicializační-funkce">4.1 Inicializační funkce</h2>
 <ol type="1">
 <li><p><strong>raw() a cbreak()</strong></p>
@@ -41,6 +42,24 @@
 <li><p><strong>halfdelay()</strong></p>
 <p>Přestože tato funkce není používaná příliš často, je občas velice užitečná. Vstup je okamžitě předán programu jako po zavolání <code>cbreak()</code> s tím rozdílem, že čeká X desetin sekundy na vstup a jestliže potom není vstup dostupný, vrátí ERR. X je interval zadaný jako argument při volání halfdelay(). Tato funkce je užitečná, pokud potřebujete nějaký vstup, ale když uživatel neodpoví dostatečně rychle, chcete udělat něco jiného.</p></li>
 </ol>
+    </article>
+
+    <h2 class="comments-header">Komentáře</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//cs/2010-12-19-ncurses.html";
+            this.page.identifier = "/cs/2010-12-19-ncurses.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

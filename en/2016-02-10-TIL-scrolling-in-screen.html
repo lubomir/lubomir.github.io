@@ -29,13 +29,32 @@
 </div>
 
 <div class="post">
-<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
+    <article>
+        <p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
 <p>This mode can be entered by pressing the regular prefix combination (<code>^A</code>), and then hitting <code>Esc</code>. Moving around is possible with arrow keys. To get back to regular mode hit <code>Esc</code> twice.</p>
 <p><a href="http://unix.stackexchange.com/questions/40242/scroll-inside-screen-or-pause-output">Source at Unix Stack Exchange</a>.</p>
 <p>Even better option is to put following into <code>.screenrc</code>:</p>
 <pre><code>termcapinfo xterm* ti@:te@</code></pre>
 <p>This will enable regular scrolling with mouse wheel or terminal scrollbar.</p>
 <p><a href="http://unix.stackexchange.com/questions/18006/can-mouse-wheel-scrolling-work-in-a-screen-session">Source at Unix Stack Exchange</a></p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html";
+            this.page.identifier = "/en/2016-02-10-TIL-scrolling-in-screen.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->

@@ -29,7 +29,8 @@
 </div>
 
 <div class="post">
-<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
+    <article>
+        <p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
 <p>Společným znakem oken, která mají fixní velikost, je nastavení minimální a maximální velikosti okna na stejnou hodnotu. Toto nastavení je v <code>WM_NORMAL_HINTS</code> a dá se zjistit třeba přes <code>xprop</code>. Toto pole má typ <code>XSizeHints</code> a nejpřesnější popis, který jsem našel, vypadá takto:</p>
@@ -67,6 +68,24 @@ minHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv"
 maxWidth  <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">7</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span>
 maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv">8</span>)<span class="ot"> ::</span> [<span class="dt">CLong</span>] <span class="ot">-&gt;</span> <span class="dt">CLong</span></code></pre></div>
 <p>A to je asi tak všechno. Zatím mám pocit, že to funguje, žádné chyby jsem nepozoroval. <a href="../data/HandleFixedWindows.hs">Kompletní soubor</a> stačí nakopírovat do <code>~/.xmonad/lib/</code>, naimportovat do konfiguračního souboru a použít.</p>
+    </article>
+
+    <h2 class="comments-header">Komentáře</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html";
+            this.page.identifier = "/cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
 
     </div><!-- .container -->
