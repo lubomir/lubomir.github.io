@@ -305,6 +305,7 @@ table thead > tr > th {
 }
 .post {
   margin-top: 1em;
+  margin-bottom: 2em;
 }
 .post a {
     text-decoration: underline;
