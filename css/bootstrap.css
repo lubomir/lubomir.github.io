@@ -319,6 +319,9 @@ table thead > tr > th {
 .metainfo div {
   text-align: center;
 }
+.comments-header {
+  margin-top: 2em;
+}
 @media(min-width: 992px) {
   .metainfo div:first-child {
     text-align: left;

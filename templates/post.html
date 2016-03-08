@@ -14,5 +14,24 @@
 </div>
 
 <div class="post">
-$body$
+    <article>
+        $body$
+    </article>
+
+    <h2 class="comments-header">$comments$</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io/$url$";
+            this.page.identifier = "$url$";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
 </div>
