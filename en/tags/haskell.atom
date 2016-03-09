@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged Haskell</title>
-    <link href="http://lubomir.github.io//en/tags/haskell.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/haskell.atom</id>
+    <link href="https://lubomir.github.io//en/tags/haskell.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/haskell.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-01-24T00:00:00Z</updated>
     <entry>
     <title>Watching process outputs with Haskell</title>
-    <link href="http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
-    <id>http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
+    <link href="https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
+    <id>https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
     <published>2016-01-24T00:00:00Z</published>
     <updated>2016-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
@@ -77,8 +77,8 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </entry>
 <entry>
     <title>Simulating an elevator</title>
-    <link href="http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
-    <id>http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
+    <link href="https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
+    <id>https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
     <published>2014-08-31T00:00:00Z</published>
     <updated>2014-08-31T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>

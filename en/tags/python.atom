@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged Python</title>
-    <link href="http://lubomir.github.io//en/tags/python.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/python.atom</id>
+    <link href="https://lubomir.github.io//en/tags/python.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/python.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2014-09-18T00:00:00Z</updated>
     <entry>
     <title>Exploring test case fixtures in Django</title>
-    <link href="http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
-    <id>http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
+    <link href="https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
+    <id>https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
     <published>2014-09-18T00:00:00Z</published>
     <updated>2014-09-18T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>

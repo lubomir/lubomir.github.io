@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged GitHub</title>
-    <link href="http://lubomir.github.io//en/tags/github.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/github.atom</id>
+    <link href="https://lubomir.github.io//en/tags/github.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/github.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2015-08-01T00:00:00Z</updated>
     <entry>
     <title>Reviewing GitHub pull requests locally</title>
-    <link href="http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
-    <id>http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
+    <link href="https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
+    <id>https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
     <published>2015-08-01T00:00:00Z</published>
     <updated>2015-08-01T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>GitHub is a great place to collaborate on open-source code. One thing I have struggled with a bit is how to perform code review for pull requests.</p>

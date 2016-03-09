@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako C</title>
-    <link href="http://lubomir.github.io//cs/tags/c.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/c.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/c.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/c.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2012-01-24T00:00:00Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
-    <link href="http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
-    <id>http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
+    <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
     <updated>2012-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
@@ -229,8 +229,8 @@ Seznam
 </entry>
 <entry>
     <title>O princezně, která ztrácela pamět</title>
-    <link href="http://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
-    <id>http://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
+    <link href="https://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
+    <id>https://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
     <updated>2011-11-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<blockquote>
@@ -249,8 +249,8 @@ Seznam
 </entry>
 <entry>
     <title>Inicializační funkce NCurses</title>
-    <link href="http://lubomir.github.io//cs/2010-12-19-ncurses.html" />
-    <id>http://lubomir.github.io//cs/2010-12-19-ncurses.html</id>
+    <link href="https://lubomir.github.io//cs/2010-12-19-ncurses.html" />
+    <id>https://lubomir.github.io//cs/2010-12-19-ncurses.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
@@ -268,8 +268,8 @@ Seznam
 </entry>
 <entry>
     <title>Jak se projevuje 'const'</title>
-    <link href="http://lubomir.github.io//cs/2010-12-19-const.html" />
-    <id>http://lubomir.github.io//cs/2010-12-19-const.html</id>
+    <link href="https://lubomir.github.io//cs/2010-12-19-const.html" />
+    <id>https://lubomir.github.io//cs/2010-12-19-const.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>

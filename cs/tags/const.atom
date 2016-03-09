@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako const</title>
-    <link href="http://lubomir.github.io//cs/tags/const.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/const.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/const.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/const.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2010-12-19T00:00:00Z</updated>
     <entry>
     <title>Jak se projevuje 'const'</title>
-    <link href="http://lubomir.github.io//cs/2010-12-19-const.html" />
-    <id>http://lubomir.github.io//cs/2010-12-19-const.html</id>
+    <link href="https://lubomir.github.io//cs/2010-12-19-const.html" />
+    <id>https://lubomir.github.io//cs/2010-12-19-const.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2010-12-19T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>

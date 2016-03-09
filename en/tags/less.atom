@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged less</title>
-    <link href="http://lubomir.github.io//en/tags/less.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/less.atom</id>
+    <link href="https://lubomir.github.io//en/tags/less.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/less.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-02-18T00:00:00Z</updated>
     <entry>
     <title>Today I Learned: Customizing less</title>
-    <link href="http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
-    <id>http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
+    <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
     <published>2016-02-18T00:00:00Z</published>
     <updated>2016-02-18T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>

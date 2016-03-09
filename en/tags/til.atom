@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged TIL</title>
-    <link href="http://lubomir.github.io//en/tags/til.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/til.atom</id>
+    <link href="https://lubomir.github.io//en/tags/til.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/til.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-02-18T00:00:00Z</updated>
     <entry>
     <title>Today I Learned: Customizing less</title>
-    <link href="http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
-    <id>http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
+    <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
     <published>2016-02-18T00:00:00Z</published>
     <updated>2016-02-18T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
@@ -22,8 +22,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Validating XML</title>
-    <link href="http://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
-    <id>http://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
+    <id>https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
     <published>2016-02-12T00:00:00Z</published>
     <updated>2016-02-12T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>This is not rocket science nor brain surgery. I just never needed this and found it practical to note this for further reference.</p>
@@ -33,8 +33,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Scrolling in screen</title>
-    <link href="http://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html" />
-    <id>http://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html" />
+    <id>https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html</id>
     <published>2016-02-10T00:00:00Z</published>
     <updated>2016-02-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>

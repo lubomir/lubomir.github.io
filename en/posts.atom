@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar</title>
-    <link href="http://lubomir.github.io//en/posts.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/posts.atom</id>
+    <link href="https://lubomir.github.io//en/posts.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/posts.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-03-08T00:00:00Z</updated>
     <entry>
     <title>Poor Man's CI</title>
-    <link href="http://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
-    <id>http://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
+    <link href="https://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
+    <id>https://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
     <published>2016-03-08T00:00:00Z</published>
     <updated>2016-03-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>
@@ -64,8 +64,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Customizing less</title>
-    <link href="http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
-    <id>http://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
+    <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
     <published>2016-02-18T00:00:00Z</published>
     <updated>2016-02-18T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
@@ -75,8 +75,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Validating XML</title>
-    <link href="http://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
-    <id>http://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
+    <id>https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
     <published>2016-02-12T00:00:00Z</published>
     <updated>2016-02-12T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>This is not rocket science nor brain surgery. I just never needed this and found it practical to note this for further reference.</p>
@@ -86,8 +86,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Scrolling in screen</title>
-    <link href="http://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html" />
-    <id>http://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html</id>
+    <link href="https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html" />
+    <id>https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html</id>
     <published>2016-02-10T00:00:00Z</published>
     <updated>2016-02-10T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
@@ -100,8 +100,8 @@
 </entry>
 <entry>
     <title>Watching process outputs with Haskell</title>
-    <link href="http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
-    <id>http://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
+    <link href="https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
+    <id>https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
     <published>2016-01-24T00:00:00Z</published>
     <updated>2016-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
@@ -166,8 +166,8 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </entry>
 <entry>
     <title>Reviewing GitHub pull requests locally</title>
-    <link href="http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
-    <id>http://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
+    <link href="https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
+    <id>https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
     <published>2015-08-01T00:00:00Z</published>
     <updated>2015-08-01T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>GitHub is a great place to collaborate on open-source code. One thing I have struggled with a bit is how to perform code review for pull requests.</p>
@@ -181,8 +181,8 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </entry>
 <entry>
     <title>Exploring test case fixtures in Django</title>
-    <link href="http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
-    <id>http://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
+    <link href="https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
+    <id>https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
     <published>2014-09-18T00:00:00Z</published>
     <updated>2014-09-18T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
@@ -234,8 +234,8 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </entry>
 <entry>
     <title>Simulating an elevator</title>
-    <link href="http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
-    <id>http://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
+    <link href="https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
+    <id>https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
     <published>2014-08-31T00:00:00Z</published>
     <updated>2014-08-31T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>

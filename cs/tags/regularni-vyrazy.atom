@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako regulární výrazy</title>
-    <link href="http://lubomir.github.io//cs/tags/regularni-vyrazy.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/regularni-vyrazy.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/regularni-vyrazy.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/regularni-vyrazy.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2012-03-20T00:00:00Z</updated>
     <entry>
     <title>Derivací k regulárním výrazům</title>
-    <link href="http://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
-    <id>http://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
+    <link href="https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
+    <id>https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
     <published>2012-03-20T00:00:00Z</published>
     <updated>2012-03-20T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>

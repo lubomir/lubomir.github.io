@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako pdf</title>
-    <link href="http://lubomir.github.io//cs/tags/pdf.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/pdf.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/pdf.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/pdf.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2013-04-02T00:00:00Z</updated>
     <entry>
     <title>Zpracování PDF</title>
-    <link href="http://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html" />
-    <id>http://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html</id>
+    <link href="https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html" />
+    <id>https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
     <updated>2013-04-02T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>

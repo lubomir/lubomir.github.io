@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako benchmark</title>
-    <link href="http://lubomir.github.io//cs/tags/benchmark.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/benchmark.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/benchmark.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/benchmark.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2012-01-24T00:00:00Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
-    <link href="http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
-    <id>http://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
+    <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
+    <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
     <updated>2012-01-24T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>

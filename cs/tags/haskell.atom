@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako Haskell</title>
-    <link href="http://lubomir.github.io//cs/tags/haskell.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//cs/tags/haskell.atom</id>
+    <link href="https://lubomir.github.io//cs/tags/haskell.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//cs/tags/haskell.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2012-03-20T00:00:00Z</updated>
     <entry>
     <title>Derivací k regulárním výrazům</title>
-    <link href="http://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
-    <id>http://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
+    <link href="https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
+    <id>https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
     <published>2012-03-20T00:00:00Z</published>
     <updated>2012-03-20T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
@@ -171,8 +171,8 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
 </entry>
 <entry>
     <title>Kódování čísel</title>
-    <link href="http://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
-    <id>http://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
+    <link href="https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
+    <id>https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
     <published>2011-06-06T00:00:00Z</published>
     <updated>2011-06-06T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
@@ -239,8 +239,8 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
 </entry>
 <entry>
     <title>XMonad a okna s pevnou velikostí</title>
-    <link href="http://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
-    <id>http://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
+    <link href="https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
+    <id>https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
     <published>2011-04-04T00:00:00Z</published>
     <updated>2011-04-04T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>

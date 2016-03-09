@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged testing</title>
-    <link href="http://lubomir.github.io//en/tags/testing.atom" rel="self" />
-    <link href="http://lubomir.github.io/" />
-    <id>http://lubomir.github.io//en/tags/testing.atom</id>
+    <link href="https://lubomir.github.io//en/tags/testing.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/testing.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-03-08T00:00:00Z</updated>
     <entry>
     <title>Poor Man's CI</title>
-    <link href="http://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
-    <id>http://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
+    <link href="https://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
+    <id>https://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
     <published>2016-03-08T00:00:00Z</published>
     <updated>2016-03-08T00:00:00Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>
