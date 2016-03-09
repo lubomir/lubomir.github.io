@@ -213,7 +213,7 @@ postList bc tags pattern preprocess' = do
 
 feedConfiguration :: FeedConfiguration
 feedConfiguration = FeedConfiguration
-    { feedRoot        = "http://lubomir.github.io/"
+    { feedRoot        = "https://lubomir.github.io/"
     , feedTitle       = "lsedlar"
     , feedDescription = "home of lsedlar"
     , feedAuthorName  = "Lubomír Sedlář"
