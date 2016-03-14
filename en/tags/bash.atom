@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>lsedlar – Posts tagged bash</title>
+    <link href="https://lubomir.github.io//en/tags/bash.atom" rel="self" />
+    <link href="https://lubomir.github.io/" />
+    <id>https://lubomir.github.io//en/tags/bash.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lubomir.sedlar@gmail.com</email>
+    </author>
+    <updated>2016-03-14T00:00:00Z</updated>
+    <entry>
+    <title>Today I Learned: Packaging bash-completion files</title>
+    <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
+    <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
+    <published>2016-03-14T00:00:00Z</published>
+    <updated>2016-03-14T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
+<p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
+<p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
+<pre><code>%define compdir %(pkg-config --variable=completionsdir bash-completion)
+%if &quot;%{compdir}&quot; == &quot;&quot;
+%define compdir &quot;/etc/bash_completion.d&quot;
+%endif</code></pre>
+<p>The real gotcha is that the <code>%files</code> section must install the parent of this directory, otherwise the builds will fail with error about two files on one line.</p>]]></summary>
+</entry>
+
+</feed>

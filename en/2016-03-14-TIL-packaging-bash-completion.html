@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Today I Learned: Packaging bash-completion files</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Today I Learned: Packaging bash-completion files</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>March 14, 2016</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/til.html">TIL</a>, <a href="../en/tags/fedora.html">Fedora</a>, <a href="../en/tags/bash.html">bash</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+    <article>
+        <p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
+<p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
+<p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
+<pre><code>%define compdir %(pkg-config --variable=completionsdir bash-completion)
+%if &quot;%{compdir}&quot; == &quot;&quot;
+%define compdir &quot;/etc/bash_completion.d&quot;
+%endif</code></pre>
+<p>The real gotcha is that the <code>%files</code> section must install the parent of this directory, otherwise the builds will fail with error about two files on one line.</p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html";
+            this.page.identifier = "/en/2016-03-14-TIL-packaging-bash-completion.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="last"><a href="../cookies.html">Cookies</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+        window.cookieconsent_options = {"message":"This website uses some cookies.","dismiss":"Got it!","learnMore":"More info","link":"/cookies.html","theme":"dark-floating"};
+     </script>
+     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+  </body>
+</html>
