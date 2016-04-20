@@ -409,4 +409,5 @@ td pre {
 .date {
     font-size: 90%;
     color: #444;
+    white-space: nowrap;
 }
