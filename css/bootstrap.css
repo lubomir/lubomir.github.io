@@ -292,6 +292,7 @@ table thead > tr > th {
 }
 .recent li {
   margin-left: 0;
+  margin-bottom: .5em;
 }
 .navigation li {
   display: inline-block;
