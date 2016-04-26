@@ -8,8 +8,50 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-04-20T00:00:00Z</updated>
+    <updated>2016-04-26T00:00:00Z</updated>
     <entry>
+    <title>Slightly Richer Man's CI</title>
+    <link href="https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html" />
+    <id>https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html</id>
+    <published>2016-04-26T00:00:00Z</published>
+    <updated>2016-04-26T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>Not so long ago I have written about <a href="/en/2016-03-08-poor-man-ci.html">my attempts to bring CI to Pagure</a>. It was pointed out to me that a couple assumptions I've made are actually incorrect.</p>
+<p>Here are the errata:</p>
+<ul>
+<li><p>When a pull request is updated or rebased, there is no need to check the message body. <a href="https://pagure.io/">Pagure</a> already puts this information into the message (look for <code>notification: true</code>).</p></li>
+<li><p>Using comments for indicating status is too clumsy, especially given the fact there is a feature designed to communicate exactly this type of information – flags. Setting a flag is pretty much the same as posting a comment, but they appear in a sidebar with a link and some text. You can also add a percentage to it that will determine the color of a badge.</p></li>
+<li><p>The <em>Fedmsg</em> hook that you can enable in the project settings is actually not required. I misunderstood what it does. The notifications on new pull requests get send automatically without any change in configuration required.</p>
+<p>The hook is actually git <code>post-receive</code> hook that will send you tons of e-mail through the <a href="https://apps.fedoraproject.org/notifications">Fedora notification</a> system whenever a commit is pushed to master without going through a pull-request.</p></li>
+</ul>
+<p>Anyway, fixing these is quite simple.</p>
+<p>While the setup described in previous post worked fine for my use case, it was not ideal. One of the biggest issues is the configuration: adding stuff to <code>/etc</code> is not a scalable model. First order of business was to create a web interface where the configuration could be managed. Added benefit: with a decent authentication system (yes, FAS does nicely) it's possible for anyone to configure their integration points.</p>
+<figure>
+<img src="/images/poormanci/index.png" alt="Screenshot of index page" /><figcaption>Screenshot of index page</figcaption>
+</figure>
+<h2 id="jenkins-wants-a-voice-too">Jenkins wants a voice too</h2>
+<p>Another big drawback is the dependency on Fedora Infrastructure Jenkins. While setting up your own Jenkins is easy (approx. three clicks on <a href="https://www.openshift.com/">OpenShift</a>), connecting it to production <em>Fedmsg</em> is probably not (I don't know, did not try).</p>
+<p>Since there is now a web server for the interface, it is not a big step to support web hooks. There is a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Notification+Plugin">Notification plugin</a> for Jenkins that can ping a URL with JSON data whenever a job finishes.</p>
+<p>The real message contains a ton of data, but for this use-case only project name and build number are really interesting. As long as this data is supplied, we are happy.</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;asgard&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;build&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+        <span class="dt">&quot;number&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span>
+    <span class="fu">}</span>
+<span class="fu">}</span></code></pre></div>
+<p>If instead of web requests the plugin gives you stack traces, try setting log lines to 1.</p>
+<figure>
+<img src="/images/poormanci/notification.png" alt="Plugin configuration" /><figcaption>Plugin configuration</figcaption>
+</figure>
+<p>(No, that is not an actual token in the shown URL. No need to try.)</p>
+<h2 id="here-we-are-and-there-we-go">Here we are and there we go</h2>
+<p>The semi-finished service is available at <a href="http://poormanci.lsedlar.cz/" class="uri">http://poormanci.lsedlar.cz/</a>. The documentation really is lacking, though. The best guide how to use it is <a href="/en/2016-03-08-poor-man-ci.html">the previous blog post</a> or <a href="http://poormanci.lsedlar.cz/help">a somewhat work-in-progress help page</a>.</p>
+<p>Now there is still a ton of things to improve. Currently, all requests to external services are sent directly from the fedmsg consumer or web app process. Since these are blocking and could potentially take a long time, it's a prime candidate for denial-of-service. I need to refactor this into a separate worker process.</p>
+<p>Another thing to add would be the support for a web hook sent from Pagure. This would make it possible to use a custom instance. First I need to learn what data is actually sent in the HTTP request.</p>
+<p>Another point of improvement is the deployment of the whole thing. Currently, I build everything <a href="https://copr.fedorainfracloud.org/coprs/lsedlar/poor-man-ci/">in COPR</a>, install the RPM and do any database migrations almost by hand. The initial setup was also manual. I plan to write an Ansible playbook to make future deployments simpler. It will also document the process a bit.</p>
+<p>Next item on the list is support for multi-configuration projects in Jenkins. The Matrix plugin in Jenkins allows a single test suite to run on multiple builders (e.g. with different Python versions). I want to support such configuration too, but the <em>Fedmsg</em> integration will not do here. <a href="https://apps.fedoraproject.org/datagrepper/id?id=2016-ef190673-90c3-4947-b82f-a909d870d53f&amp;is_raw=true&amp;size=extra-large">The messages</a> from such builds are not particularly helpful. I have reported <a href="https://github.com/fedora-infra/jenkins-fedmsg-emit/issues/3">the issue</a> upstream, but I'm really in no position to go fix the Java code.</p>
+<p>The reporting from the notification plugin works well, though.</p>]]></summary>
+</entry>
+<entry>
     <title>Today I Learned: Exploring Git history</title>
     <link href="https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html" />
     <id>https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html</id>
@@ -227,59 +269,6 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <p>Turns out GitHub allows just that. There is a ref pointing to the changes created by the pull request. It is easy enough to create a local branch by the following command:</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> fetch origin pull/PULL_REQUEST_ID/head:LOCAL_BRANCH</code></pre></div>
 <p>Obviously, the parts in all caps need to be changed to something more useful. After running the command, you can check out the local branch and do anything you want with it. When you are done, simply delete it and everything is the way it was before. It does not get much simpler than that.</p>]]></summary>
-</entry>
-<entry>
-    <title>Exploring test case fixtures in Django</title>
-    <link href="https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
-    <id>https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
-    <published>2014-09-18T00:00:00Z</published>
-    <updated>2014-09-18T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
-<p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
-<p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">run-test-server.py</span> myapp.tests MyComplicatedTestCase</code></pre></div>
-<p>The first idea how to proceed is to simply import the module and look at <code>fixtures</code> attribute of the test case. Sadly, it is not that easy. Importing the module fails with <code>ImproperlyConfiguredException</code> because simply importing a module would be too much to ask for without loading all the <a href="https://www.djangoproject.com/">Django</a> settings. This could be a whole other rant.</p>
-<p>Since <code>__import__</code> is slightly more complicated that necessary, let's offload the actual importing to <code>importlib.import_module</code> which works exactly as expected. However, it is only available since Python 2.7.</p>
-<p>Once the module is imported, all that needs to be done is to retrieve the test case, its fixtures and fire out the <code>testserver</code> command with appropriate arguments.</p>
-<p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
-
-<span class="im">import</span> argparse
-<span class="im">from</span> subprocess <span class="im">import</span> call
-<span class="im">import</span> sys
-<span class="im">import</span> importlib
-
-<span class="im">from</span> django.conf <span class="im">import</span> settings
-
-
-<span class="kw">def</span> get_fixtures(module, case):
-    settings.configure()
-    parts <span class="op">=</span> module.split(<span class="st">&#39;.&#39;</span>)
-
-    app <span class="op">=</span> importlib.import_module(module)
-    <span class="cf">return</span> <span class="bu">getattr</span>(app, case).fixtures
-
-
-<span class="kw">def</span> main():
-    parser <span class="op">=</span> argparse.ArgumentParser()
-    parser.add_argument(<span class="st">&#39;MODULE&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
-    parser.add_argument(<span class="st">&#39;TEST_CASE&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
-
-    args <span class="op">=</span> parser.parse_args()
-    fixtures <span class="op">=</span> get_fixtures(args.MODULE, args.TEST_CASE)
-
-    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] <span class="op">+</span> fixtures)
-
-
-<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:
-    sys.path.append(<span class="st">&#39;.&#39;</span>)
-    main()</code></pre></div>
-<h2 id="further-improvements">Further improvements</h2>
-<p>This script could obviously use a bit more polish:</p>
-<ul>
-<li>The help output could be more helpful.</li>
-<li>If something breaks, the user is presented with a stack trace. Not nice.</li>
-</ul>]]></summary>
 </entry>
 
 </feed>

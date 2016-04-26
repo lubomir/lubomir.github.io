@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Slightly Richer Man's CI</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Slightly Richer Man's CI</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>April 26, 2016</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/fedora.html">Fedora</a>, <a href="../en/tags/pagure.html">Pagure</a>, <a href="../en/tags/jenkins.html">Jenkins</a>, <a href="../en/tags/ci.html">CI</a>, <a href="../en/tags/testing.html">testing</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+    <article>
+        <p>Not so long ago I have written about <a href="../en/2016-03-08-poor-man-ci.html">my attempts to bring CI to Pagure</a>. It was pointed out to me that a couple assumptions I've made are actually incorrect.</p>
+<p>Here are the errata:</p>
+<ul>
+<li><p>When a pull request is updated or rebased, there is no need to check the message body. <a href="https://pagure.io/">Pagure</a> already puts this information into the message (look for <code>notification: true</code>).</p></li>
+<li><p>Using comments for indicating status is too clumsy, especially given the fact there is a feature designed to communicate exactly this type of information – flags. Setting a flag is pretty much the same as posting a comment, but they appear in a sidebar with a link and some text. You can also add a percentage to it that will determine the color of a badge.</p></li>
+<li><p>The <em>Fedmsg</em> hook that you can enable in the project settings is actually not required. I misunderstood what it does. The notifications on new pull requests get send automatically without any change in configuration required.</p>
+<p>The hook is actually git <code>post-receive</code> hook that will send you tons of e-mail through the <a href="https://apps.fedoraproject.org/notifications">Fedora notification</a> system whenever a commit is pushed to master without going through a pull-request.</p></li>
+</ul>
+<p>Anyway, fixing these is quite simple.</p>
+<p>While the setup described in previous post worked fine for my use case, it was not ideal. One of the biggest issues is the configuration: adding stuff to <code>/etc</code> is not a scalable model. First order of business was to create a web interface where the configuration could be managed. Added benefit: with a decent authentication system (yes, FAS does nicely) it's possible for anyone to configure their integration points.</p>
+<figure>
+<img src="../images/poormanci/index.png" alt="Screenshot of index page" /><figcaption>Screenshot of index page</figcaption>
+</figure>
+<h2 id="jenkins-wants-a-voice-too">Jenkins wants a voice too</h2>
+<p>Another big drawback is the dependency on Fedora Infrastructure Jenkins. While setting up your own Jenkins is easy (approx. three clicks on <a href="https://www.openshift.com/">OpenShift</a>), connecting it to production <em>Fedmsg</em> is probably not (I don't know, did not try).</p>
+<p>Since there is now a web server for the interface, it is not a big step to support web hooks. There is a <a href="https://wiki.jenkins-ci.org/display/JENKINS/Notification+Plugin">Notification plugin</a> for Jenkins that can ping a URL with JSON data whenever a job finishes.</p>
+<p>The real message contains a ton of data, but for this use-case only project name and build number are really interesting. As long as this data is supplied, we are happy.</p>
+<div class="sourceCode"><pre class="sourceCode json"><code class="sourceCode json"><span class="fu">{</span>
+    <span class="dt">&quot;name&quot;</span><span class="fu">:</span> <span class="st">&quot;asgard&quot;</span><span class="fu">,</span>
+    <span class="dt">&quot;build&quot;</span><span class="fu">:</span> <span class="fu">{</span>
+        <span class="dt">&quot;number&quot;</span><span class="fu">:</span> <span class="dv">1</span><span class="fu">,</span>
+    <span class="fu">}</span>
+<span class="fu">}</span></code></pre></div>
+<p>If instead of web requests the plugin gives you stack traces, try setting log lines to 1.</p>
+<figure>
+<img src="../images/poormanci/notification.png" alt="Plugin configuration" /><figcaption>Plugin configuration</figcaption>
+</figure>
+<p>(No, that is not an actual token in the shown URL. No need to try.)</p>
+<h2 id="here-we-are-and-there-we-go">Here we are and there we go</h2>
+<p>The semi-finished service is available at <a href="http://poormanci.lsedlar.cz/" class="uri">http://poormanci.lsedlar.cz/</a>. The documentation really is lacking, though. The best guide how to use it is <a href="../en/2016-03-08-poor-man-ci.html">the previous blog post</a> or <a href="http://poormanci.lsedlar.cz/help">a somewhat work-in-progress help page</a>.</p>
+<p>Now there is still a ton of things to improve. Currently, all requests to external services are sent directly from the fedmsg consumer or web app process. Since these are blocking and could potentially take a long time, it's a prime candidate for denial-of-service. I need to refactor this into a separate worker process.</p>
+<p>Another thing to add would be the support for a web hook sent from Pagure. This would make it possible to use a custom instance. First I need to learn what data is actually sent in the HTTP request.</p>
+<p>Another point of improvement is the deployment of the whole thing. Currently, I build everything <a href="https://copr.fedorainfracloud.org/coprs/lsedlar/poor-man-ci/">in COPR</a>, install the RPM and do any database migrations almost by hand. The initial setup was also manual. I plan to write an Ansible playbook to make future deployments simpler. It will also document the process a bit.</p>
+<p>Next item on the list is support for multi-configuration projects in Jenkins. The Matrix plugin in Jenkins allows a single test suite to run on multiple builders (e.g. with different Python versions). I want to support such configuration too, but the <em>Fedmsg</em> integration will not do here. <a href="https://apps.fedoraproject.org/datagrepper/id?id=2016-ef190673-90c3-4947-b82f-a909d870d53f&amp;is_raw=true&amp;size=extra-large">The messages</a> from such builds are not particularly helpful. I have reported <a href="https://github.com/fedora-infra/jenkins-fedmsg-emit/issues/3">the issue</a> upstream, but I'm really in no position to go fix the Java code.</p>
+<p>The reporting from the notification plugin works well, though.</p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html";
+            this.page.identifier = "/en/2016-04-26-slightly-richer-man-ci.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="last"><a href="../cookies.html">Cookies</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+        window.cookieconsent_options = {"message":"This website uses some cookies.","dismiss":"Got it!","learnMore":"More info","link":"/cookies.html","theme":"dark-floating"};
+     </script>
+     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+  </body>
+</html>
