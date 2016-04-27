@@ -24,9 +24,11 @@ Here are the errata:
     requests get send automatically without any change in configuration
     required.
 
-    The hook is actually git `post-receive` hook that will send you tons of
-    e-mail through the [Fedora notification] system whenever a commit is pushed
-    to master without going through a pull-request.
+    The hook is actually git `post-receive` hook that will send you <del>tons
+    of</del> e-mail through the [Fedora notification] system whenever a commit
+    is pushed to master without going through a pull-request.
+
+    UPDATE: Since Pagure 2.0 the hook will send only one e-mail on each push.
 
 [Pagure]: https://pagure.io/
 [Fedora notification]: https://apps.fedoraproject.org/notifications
@@ -95,6 +97,10 @@ separate worker process.
 Another thing to add would be the support for a web hook sent from Pagure. This
 would make it possible to use a custom instance. First I need to learn what
 data is actually sent in the HTTP request.
+
+UPDATE: This is actually
+[documented](https://docs.pagure.org/pagure/usage/using_webhooks.html) and the
+hook contains the same information that the Fedmsg notification has.
 
 Another point of improvement is the deployment of the whole thing. Currently, I
 build everything [in COPR], install the RPM and do any database migrations
