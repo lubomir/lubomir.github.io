@@ -8,8 +8,94 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-04-26T00:00:00Z</updated>
+    <updated>2016-05-04T00:00:00Z</updated>
     <entry>
+    <title>Git hooks for required sign-off</title>
+    <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
+    <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
+    <published>2016-05-04T00:00:00Z</published>
+    <updated>2016-05-04T00:00:00Z</updated>
+    <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
+<p>As far as I know, it is supposed to indicate that whoever submitted the commit agrees with the <a href="http://developercertificate.org/">Developer Certificate of Origin</a>.</p>
+<p>It is easy to add the line to the commit. Git even has a command line option for it: <code>-s</code>.</p>
+<p>It is even easier to forget it, though. But thankfully computers are pretty good at being consistent, so I wrote a few git hooks to remind me.</p>
+<p>There are <a href="https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks">a couple client-side hooks</a> available. Originally the goal was to use <code>commit-msg</code> to reject the commit completely. This turned out to be really frustrating: I would write a nice descriptive commit message only to be told <em>“you forgot <code>-s</code>, write it all again”</em>. Not cool.</p>
+<p>Instead I modified to hook to still nag me, but allow me to commit none-the-less. After all, during frantic coding it is often useful to be able to make quick commits, often with the message only saying <em>WIP</em>.</p>
+<p>The example <code>commit-msg</code> hook included a check for a duplicate sign-off line, but is never a problem for me, so I don't use that.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/sh</span>
+<span class="ot">RED=</span><span class="st">&quot;&quot;</span>
+<span class="ot">NORMAL=</span><span class="st">&quot;&quot;</span>
+<span class="kw">if [</span> <span class="ot">-f</span> ~/.term_colors<span class="kw"> ]</span>; <span class="kw">then</span>
+    <span class="kw">.</span> <span class="kw">~/.term_colors</span>
+<span class="kw">fi</span>
+
+<span class="kw">if [</span> <span class="st">&quot;1&quot;</span> <span class="ot">!=</span> <span class="st">&quot;</span><span class="ot">$(</span><span class="kw">grep</span> -c <span class="st">&#39;^Signed-off-by: &#39;</span> <span class="st">&quot;</span><span class="ot">$1</span><span class="st">&quot;</span><span class="ot">)</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span>
+    <span class="kw">printf</span> <span class="kw">&gt;&amp;2</span> <span class="st">&quot;%sMissing Signed-off-by line.%s\n&quot;</span> <span class="st">&quot;</span><span class="ot">$RED</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="ot">$NORMAL</span><span class="st">&quot;</span>
+<span class="kw">fi</span></code></pre></div>
+<p>The sourced <code>.term_colors</code> file is available in <a href="https://github.com/lubomir/dotfiles/blob/master/term_colors">my dotfiles</a>. It only really contains a bunch of variables definitions with ANSI color sequences.</p>
+<p>With this hook I get reminded directly after the commit. To make sure I don't push anything breaking rules there is a <code>pre-push</code> hook. This one actually aborts the push if anything is wrong. It can however be bypassed with <code>--no-verify</code> option.</p>
+<p>It is inspired by sample <code>pre-push</code> hook that rejects pushing commits whose summary starts with <em>WIP</em>.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/bash</span>
+
+<span class="co"># shellcheck disable=2034</span>
+<span class="ot">remote=</span><span class="st">&quot;</span><span class="ot">$1</span><span class="st">&quot;</span>
+<span class="co"># shellcheck disable=2034</span>
+<span class="ot">url=</span><span class="st">&quot;</span><span class="ot">$2</span><span class="st">&quot;</span>
+
+<span class="ot">z40=</span>0000000000000000000000000000000000000000
+
+<span class="co"># shellcheck disable=2034</span>
+<span class="kw">while</span> <span class="kw">read</span> <span class="ot">local_ref</span> <span class="ot">local_sha</span> <span class="ot">remote_ref</span> <span class="ot">remote_sha</span>
+<span class="kw">do</span>
+    <span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$remote_ref</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="st">&quot;refs/heads/master&quot;</span><span class="kw"> ]</span>
+    <span class="kw">then</span>
+        <span class="co"># Any push to master is ok</span>
+        <span class="kw">continue</span>
+    <span class="kw">fi</span>
+
+    <span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$local_sha</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="ot">$z40</span><span class="kw"> ]</span>
+    <span class="kw">then</span>
+        <span class="co"># Branch is deleted, nothing to check here, move along.</span>
+        <span class="kw">:</span>
+    <span class="kw">else</span>
+        <span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$remote_sha</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="ot">$z40</span><span class="kw"> ]</span>
+        <span class="kw">then</span>
+            <span class="co"># New branch, examine all commits</span>
+            <span class="ot">range=</span><span class="st">&quot;</span><span class="ot">$local_sha</span><span class="st">&quot;</span>
+        <span class="kw">else</span>
+            <span class="co"># Update to existing branch, examine new commits</span>
+            <span class="ot">range=</span><span class="st">&quot;</span><span class="ot">$remote_sha</span><span class="st">..</span><span class="ot">$local_sha</span><span class="st">&quot;</span>
+        <span class="kw">fi</span>
+
+        <span class="co"># Check for WIP commit</span>
+        <span class="ot">commit=$(</span><span class="kw">git</span> rev-list -n 1 --grep <span class="st">&#39;^WIP&#39;</span> <span class="st">&quot;</span><span class="ot">$range</span><span class="st">&quot;</span><span class="ot">)</span>
+        <span class="kw">if [</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="ot">$commit</span><span class="st">&quot;</span><span class="kw"> ]</span>
+        <span class="kw">then</span>
+            <span class="kw">echo</span> <span class="kw">&gt;&amp;2</span> <span class="st">&quot;Found WIP commit in </span><span class="ot">$local_ref</span><span class="st">, not pushing&quot;</span>
+            <span class="kw">exit</span> 1
+        <span class="kw">fi</span>
+
+        <span class="co"># Check for commits without sign-off</span>
+        <span class="kw">if [</span> <span class="st">&quot;</span><span class="ot">$remote_sha</span><span class="st">&quot;</span> <span class="ot">=</span> <span class="ot">$z40</span><span class="kw"> ]</span>; <span class="kw">then</span>
+            <span class="co"># New branch is pushed, we only want to check commits that are not</span>
+            <span class="co"># on master.</span>
+            <span class="ot">range=</span><span class="st">&quot;</span><span class="ot">$(</span><span class="kw">git</span> merge-base master <span class="st">&quot;</span><span class="ot">$local_sha</span><span class="st">&quot;</span><span class="ot">)</span><span class="st">..</span><span class="ot">$local_sha</span><span class="st">&quot;</span>
+        <span class="kw">fi</span>
+        <span class="kw">while</span> <span class="kw">read</span> <span class="ot">ref</span>; <span class="kw">do</span>
+            <span class="ot">msg=$(</span><span class="kw">git</span> log -n 1 --format=%B <span class="st">&quot;</span><span class="ot">$ref</span><span class="st">&quot;</span><span class="ot">)</span>
+            <span class="kw">if</span> ! <span class="kw">grep</span> -q <span class="st">&#39;^Signed-off-by: &#39;</span> <span class="kw">&lt;&lt;&lt;</span><span class="st">&quot;</span><span class="ot">$msg</span><span class="st">&quot;</span><span class="kw">;</span> <span class="kw">then</span>
+                <span class="kw">echo</span> <span class="kw">&gt;&amp;2</span> <span class="st">&quot;Unsigned commit </span><span class="ot">$ref</span><span class="st">&quot;</span>
+                <span class="kw">exit</span> 1
+            <span class="kw">fi</span>
+        <span class="kw">done</span> <span class="kw">&lt;</span> <span class="kw">&lt;(git</span> rev-list <span class="st">&quot;</span><span class="ot">$range</span><span class="st">&quot;</span><span class="kw">)</span>
+        <span class="co"># The process substitution above is a hack to make sure loop runs in</span>
+        <span class="co"># the same shell and can actually exit the whole script.</span>
+    <span class="kw">fi</span>
+<span class="kw">done</span>
+
+<span class="kw">exit</span> 0</code></pre></div>]]></summary>
+</entry>
+<entry>
     <title>Slightly Richer Man's CI</title>
     <link href="https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html" />
     <id>https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html</id>
@@ -256,21 +342,6 @@ main <span class="fu">=</span> <span class="kw">do</span>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">race</span> <span class="st">&quot;python -m SimpleHTTPServer&quot;</span> <span class="st">&quot;make rebuild-on-change&quot;</span></code></pre></div>
 <p>Arguably, it is just a glorified wrapper for the <code>&amp;</code> Bash functionality and <code>wait</code> command. Nonetheless, I still consider it useful.</p>
 <p>You can get <a href="https://github.com/lubomir/race">the whole project</a> including cabal file with list of dependencies on GitHub.</p>]]></summary>
-</entry>
-<entry>
-    <title>Reviewing GitHub pull requests locally</title>
-    <link href="https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html" />
-    <id>https://lubomir.github.io//en/2015-08-01-reviewing-github-pull-request.html</id>
-    <published>2015-08-01T00:00:00Z</published>
-    <updated>2015-08-01T00:00:00Z</updated>
-    <summary type="html"><![CDATA[<p>GitHub is a great place to collaborate on open-source code. One thing I have struggled with a bit is how to perform code review for pull requests.</p>
-<p>If the contributor has access to the actual repository and requests a pull from a branch, it is really trivial. The real issue is with reviewing pull requests coming from forks.</p>
-<p>By reviewing, I don't mean just looking over the code. That could be done through the web interface easy enough. Usually, I want to see the code in action, play around with it a test it.</p>
-<p>The way GitHub recommends right next to the merge button is to add another remote and checkout a branch from it. This works, but it has the downside of cluttering your local repo with a bunch of not so useful remotes.</p>
-<p>Ideally, what I would like is to somehow just create one local branch with the proposed changes.</p>
-<p>Turns out GitHub allows just that. There is a ref pointing to the changes created by the pull request. It is easy enough to create a local branch by the following command:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">git</span> fetch origin pull/PULL_REQUEST_ID/head:LOCAL_BRANCH</code></pre></div>
-<p>Obviously, the parts in all caps need to be changed to something more useful. After running the command, you can check out the local branch and do anything you want with it. When you are done, simply delete it and everything is the way it was before. It does not get much simpler than that.</p>]]></summary>
 </entry>
 
 </feed>
