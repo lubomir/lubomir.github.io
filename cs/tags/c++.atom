@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2010-12-19T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <entry>
     <title>UnitTest v C++</title>
     <link href="https://lubomir.github.io//cs/2010-12-19-unittest.html" />
     <id>https://lubomir.github.io//cs/2010-12-19-unittest.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2010-12-19T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
 <p>Já používám knihovnu <a href="http://unittest-cpp.sourceforge.net/">UnitTest++</a>, která je rozumným kompromisem mezi funkcionalitou a jednoduchostí.</p>
 <h2 id="použití">Použití</h2>

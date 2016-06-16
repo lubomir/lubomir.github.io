@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <entry>
     <title>Git hooks for required sign-off</title>
     <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
     <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
     <published>2016-05-04T00:00:00Z</published>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
 <p>As far as I know, it is supposed to indicate that whoever submitted the commit agrees with the <a href="http://developercertificate.org/">Developer Certificate of Origin</a>.</p>
 <p>It is easy to add the line to the commit. Git even has a command line option for it: <code>-s</code>.</p>
@@ -100,7 +100,7 @@
     <link href="https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html" />
     <id>https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html</id>
     <published>2016-04-26T00:00:00Z</published>
-    <updated>2016-04-26T00:00:00Z</updated>
+    <updated>2016-04-27T10:13:24Z</updated>
     <summary type="html"><![CDATA[<p>Not so long ago I have written about <a href="/en/2016-03-08-poor-man-ci.html">my attempts to bring CI to Pagure</a>. It was pointed out to me that a couple assumptions I've made are actually incorrect.</p>
 <p>Here are the errata:</p>
 <ul>
@@ -144,7 +144,7 @@
     <link href="https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html" />
     <id>https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html</id>
     <published>2016-04-20T00:00:00Z</published>
-    <updated>2016-04-20T00:00:00Z</updated>
+    <updated>2016-04-20T16:53:26Z</updated>
     <summary type="html"><![CDATA[<p>For a long time my most favourite way of looking at Git history has been this long command.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log --graph --oneline --decorate --all</code></pre></div>
 <p>All this while it worked very well, but the one annoyance I noticed is that <code>--all</code> actually displays everything. Admittedly this is expected, but in some cases not really desirable.</p>
@@ -157,7 +157,7 @@
     <link href="https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html" />
     <id>https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html</id>
     <published>2016-04-03T00:00:00Z</published>
-    <updated>2016-04-03T00:00:00Z</updated>
+    <updated>2016-04-03T17:13:29Z</updated>
     <summary type="html"><![CDATA[<p>The other day I was wondering what happens when two pull requests in <a href="https://pagure.io/">Pagure</a> share some commits. So I tested it out and here are the results.</p>
 <p>By sharing commits I mean one pull request is based on another. (In the spirit of <code>git log</code>, newest commits on the top.)</p>
 <pre><code> * d69de04 (pr2) Extra commit
@@ -178,7 +178,7 @@
     <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
     <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
     <published>2016-03-14T00:00:00Z</published>
-    <updated>2016-03-14T00:00:00Z</updated>
+    <updated>2016-03-14T18:51:31Z</updated>
     <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
 <p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
 <p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
@@ -193,7 +193,7 @@
     <link href="https://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
     <id>https://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
     <published>2016-03-08T00:00:00Z</published>
-    <updated>2016-03-08T00:00:00Z</updated>
+    <updated>2016-03-08T20:39:11Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>
 <p>There is a not-very-advertised <a href="https://fedoraproject.org/wiki/Jenkins@infra">Jenkins server</a> used for Fedora Infrastructure. The project I'm working on primarily, <a href="https://pagure.io/pungi">Pungi</a>, has a couple unit tests that are run there after every push to <code>master</code> or some other long-lived branch.</p>
 <p>This is a nice start, but leads to problems when new contributors submit their pull requests. Unless someone runs the tests manually, we won't know if they break.</p>

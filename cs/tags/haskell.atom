@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2012-03-20T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <entry>
     <title>Derivací k regulárním výrazům</title>
     <link href="https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
     <id>https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
     <published>2012-03-20T00:00:00Z</published>
-    <updated>2012-03-20T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
 <p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
 <figure>
@@ -174,7 +174,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
     <link href="https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
     <id>https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
     <published>2011-06-06T00:00:00Z</published>
-    <updated>2011-06-06T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
 <h2 id="varianty">Varianty</h2>
 <p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>
@@ -242,7 +242,7 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
     <link href="https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
     <id>https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
     <published>2011-04-04T00:00:00Z</published>
-    <updated>2011-04-04T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>

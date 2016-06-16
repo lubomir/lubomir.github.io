@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2011-06-06T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <entry>
     <title>Kódování čísel</title>
     <link href="https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
     <id>https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
     <published>2011-06-06T00:00:00Z</published>
-    <updated>2011-06-06T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="https://is.muni.cz/auth/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
 <h2 id="varianty">Varianty</h2>
 <p>První myslitelné kódování je klasický zápis čísla ve dvojkové soustavě. Jeho výhoda je velká úspornost, na druhou stranu každá posloupnost nul a jedniček se dá interpretovat jako číslo. My bychom ale chtěli poznat, kde jedno číslo končí a druhé začíná. Proto potřebujeme <em>bezprefixový</em> kód, tedy takový, aby žádné slovo nebylo prefixem jiného. Zároveň ale nechceme používat žádnou překladovou tabulku, takže <a href="http://cs.wikipedia.org/wiki/Huffmanovo_kódování">Huffmanovo kódování</a> je ze hry.</p>

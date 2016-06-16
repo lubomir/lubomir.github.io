@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-03-08T00:00:00Z</updated>
+    <updated>2016-03-08T20:39:11Z</updated>
     <entry>
     <title>Poor Man's CI</title>
     <link href="https://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
     <id>https://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
     <published>2016-03-08T00:00:00Z</published>
-    <updated>2016-03-08T00:00:00Z</updated>
+    <updated>2016-03-08T20:39:11Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>
 <p>There is a not-very-advertised <a href="https://fedoraproject.org/wiki/Jenkins@infra">Jenkins server</a> used for Fedora Infrastructure. The project I'm working on primarily, <a href="https://pagure.io/pungi">Pungi</a>, has a couple unit tests that are run there after every push to <code>master</code> or some other long-lived branch.</p>
 <p>This is a nice start, but leads to problems when new contributors submit their pull requests. Unless someone runs the tests manually, we won't know if they break.</p>

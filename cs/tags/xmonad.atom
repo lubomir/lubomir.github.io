@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2011-04-04T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <entry>
     <title>XMonad a okna s pevnou velikostí</title>
     <link href="https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
     <id>https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
     <published>2011-04-04T00:00:00Z</published>
-    <updated>2011-04-04T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>

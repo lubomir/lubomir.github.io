@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2014-09-18T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <entry>
     <title>Exploring test case fixtures in Django</title>
     <link href="https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
     <id>https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
     <published>2014-09-18T00:00:00Z</published>
-    <updated>2014-09-18T00:00:00Z</updated>
+    <updated>2015-05-08T21:04:49Z</updated>
     <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
 <p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
 <p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>

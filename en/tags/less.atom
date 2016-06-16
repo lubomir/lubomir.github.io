@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-02-18T00:00:00Z</updated>
+    <updated>2016-02-18T14:47:05Z</updated>
     <entry>
     <title>Today I Learned: Customizing less</title>
     <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
     <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
     <published>2016-02-18T00:00:00Z</published>
-    <updated>2016-02-18T00:00:00Z</updated>
+    <updated>2016-02-18T14:47:05Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
 <p>Ever since I set this, I've had trouble with <code>git</code> paging its output even when it would fit on a single page. This has bothered me, but I did not connect it to the <code>LESS</code> setting.</p>
 <p>It turns out that <code>git</code> is quite sophisticated. When its output is paged via <code>less</code>, it looks if <code>LESS</code> env var is set, and sets it to <code>-FRX</code> if it is not.</p>

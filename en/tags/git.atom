@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <entry>
     <title>Git hooks for required sign-off</title>
     <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
     <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
     <published>2016-05-04T00:00:00Z</published>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
 <p>As far as I know, it is supposed to indicate that whoever submitted the commit agrees with the <a href="http://developercertificate.org/">Developer Certificate of Origin</a>.</p>
 <p>It is easy to add the line to the commit. Git even has a command line option for it: <code>-s</code>.</p>
@@ -100,7 +100,7 @@
     <link href="https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html" />
     <id>https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html</id>
     <published>2016-04-20T00:00:00Z</published>
-    <updated>2016-04-20T00:00:00Z</updated>
+    <updated>2016-04-20T16:53:26Z</updated>
     <summary type="html"><![CDATA[<p>For a long time my most favourite way of looking at Git history has been this long command.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log --graph --oneline --decorate --all</code></pre></div>
 <p>All this while it worked very well, but the one annoyance I noticed is that <code>--all</code> actually displays everything. Admittedly this is expected, but in some cases not really desirable.</p>

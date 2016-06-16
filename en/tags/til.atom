@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-04-20T00:00:00Z</updated>
+    <updated>2016-04-20T16:53:26Z</updated>
     <entry>
     <title>Today I Learned: Exploring Git history</title>
     <link href="https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html" />
     <id>https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html</id>
     <published>2016-04-20T00:00:00Z</published>
-    <updated>2016-04-20T00:00:00Z</updated>
+    <updated>2016-04-20T16:53:26Z</updated>
     <summary type="html"><![CDATA[<p>For a long time my most favourite way of looking at Git history has been this long command.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">git</span> log --graph --oneline --decorate --all</code></pre></div>
 <p>All this while it worked very well, but the one annoyance I noticed is that <code>--all</code> actually displays everything. Admittedly this is expected, but in some cases not really desirable.</p>
@@ -27,7 +27,7 @@
     <link href="https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html" />
     <id>https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html</id>
     <published>2016-04-03T00:00:00Z</published>
-    <updated>2016-04-03T00:00:00Z</updated>
+    <updated>2016-04-03T17:13:29Z</updated>
     <summary type="html"><![CDATA[<p>The other day I was wondering what happens when two pull requests in <a href="https://pagure.io/">Pagure</a> share some commits. So I tested it out and here are the results.</p>
 <p>By sharing commits I mean one pull request is based on another. (In the spirit of <code>git log</code>, newest commits on the top.)</p>
 <pre><code> * d69de04 (pr2) Extra commit
@@ -48,7 +48,7 @@
     <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
     <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
     <published>2016-03-14T00:00:00Z</published>
-    <updated>2016-03-14T00:00:00Z</updated>
+    <updated>2016-03-14T18:51:31Z</updated>
     <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
 <p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
 <p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
@@ -63,7 +63,7 @@
     <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
     <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
     <published>2016-02-18T00:00:00Z</published>
-    <updated>2016-02-18T00:00:00Z</updated>
+    <updated>2016-02-18T14:47:05Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
 <p>Ever since I set this, I've had trouble with <code>git</code> paging its output even when it would fit on a single page. This has bothered me, but I did not connect it to the <code>LESS</code> setting.</p>
 <p>It turns out that <code>git</code> is quite sophisticated. When its output is paged via <code>less</code>, it looks if <code>LESS</code> env var is set, and sets it to <code>-FRX</code> if it is not.</p>
@@ -74,7 +74,7 @@
     <link href="https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
     <id>https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
     <published>2016-02-12T00:00:00Z</published>
-    <updated>2016-02-12T00:00:00Z</updated>
+    <updated>2016-02-12T08:44:34Z</updated>
     <summary type="html"><![CDATA[<p>This is not rocket science nor brain surgery. I just never needed this and found it practical to note this for further reference.</p>
 <p>Setup: I have an XML file and a doctype, each in some place on my hard drive. I want to check whether the document validates against the doctype.</p>
 <div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">xmllint</span> --path ./path/to/dir/with/doctype path/to/my.xml --valid</code></pre></div>
@@ -85,7 +85,7 @@
     <link href="https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html" />
     <id>https://lubomir.github.io//en/2016-02-10-TIL-scrolling-in-screen.html</id>
     <published>2016-02-10T00:00:00Z</published>
-    <updated>2016-02-10T00:00:00Z</updated>
+    <updated>2016-02-12T08:22:21Z</updated>
     <summary type="html"><![CDATA[<p>By default, <code>screen</code> does not allow scrolling with regular <code>PgUp</code>/<code>PgDn</code> or arrow keys. However, there is a way to move around: the is a <em>copy mode</em>.</p>
 <p>This mode can be entered by pressing the regular prefix combination (<code>^A</code>), and then hitting <code>Esc</code>. Moving around is possible with arrow keys. To get back to regular mode hit <code>Esc</code> twice.</p>
 <p><a href="http://unix.stackexchange.com/questions/40242/scroll-inside-screen-or-pause-output">Source at Unix Stack Exchange</a>.</p>

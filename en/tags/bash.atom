@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <entry>
     <title>Git hooks for required sign-off</title>
     <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
     <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
     <published>2016-05-04T00:00:00Z</published>
-    <updated>2016-05-04T00:00:00Z</updated>
+    <updated>2016-05-04T17:11:49Z</updated>
     <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
 <p>As far as I know, it is supposed to indicate that whoever submitted the commit agrees with the <a href="http://developercertificate.org/">Developer Certificate of Origin</a>.</p>
 <p>It is easy to add the line to the commit. Git even has a command line option for it: <code>-s</code>.</p>
@@ -100,7 +100,7 @@
     <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
     <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
     <published>2016-03-14T00:00:00Z</published>
-    <updated>2016-03-14T00:00:00Z</updated>
+    <updated>2016-03-14T18:51:31Z</updated>
     <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
 <p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
 <p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
