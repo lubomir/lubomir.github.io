@@ -8,6 +8,7 @@ import System.FilePath
 import qualified Data.Set as S
 
 import Hakyll
+import Hakyll.FileStore.Git.Context
 import Text.Pandoc
 import Czech
 
@@ -196,13 +197,15 @@ myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransfor
 
 postCtx :: BlogConfig -> Tags -> Context String
 postCtx bc tags = mconcat
-    [ modificationTimeField "mtime" "%U"
-    , tagsField "tags" tags
+    [ tagsField "tags" tags
     , mkContext bc
     ]
 
 feedCtx :: Context String
-feedCtx = bodyField "description" <> defaultContext
+feedCtx = mconcat
+    [ bodyField "description"
+    , gitModificationTimeField "updated" "%FT%TZ"
+    , defaultContext]
 
 postList :: BlogConfig -> Tags -> Pattern -> ([Item String]
          -> Compiler [Item String]) -> Compiler String

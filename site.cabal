@@ -18,3 +18,4 @@ executable site
                      , pandoc
                      , filepath
                      , containers
+                     , hakyll-filestore
