@@ -39,6 +39,7 @@ mkContext (BlogConfig {..}) =
             , constField "contactLink" contactLink
             , constField "licensedAs" licensedAs
             , constField "comments" commentsHeader
+            , constField "lang" langPrefix
             , defaultContext
             ]
 
