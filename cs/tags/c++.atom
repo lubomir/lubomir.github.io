@@ -8,15 +8,15 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-05-08T21:04:49Z</updated>
+    <updated>2016-06-26T13:24:29Z</updated>
     <entry>
     <title>UnitTest v C++</title>
     <link href="https://lubomir.github.io//cs/2010-12-19-unittest.html" />
     <id>https://lubomir.github.io//cs/2010-12-19-unittest.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-05-08T21:04:49Z</updated>
+    <updated>2016-06-26T13:24:29Z</updated>
     <summary type="html"><![CDATA[<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
-<p>Já používám knihovnu <a href="http://unittest-cpp.sourceforge.net/">UnitTest++</a>, která je rozumným kompromisem mezi funkcionalitou a jednoduchostí.</p>
+<p>Já používám knihovnu <a href="https://github.com/unittest-cpp/unittest-cpp">UnitTest++</a>, která je rozumným kompromisem mezi funkcionalitou a jednoduchostí.</p>
 <h2 id="použití">Použití</h2>
 <p>Testy pomocí UnitTest++ je možné psát do libovolného souboru s příponou <code>.cpp</code> i <code>.cc</code>, jak je komu libo. Pro kompilaci je potřeba kompilátoru předat informace o tom, kde najde příslušné hlavičkové soubory a potom i knihovnu. Obojí jsem zkompiloval a je na Aise dostupné v adresáři <code>/home/~xsedlar3/include</code>.</p>
 <p>Na začátku testovacího souboru je pochopitelně třeba vložit hlavičky knihovny vlastního kódu, který je třeba testovat.</p>
@@ -30,7 +30,7 @@
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">TEST(Addition) {
     CHECK(someFunction());
 }</code></pre></div>
-<p>K usnadnění psaní testů je definováno několik šikovných maker jako je výše uvedené <code>CHECK</code>. To jednoduše kontroluje, jestli se jeho argument vyhodnotí na <code>true</code>. Další možnosti jsou třeba <code>CHECK_EQUAL(co_cekam, testovany_vyraz)</code>, které ověří, že testovaný výraz vrací určenou hodnotu. Pořadí argumentů je tady docela důležité, pokud bude očekávaná hodnota jako druhá, případně chyby budou hlášené dost chaoticky. Další makra jsou popsána v <a href="http://unittest-cpp.sourceforge.net/UnitTest++.html">dokumentaci</a>.</p>
+<p>K usnadnění psaní testů je definováno několik šikovných maker jako je výše uvedené <code>CHECK</code>. To jednoduše kontroluje, jestli se jeho argument vyhodnotí na <code>true</code>. Další možnosti jsou třeba <code>CHECK_EQUAL(co_cekam, testovany_vyraz)</code>, které ověří, že testovaný výraz vrací určenou hodnotu. Pořadí argumentů je tady docela důležité, pokud bude očekávaná hodnota jako druhá, případně chyby budou hlášené dost chaoticky. Další makra jsou popsána v <a href="https://github.com/unittest-cpp/unittest-cpp/wiki">dokumentaci</a>.</p>
 <p>Aby se i ve velkém souboru s testy dalo dobře orientovat, je možné jednotlivé testy dělit do sad pomocí makra <code>SUITE(nazev)</code>, případně je rozdělit do více souborů.</p>
 <p>Jednoduchý test tedy může vypadat takto:</p>
 <div class="sourceCode"><pre class="sourceCode cpp"><code class="sourceCode cpp">TEST(InsertValueAtStart) {

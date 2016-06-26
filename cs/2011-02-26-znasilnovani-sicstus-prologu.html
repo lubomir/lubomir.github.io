@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-    <link rel="alternate" type="application/rss+xml" href="../rss.xml">
+    <link rel="alternate" type="application/rss+xml" href="../cs/posts.atom">
     <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
     <title>Znásilňování SICStus Prologu</title>
   </head>
@@ -30,23 +30,7 @@
 
 <div class="post">
     <article>
-        <h2 id="instalace">Instalace</h2>
-<p>Nejdřív je potřeba stáhnout samotný program k instalaci z <a href="https://lindir.ics.muni.cz/sicstus/">této stránky</a> (pouze pro studenty FI a nekomerční použití). Přihlašuje se učem a sekundárním heslem. Je nutné stáhnout dva soubory: archiv s programem a soubor s příslušným licenčním klíčem.</p>
-<p>Instalace je docela jednoduchá:</p>
-<ol type="1">
-<li>rozbalit archiv</li>
-<li>v nově vytvořeném adresáři spustit <code>./InstallSICStus --all-questions</code></li>
-<li>odpovědět na spoustu otázek
-<ul>
-<li>klíč a podobné věci jsou v druhém staženém souboru</li>
-<li>pokud se zvolí vhodný adresář, není potřeba ani heslo roota</li>
-<li>instalovat Tk, jasper, odbc ani nic podobného není nezbytně nutné</li>
-<li>pokud se instaluje v systému s vyšší verzí GLibc než 2.7, je potřeba potvrdit, že opravdu chci instalovat</li>
-</ul></li>
-</ol>
-<p>A to je asi tak vše. Další pokračování by mohla být instalace <a href="http://www.eclipse.org/">Eclipse</a> a IDE pro Prolog jménem <a href="http://www.sics.se/sicstus/spider/site/index.html">Spider</a>.</p>
-<p>Případná odinstalace je relativně jednoduchá. Stačí si ponechat soubor <code>UnInstallSICStus</code> z adresáře, odkud se instalovalo. Je to primitivní shellový skript, který smaže všechny nainstalované soubory. Komentář v souboru sice tvrdí, že některé soubory neodstraní, ale nikde jsem žádné zbytky nenašel.</p>
-<h2 id="použití">Použití</h2>
+        <h2 id="použití">Použití</h2>
 <p>Při instalaci se do adresáře <code>$PREFIX/bin</code> mimo jiné nainstaluje spustitelný soubor <code>sicstus</code>, což je přímo interpret. Tu stačí spustit a jsem skoro tam, kde jsme chtěli být.</p>
 <p>To slovíčko „skoro“ je poměrně důležité. Interpret sice běží, ale zdaleka se nechová tak, aby se dal pohodlně používat. Například kurzor se nedá posunout šipkami doprostřed psaného dotazu a opravit překlep, po ukončení zůstane nezalomený řádek a posunutý prompt, nikde žádná historie dotazů …</p>
 <p>Naštěstí to není nezvratný stav. Stačí nainstalovat utilitu <a href="http://utopia.knoware.nl/~hlub/rlwrap/">rlwrap</a> třeba ze standardních repozitářů a potom spouštět <code>rlwrap sicsus</code>. Výsledkem je stejný interpret, ale tentokrát se všemi výhodami knihovny readline, jako třeba funkční šipky nebo historie ukládaná do <code>~/.sicstus_history</code>, ve které se dá interaktivně vyhledávat přes <code>^R</code> nebo jenom šipkou nahoru/dolů. Možná to má někde nějaký háček, ale zatím jsem na nic nepřišel.</p>
