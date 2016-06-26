@@ -9,8 +9,10 @@ nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní tes
 kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód
 okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.
 
-Já používám knihovnu [UnitTest++](http://unittest-cpp.sourceforge.net/), která
-je rozumným kompromisem mezi funkcionalitou a jednoduchostí.
+Já používám knihovnu [UnitTest++], která je rozumným kompromisem mezi
+funkcionalitou a jednoduchostí.
+
+[UnitTest++]: https://github.com/unittest-cpp/unittest-cpp
 
 
 ## Použití
@@ -55,7 +57,7 @@ uvedené `CHECK`. To jednoduše kontroluje, jestli se jeho argument vyhodnotí n
 které ověří, že testovaný výraz vrací určenou hodnotu. Pořadí argumentů je tady
 docela důležité, pokud bude očekávaná hodnota jako druhá, případně chyby budou
 hlášené dost chaoticky. Další makra jsou popsána v
-[dokumentaci](http://unittest-cpp.sourceforge.net/UnitTest++.html).
+[dokumentaci](https://github.com/unittest-cpp/unittest-cpp/wiki).
 
 Aby se i ve velkém souboru s testy dalo dobře orientovat, je možné jednotlivé
 testy dělit do sad pomocí makra `SUITE(nazev)`, případně je rozdělit do více

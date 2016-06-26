@@ -5,33 +5,6 @@ tags: prolog, Debian, vim
 ---
 
 
-## Instalace
-
-Nejdřív je potřeba stáhnout samotný program k instalaci z [této
-stránky][download] (pouze pro studenty FI a nekomerční použití). Přihlašuje se
-učem a sekundárním heslem. Je nutné stáhnout dva soubory: archiv s programem a
-soubor s příslušným licenčním klíčem.
-
-Instalace je docela jednoduchá:
-
-1. rozbalit archiv
-2. v nově vytvořeném adresáři spustit `./InstallSICStus --all-questions`
-3. odpovědět na spoustu otázek
-    * klíč a podobné věci jsou v druhém staženém souboru
-    * pokud se zvolí vhodný adresář, není potřeba ani heslo roota
-    * instalovat Tk, jasper, odbc ani nic podobného není nezbytně nutné
-    * pokud se instaluje v systému s vyšší verzí GLibc než 2.7, je potřeba
-      potvrdit, že opravdu chci instalovat
-
-A to je asi tak vše. Další pokračování by mohla být instalace
-[Eclipse][eclipse] a IDE pro Prolog jménem [Spider][spider].
-
-Případná odinstalace je relativně jednoduchá. Stačí si ponechat soubor
-`UnInstallSICStus` z adresáře, odkud se instalovalo. Je to primitivní shellový
-skript, který smaže všechny nainstalované soubory. Komentář v souboru sice
-tvrdí, že některé soubory neodstraní, ale nikde jsem žádné zbytky nenašel.
-
-
 ## Použití
 
 Při instalaci se do adresáře `$PREFIX/bin` mimo jiné nainstaluje spustitelný
@@ -91,9 +64,6 @@ souboru:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-[download]: https://lindir.ics.muni.cz/sicstus/
-[eclipse]:  http://www.eclipse.org/
-[spider]:   http://www.sics.se/sicstus/spider/site/index.html
 [rlwrap]:   http://utopia.knoware.nl/~hlub/rlwrap/
 [vimfile]:  https://github.com/adimit/prolog.vim
 [filtr]:    /data/prolog_filter

@@ -137,5 +137,5 @@ pouze s čísly omezené velikosti, navíc jsem se nesnažil o efektivitu, tak
 to velice pomalé. Taky chybí jakákoli kontrola chyb.
 
 
-[ib047]: https://is.muni.cz/auth/predmety/predmet.pl?id=585364
+[ib047]: http://is.muni.cz/predmety/predmet.pl?id=585364
 [huffman]: http://cs.wikipedia.org/wiki/Huffmanovo_kódování
