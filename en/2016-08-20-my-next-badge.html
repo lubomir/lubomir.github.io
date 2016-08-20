@@ -1,24 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <title>lsedlar – Posts tagged Python</title>
-    <link href="https://lubomir.github.io//en/tags/python.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/python.atom</id>
-    <author>
-        <name>Lubomír Sedlář</name>
-        <email>lubomir.sedlar@gmail.com</email>
-    </author>
-    <updated>2016-08-20T12:12:11Z</updated>
-    <entry>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../en/posts.atom">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
     <title>What's my next badge?</title>
-    <link href="https://lubomir.github.io//en/2016-08-20-my-next-badge.html" />
-    <id>https://lubomir.github.io//en/2016-08-20-my-next-badge.html</id>
-    <published>2016-08-20T00:00:00Z</published>
-    <updated>2016-08-20T12:12:11Z</updated>
-    <summary type="html"><![CDATA[<p>I love <a href="http://badges.fedoraproject.org/">Fedora Badges</a>. I'm not saying all I do is to get more badges, but it's a great motivator. One thing that somewhat miss a guidance on what options I have, what should I do to get another badge, how much activity will it need.</p>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>What's my next badge?</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>August 20, 2016</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/fedora.html">Fedora</a>, <a href="../en/tags/badges.html">badges</a>, <a href="../en/tags/python.html">Python</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+    <article>
+        <p>I love <a href="http://badges.fedoraproject.org/">Fedora Badges</a>. I'm not saying all I do is to get more badges, but it's a great motivator. One thing that somewhat miss a guidance on what options I have, what should I do to get another badge, how much activity will it need.</p>
 <p>Fedora Project is not the only community that awards badges to its members. For example Stack Overflow has badges as well. In you Stack Overflow profile you can see which badge you are likely going to get next and how much progress you have made on that.</p>
 <figure>
-<img src="/images/so-badges.png" alt="Badges on Stack Overflow" /><figcaption>Badges on Stack Overflow</figcaption>
+<img src="../images/so-badges.png" alt="Badges on Stack Overflow" /><figcaption>Badges on Stack Overflow</figcaption>
 </figure>
 <p>Is it possible to do something like this for Fedora badges? Turns out it kind-of is. There actually is [a related issue] filed for the awesome <a href="https://pagure.io/fedora-hubs">Fedora Hubs project</a> to show options of next badges.</p>
 <p>All this actually relies on having information about <a href="https://github.com/fedora-infra/tahrir/issues/343">badge paths</a>, but until it's available in production, it can be reasonably hacked based on badge name and a short list of exceptions.</p>
@@ -26,7 +41,7 @@
 <p>First thing that comes to mind is to simply look at statistics of the badges. The ones that are awarded more often are most likely the easiest to get. Let's start from that by finding the 5 most common badges that I don't have yet.</p>
 <p>However, just taking that is not a particularly good suggestion: in my case 3 out of these badges turn out to be &quot;have FAS account for at least X years&quot;. I'm slowly getting there, but there's not much I can do to speed this up. It makes sense to only show the first badge from each series.</p>
 <p style="text-align: center">
-<a href="https://badges.fedoraproject.org/badge/dont-call-it-a-comeback" title="Don't Call it a Comeback – You reactivated your Fedora account"><img width=128 src="https://badges.fedoraproject.org/pngs/dont-call-it-a-comeback.png" alt="dont-call-it-a-comeback icon"></a> <a href="https://badges.fedoraproject.org/badge/egg" title="Egg – You've had a FAS account for over one year"><img width=128 src="https://badges.fedoraproject.org/pngs/fas-account-egg.png" alt="egg icon"></a> <a href="https://badges.fedoraproject.org/badge/curious-penguin-ask-fedora-i" title="Curious Penguin (Ask Fedora I) – You had your first interaction with the Ask Fedora forum system."><img width=128 src="https://badges.fedoraproject.org/pngs/askbot-curious-penguin-01.png" alt="curious-penguin-ask-fedora-i icon"></a> <a href="https://badges.fedoraproject.org/badge/crypto-panda" title="Crypto Panda – You updated your GPG key with the Fedora Account System (FAS)"><img width=128 src="https://badges.fedoraproject.org/pngs/fas-crypto-panda.png" alt="crypto-panda icon"></a> <a href="https://badges.fedoraproject.org/badge/speak-up!" title="Speak Up! – Participated in an IRC meeting."><img width=128 src="https://badges.fedoraproject.org/pngs/irc-speak-up.png" alt="speak-up! icon"></a>
+<a href="https://badges.fedoraproject.org/badge/dont-call-it-a-comeback" title="Don't Call it a Comeback – You reactivated your Fedora account"><img width="128" src="https://badges.fedoraproject.org/pngs/dont-call-it-a-comeback.png" alt="dont-call-it-a-comeback icon"></a> <a href="https://badges.fedoraproject.org/badge/egg" title="Egg – You've had a FAS account for over one year"><img width="128" src="https://badges.fedoraproject.org/pngs/fas-account-egg.png" alt="egg icon"></a> <a href="https://badges.fedoraproject.org/badge/curious-penguin-ask-fedora-i" title="Curious Penguin (Ask Fedora I) – You had your first interaction with the Ask Fedora forum system."><img width="128" src="https://badges.fedoraproject.org/pngs/askbot-curious-penguin-01.png" alt="curious-penguin-ask-fedora-i icon"></a> <a href="https://badges.fedoraproject.org/badge/crypto-panda" title="Crypto Panda – You updated your GPG key with the Fedora Account System (FAS)"><img width="128" src="https://badges.fedoraproject.org/pngs/fas-crypto-panda.png" alt="crypto-panda icon"></a> <a href="https://badges.fedoraproject.org/badge/speak-up!" title="Speak Up! – Participated in an IRC meeting."><img width="128" src="https://badges.fedoraproject.org/pngs/irc-speak-up.png" alt="speak-up! icon"></a>
 </p>
 <h2 id="progress-towards-next-badge">Progress towards next badge</h2>
 <p>Before we can estimate progress on getting a badge, it is important to understand how the badges are awarded. The system is based on the messaging bus<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. The <a href="https://github.com/fedora-infra/fedbadges">fedbadges</a> service listens to the bus and every time it sees a message, it checks it against the rules it has defined.</p>
@@ -177,60 +192,52 @@
 <ol>
 <li id="fn1"><p>Well, almost. Some badges are awarded manually. We can ignore that here.<a href="#fnref1">↩</a></p></li>
 </ol>
-</section>]]></summary>
-</entry>
-<entry>
-    <title>Exploring test case fixtures in Django</title>
-    <link href="https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html" />
-    <id>https://lubomir.github.io//en/2014-09-18-exploring-django-fixtures.html</id>
-    <published>2014-09-18T00:00:00Z</published>
-    <updated>2015-06-10T15:42:16Z</updated>
-    <summary type="html"><![CDATA[<p><a href="https://www.djangoproject.com/">Django</a> has a nice feature for exploring the environment in which the tests run via the <code>testserver</code> command. You can give it paths to fixture files used in the test case you want and go crazy.</p>
-<p>However, this use case becomes really unpleasant once you need to load bigger number of fixtures. It would be much more user friendly if you could instead tell it what test case you want to explore and the script automatically inferred what fixtures to load.</p>
-<p>The <code>--help</code> output is silent on this, so let's roll our own solution to this. The script will have two mandatory arguments: module containing the tests and the actual test case name.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">run-test-server.py</span> myapp.tests MyComplicatedTestCase</code></pre></div>
-<p>The first idea how to proceed is to simply import the module and look at <code>fixtures</code> attribute of the test case. Sadly, it is not that easy. Importing the module fails with <code>ImproperlyConfiguredException</code> because simply importing a module would be too much to ask for without loading all the <a href="https://www.djangoproject.com/">Django</a> settings. This could be a whole other rant.</p>
-<p>Since <code>__import__</code> is slightly more complicated that necessary, let's offload the actual importing to <code>importlib.import_module</code> which works exactly as expected. However, it is only available since Python 2.7.</p>
-<p>Once the module is imported, all that needs to be done is to retrieve the test case, its fixtures and fire out the <code>testserver</code> command with appropriate arguments.</p>
-<p>The whole script looks as follows. The only unexplained part is the modification of path. This needs to be done so that the script can be located anywhere and still manage to import modules from current directory.</p>
-<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python"><span class="co">#! /usr/bin/env python</span>
+</section>
+    </article>
 
-<span class="im">import</span> argparse
-<span class="im">from</span> subprocess <span class="im">import</span> call
-<span class="im">import</span> sys
-<span class="im">import</span> importlib
+    <h2 class="comments-header">Comments</h2>
 
-<span class="im">from</span> django.conf <span class="im">import</span> settings
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-08-20-my-next-badge.html";
+            this.page.identifier = "/en/2016-08-20-my-next-badge.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
 
+    </div><!-- .container -->
 
-<span class="kw">def</span> get_fixtures(module, case):
-    settings.configure()
-    parts <span class="op">=</span> module.split(<span class="st">&#39;.&#39;</span>)
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="last"><a href="../cookies.html">Cookies</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
 
-    app <span class="op">=</span> importlib.import_module(module)
-    <span class="cf">return</span> <span class="bu">getattr</span>(app, case).fixtures
-
-
-<span class="kw">def</span> main():
-    parser <span class="op">=</span> argparse.ArgumentParser()
-    parser.add_argument(<span class="st">&#39;MODULE&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
-    parser.add_argument(<span class="st">&#39;TEST_CASE&#39;</span>, <span class="bu">type</span><span class="op">=</span><span class="bu">str</span>)
-
-    args <span class="op">=</span> parser.parse_args()
-    fixtures <span class="op">=</span> get_fixtures(args.MODULE, args.TEST_CASE)
-
-    call([<span class="st">&quot;python&quot;</span>, <span class="st">&quot;manage.py&quot;</span>, <span class="st">&quot;testserver&quot;</span>] <span class="op">+</span> fixtures)
-
-
-<span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:
-    sys.path.append(<span class="st">&#39;.&#39;</span>)
-    main()</code></pre></div>
-<h2 id="further-improvements">Further improvements</h2>
-<p>This script could obviously use a bit more polish:</p>
-<ul>
-<li>The help output could be more helpful.</li>
-<li>If something breaks, the user is presented with a stack trace. Not nice.</li>
-</ul>]]></summary>
-</entry>
-
-</feed>
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+        window.cookieconsent_options = {"message":"This website uses some cookies.","dismiss":"Got it!","learnMore":"More info","link":"/cookies.html","theme":"dark-floating"};
+     </script>
+     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+  </body>
+</html>

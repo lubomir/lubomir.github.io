@@ -8,8 +8,178 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-05-04T17:11:49Z</updated>
+    <updated>2016-08-20T12:12:11Z</updated>
     <entry>
+    <title>What's my next badge?</title>
+    <link href="https://lubomir.github.io//en/2016-08-20-my-next-badge.html" />
+    <id>https://lubomir.github.io//en/2016-08-20-my-next-badge.html</id>
+    <published>2016-08-20T00:00:00Z</published>
+    <updated>2016-08-20T12:12:11Z</updated>
+    <summary type="html"><![CDATA[<p>I love <a href="http://badges.fedoraproject.org/">Fedora Badges</a>. I'm not saying all I do is to get more badges, but it's a great motivator. One thing that somewhat miss a guidance on what options I have, what should I do to get another badge, how much activity will it need.</p>
+<p>Fedora Project is not the only community that awards badges to its members. For example Stack Overflow has badges as well. In you Stack Overflow profile you can see which badge you are likely going to get next and how much progress you have made on that.</p>
+<figure>
+<img src="/images/so-badges.png" alt="Badges on Stack Overflow" /><figcaption>Badges on Stack Overflow</figcaption>
+</figure>
+<p>Is it possible to do something like this for Fedora badges? Turns out it kind-of is. There actually is [a related issue] filed for the awesome <a href="https://pagure.io/fedora-hubs">Fedora Hubs project</a> to show options of next badges.</p>
+<p>All this actually relies on having information about <a href="https://github.com/fedora-infra/tahrir/issues/343">badge paths</a>, but until it's available in production, it can be reasonably hacked based on badge name and a short list of exceptions.</p>
+<h2 id="baby-steps">Baby steps</h2>
+<p>First thing that comes to mind is to simply look at statistics of the badges. The ones that are awarded more often are most likely the easiest to get. Let's start from that by finding the 5 most common badges that I don't have yet.</p>
+<p>However, just taking that is not a particularly good suggestion: in my case 3 out of these badges turn out to be &quot;have FAS account for at least X years&quot;. I'm slowly getting there, but there's not much I can do to speed this up. It makes sense to only show the first badge from each series.</p>
+<p style="text-align: center">
+<a href="https://badges.fedoraproject.org/badge/dont-call-it-a-comeback" title="Don't Call it a Comeback – You reactivated your Fedora account"><img width=128 src="https://badges.fedoraproject.org/pngs/dont-call-it-a-comeback.png" alt="dont-call-it-a-comeback icon"></a> <a href="https://badges.fedoraproject.org/badge/egg" title="Egg – You've had a FAS account for over one year"><img width=128 src="https://badges.fedoraproject.org/pngs/fas-account-egg.png" alt="egg icon"></a> <a href="https://badges.fedoraproject.org/badge/curious-penguin-ask-fedora-i" title="Curious Penguin (Ask Fedora I) – You had your first interaction with the Ask Fedora forum system."><img width=128 src="https://badges.fedoraproject.org/pngs/askbot-curious-penguin-01.png" alt="curious-penguin-ask-fedora-i icon"></a> <a href="https://badges.fedoraproject.org/badge/crypto-panda" title="Crypto Panda – You updated your GPG key with the Fedora Account System (FAS)"><img width=128 src="https://badges.fedoraproject.org/pngs/fas-crypto-panda.png" alt="crypto-panda icon"></a> <a href="https://badges.fedoraproject.org/badge/speak-up!" title="Speak Up! – Participated in an IRC meeting."><img width=128 src="https://badges.fedoraproject.org/pngs/irc-speak-up.png" alt="speak-up! icon"></a>
+</p>
+<h2 id="progress-towards-next-badge">Progress towards next badge</h2>
+<p>Before we can estimate progress on getting a badge, it is important to understand how the badges are awarded. The system is based on the messaging bus<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>. The <a href="https://github.com/fedora-infra/fedbadges">fedbadges</a> service listens to the bus and every time it sees a message, it checks it against the rules it has defined.</p>
+<p>The process starts with a simple check on the message content to make sure that the message is connected to some badge. If it is, more complex checks are performed. These checks either communicate with <a href="https://admin.fedoraproject.org/pkgdb/">pkgdb</a> or <a href="https://github.com/fedora-infra/datanommer">datanommer</a>, the service that archives old messages.</p>
+<p>Now obviously I'm not keen on reimplementing the whole rule engine. Fortunately, it is possible to reuse the code from <a href="https://github.com/fedora-infra/fedbadges">fedbadges</a>. All badges that I care about for this part only need the datanommer integration, so that is a big help.</p>
+<p>The biggest issue I faced with this is the fact that <a href="https://github.com/fedora-infra/fedbadges">fedbadges</a> connects directly to <a href="https://github.com/fedora-infra/datanommer">datanommer</a>'s database. I can't do that. My workaround was to write a script that would download all messages related to me from <a href="https://apps.fedoraproject.org/datagrepper/">datagrepper</a> and store them locally. This works reasonably well for me personally, but trying to get the messages for someone who is active for a longer time is going to be an issue.</p>
+<p>Unfortunately, the list of messages related to a particular user is not enough for all badges: <a href="https://bodhi.fedoraproject.org/">Bodhi</a> has badges for other people voting on your updates. Therefore we also need all messages related to updates a person creates.</p>
+<div style="text-align: center; margin-bottom: 1em">
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/senior-badger-badger-ii" title="Senior Badger (Badger II) – You got (about) 50 Fedora Badges.  Way to go!" style="display: block"><img src="https://badges.fedoraproject.org/pngs/badger-02.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 94.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+47 / 50
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/chocolate-chip-cookie-ii" title="Chocolate Chip (Cookie II) – Ten people think you're great, because they've given you cookies. Yummy!" style="display: block"><img src="https://badges.fedoraproject.org/pngs/chocolatechipcookie.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 80.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+8 / 10
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/bloggin-it!-planet-iii" title="Bloggin' it! (Planet III) – You posted 10 or more things to the Fedora Planet!" style="display: block"><img src="https://badges.fedoraproject.org/pngs/planet-bloggin-it-03.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 60.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+6 / 10
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/catching-the-bull-tester-iv" title="Catching the Bull (Tester IV) – *(a great struggle, repeated escapes, discipline required)* Tested and added karma to 20 updates-testing updates in Bodhi. " style="display: block"><img src="https://badges.fedoraproject.org/pngs/tester-04.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 55.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+11 / 20
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/what-goes-around-comes-around-karma-iii" title="What goes around comes around (Karma III) – You have received 50 or more good karma on your bodhi updates" style="display: block"><img src="https://badges.fedoraproject.org/pngs/what-goes-around-comes-around-50.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 50.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+25 / 50
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/building-the-outer-ring-copr-build-vii" title="Building the Outer Ring (Copr Build VII) – Successfully completed 999 copr builds" style="display: block"><img src="https://badges.fedoraproject.org/pngs/copr-build-999.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 43.8438438438%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+438 / 999
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/what-goes-up...-koji-failure-ii" title="What goes up... (Koji Failure II) – Submitted 5 or more koji builds that failed to build." style="display: block"><img src="https://badges.fedoraproject.org/pngs/koji-what-goes-up-02.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 40.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+2 / 5
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/you-can-call-me-patches-scm-iv" title="You can call me &quot;Patches&quot; (SCM IV) – Pushed 400 commits to a Fedora package repository." style="display: block"><img src="https://badges.fedoraproject.org/pngs/you-can-call-me-patches-04.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 36.5%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+146 / 400
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/if-you-build-it...-koji-success-iv" title="If you build it... (Koji Success IV) – Succesfully completed 250 koji builds." style="display: block"><img src="https://badges.fedoraproject.org/pngs/koji-if-you-build-it-04.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 34.8%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+87 / 250
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/is-this-thing-on-updates-testing-iii" title="Is this thing on? (Updates-Testing III) – Pushed 100 bodhi updates to the testing repositories." style="display: block"><img src="https://badges.fedoraproject.org/pngs/is-this-thing-on-03.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 34.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+34 / 100
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/like-a-rock-updates-stable-iii" title="Like a Rock (Updates-Stable III) – Pushed 100 bodhi updates to the stable repositories." style="display: block"><img src="https://badges.fedoraproject.org/pngs/like-a-rock-03.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 24.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+24 / 100
+</div>
+</div>
+</div>
+<div style="display: inline-block; text-align: center">
+<a href="https://badges.fedoraproject.org/badge/science-kernel-tester-ii" title="Science (Kernel Tester II) – You completed 5 runs of the kernel regression test suite" style="display: block"><img src="https://badges.fedoraproject.org/pngs/kernel_tester_5.png" width="128"></a>
+<div style="width: 200px; height: 24px; background: #999; display: inline-block; color: #fff; position: relative;">
+<div style="width: 20.0%; height: 100%; background: #3C6EB4; position: absolute;">
+
+</div>
+<div style="position: absolute; left: 0; right: 0; text-align:center; line-height: 24px; font-weight: bold;">
+1 / 5
+</div>
+</div>
+</div>
+</div>
+<p>Another problematic badge is the Cookie one: the number of cookies you have get's reset every release cycle, so despite the number 8 above, I actually only have 1 right now.</p>
+<h2 id="i-want-it-too">I want it too</h2>
+<p>If you want to experiment with this code, I put it on Pagure as <a href="https://pagure.io/my-next-badge">my-next-badge</a>. There are instructions in README. I didn't try to optimize this in any way (yet), so it needs a lot of memory as all the messages must fit there. In my case, it is about 40 MiB. For other people, it might be significantly more. By &quot;more&quot; I mean it can easily be several gigabytes.</p>
+<p>If you decide to try this, please note that the script is a hack that may not always be correct. It may try to convince you that you satisfy conditions for some badge even if you don't have it. Take it with a grain of salt.</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Well, almost. Some badges are awarded manually. We can ignore that here.<a href="#fnref1">↩</a></p></li>
+</ol>
+</section>]]></summary>
+</entry>
+<entry>
     <title>Git hooks for required sign-off</title>
     <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
     <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
@@ -276,72 +446,6 @@
 <pre><code>termcapinfo xterm* ti@:te@</code></pre>
 <p>This will enable regular scrolling with mouse wheel or terminal scrollbar.</p>
 <p><a href="http://unix.stackexchange.com/questions/18006/can-mouse-wheel-scrolling-work-in-a-screen-session">Source at Unix Stack Exchange</a></p>]]></summary>
-</entry>
-<entry>
-    <title>Watching process outputs with Haskell</title>
-    <link href="https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
-    <id>https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
-    <published>2016-01-24T00:00:00Z</published>
-    <updated>2016-01-24T12:59:28Z</updated>
-    <summary type="html"><![CDATA[<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
-<p>A recent <a href="https://www.reddit.com/r/haskell/comments/41za4n/streaming_a_unix_tools_output_to_haskell/">post on Reddit</a> actually reminded me of that.</p>
-<p>I will call the program <code>race</code>, although there are not going to be any winners.</p>
-<p>The idea of the program is simple: it will run each process in a separate thread. This runner thread will read the output of the program (both <code>stdout</code> and <code>stderr</code>, I just don't care) and send this to the main thread. This way, there will always single thread writing the actual output.</p>
-<p>The communication between threads will happen through <code>Control.Concurrent.Chan</code>, and we will be sending simple messages:</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="kw">data</span> <span class="dt">Msg</span> <span class="fu">=</span> <span class="dt">Quit</span>                 <span class="co">-- ^The process finished</span>
-         <span class="fu">|</span> <span class="dt">Msg</span> <span class="dt">Int</span> <span class="dt">ByteString</span>   <span class="co">-- ^A single line of output</span></code></pre></div>
-<p>The number in the message will indicate which child process is sending the line and will be used to pick a color.</p>
-<p>The thread for consuming these messages and printing the data is not too complex. It's a loop that keeps track of the number of running processes. In each iteration, we read a single message from the channel and depending on what it is, we either decrement the process counter or print the message wrapped in ANSI color sequences.</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">printer ::</span> <span class="dt">Chan</span> <span class="dt">Msg</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-printer _ <span class="dv">0</span> <span class="fu">=</span> return ()
-printer chan num <span class="fu">=</span> <span class="kw">do</span>
-    msg <span class="ot">&lt;-</span> readChan chan
-    <span class="kw">case</span> msg <span class="kw">of</span>
-        <span class="dt">Quit</span> <span class="ot">-&gt;</span> printer chan (num <span class="fu">-</span> <span class="dv">1</span>)
-        <span class="dt">Msg</span> i d <span class="ot">-&gt;</span> <span class="kw">do</span>
-            B.putStr <span class="fu">$</span> colored i d
-            reader chan num
-
-<span class="ot">colored ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span> <span class="ot">-&gt;</span> <span class="dt">ByteString</span>
-colored i d <span class="fu">=</span> <span class="kw">let</span> col <span class="fu">=</span> colors <span class="fu">!!</span> i
-              <span class="kw">in</span> <span class="st">&quot;\ESC[&quot;</span> <span class="fu">&lt;&gt;</span> col <span class="fu">&lt;&gt;</span> <span class="st">&quot;;1m&quot;</span> <span class="fu">&lt;&gt;</span> d <span class="fu">&lt;&gt;</span> <span class="st">&quot;\ESC[0m\n&quot;</span>
-  <span class="kw">where</span>
-    colors <span class="fu">=</span> cycle [<span class="st">&quot;36&quot;</span>, <span class="st">&quot;35&quot;</span>, <span class="st">&quot;32&quot;</span>, <span class="st">&quot;33&quot;</span>, <span class="st">&quot;34&quot;</span>, <span class="st">&quot;31&quot;</span>]</code></pre></div>
-<p>Reading the output of a random program is a bit more involved. As input, we will submit the channel, process number and a string with the command.</p>
-<p>There is a very <a href="https://www.schoolofhaskell.com/user/snoyberg/library-documentation/data-conduit-process">helpful tutorial</a> for <code>Data.Conduit.Process</code> which contains an example. We can adapt this to our needs.</p>
-<p>The biggest hurdle here is that <em>glibc</em> will by default line-buffer standard output if it goes to interactive terminal, but as soon as we redirect it to a pipe, it gets fully buffered in 4 KiB blocks.</p>
-<p>This is definitely not what we want. There are a few ways to mitigate this: the easiest is to use <code>stdbuf</code> executable, which modifies the buffering mode. The problem with it is that it does not work for all cases, especially for commands involving piping data between multiple processes.</p>
-<p>Another attempt that I made was to use a pseudoterminal. This approach is however quite complex, and I failed to get it running reliably.</p>
-<p>In the end I settled for <code>script</code> command. By using the <code>-c</code> argument it can run a complex command and it handles buffering just the way I wanted.</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">runProcess ::</span> <span class="dt">Chan</span> <span class="dt">Msg</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">String</span> <span class="ot">-&gt;</span> <span class="dt">IO</span> ()
-runProcess chan&#39; i cmd <span class="fu">=</span> <span class="kw">do</span>
-    <span class="kw">let</span> cmd&#39; <span class="fu">=</span> <span class="st">&quot;script -qfc \&quot;&quot;</span> <span class="fu">&lt;&gt;</span> cmd <span class="fu">&lt;&gt;</span> <span class="st">&quot;\&quot; /dev/null&quot;</span>
-    (<span class="dt">ClosedStream</span>, fromProcess, fromProcessErr, cph) <span class="ot">&lt;-</span>
-        streamingProcess (shell cmd&#39;)
-
-    <span class="kw">let</span> output h <span class="fu">=</span> CB.sourceHandle h <span class="fu">$$</span> CB.lines <span class="fu">=$</span> CL.mapM_
-            (writeChan chan <span class="fu">.</span> <span class="dt">Msg</span> i)
-
-    _ <span class="ot">&lt;-</span> runConcurrently <span class="fu">$</span>
-        <span class="dt">Concurrently</span> (output fromProcess) <span class="fu">*&gt;</span>
-        <span class="dt">Concurrently</span> (output fromProcessErr) <span class="fu">*&gt;</span>
-        <span class="dt">Concurrently</span> (waitForStreamingProcess cph)
-
-    writeChan chan <span class="dt">Quit</span></code></pre></div>
-<p>All that is left to do is to tie it all together: get command line arguments, spawn a thread for each one and run the printer function in the main thread. We will create the channel with one duplicate: the copy will be shared by all worker threads.</p>
-<div class="sourceCode"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span class="ot">main ::</span> <span class="dt">IO</span> ()
-main <span class="fu">=</span> <span class="kw">do</span>
-    args <span class="ot">&lt;-</span> getArgs
-    readEnd <span class="ot">&lt;-</span> newChan
-    writeEnd <span class="ot">&lt;-</span> dupChan readEnd
-
-    mapM_ (forkIO <span class="fu">.</span> uncurry (runProcess writeEnd)) (zip [<span class="dv">0</span><span class="fu">..</span>] args)
-
-    reader readEnd (length args)</code></pre></div>
-<p>The program can now be used like this:</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">race</span> <span class="st">&quot;python -m SimpleHTTPServer&quot;</span> <span class="st">&quot;make rebuild-on-change&quot;</span></code></pre></div>
-<p>Arguably, it is just a glorified wrapper for the <code>&amp;</code> Bash functionality and <code>wait</code> command. Nonetheless, I still consider it useful.</p>
-<p>You can get <a href="https://github.com/lubomir/race">the whole project</a> including cabal file with list of dependencies on GitHub.</p>]]></summary>
 </entry>
 
 </feed>
