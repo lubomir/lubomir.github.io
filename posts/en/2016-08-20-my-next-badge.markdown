@@ -68,7 +68,7 @@ service that archives old messages.
 [pkgdb]: https://admin.fedoraproject.org/pkgdb/
 
 Now obviously I'm not keen on reimplementing the whole rule engine.
-Fortunatelly, it is possible to reuse the code from [fedbadges]. All badges
+Fortunately, it is possible to reuse the code from [fedbadges]. All badges
 that I care about for this part only need the datanommer integration, so that
 is a big help.
 
@@ -81,7 +81,7 @@ longer time is going to be an issue.
 
 [datagrepper]: https://apps.fedoraproject.org/datagrepper/
 
-Unfortunatelly, the list of messages related to a particular user is not enough
+Unfortunately, the list of messages related to a particular user is not enough
 for all badges: [Bodhi] has badges for other people voting on your updates.
 Therefore we also need all messages related to updates a person creates.
 
