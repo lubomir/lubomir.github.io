@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T15:42:16Z</updated>
+    <updated>2015-06-10T15:43:20Z</updated>
     <entry>
     <title>CPO a spojité funkce</title>
     <link href="https://lubomir.github.io//cs/2011-01-24-cpo-a-spojite-funkce.html" />
     <id>https://lubomir.github.io//cs/2011-01-24-cpo-a-spojite-funkce.html</id>
     <published>2011-01-24T00:00:00Z</published>
-    <updated>2015-06-10T15:42:16Z</updated>
+    <updated>2015-06-10T15:43:20Z</updated>
     <summary type="html"><![CDATA[<p>Každý typ se dá charakterizovat jako částečně uspořádaná množina hodnot. Pokud platí, že každý spočetný řetězec má supremum, potom se jedná o <a href="http://en.wikipedia.org/wiki/Complete_partial_order">Complete Partial Order</a>.</p>
 <h2 id="primitivní-typy----příklady">Primitivní typy -- příklady</h2>
 <figure>

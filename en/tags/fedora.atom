@@ -8,8 +8,73 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-08-20T12:12:11Z</updated>
+    <updated>2016-08-26T17:41:49Z</updated>
     <entry>
+    <title>Using fedmsg to send more fedmsg</title>
+    <link href="https://lubomir.github.io//en/2016-08-26-moar-messages.html" />
+    <id>https://lubomir.github.io//en/2016-08-26-moar-messages.html</id>
+    <published>2016-08-26T00:00:00Z</published>
+    <updated>2016-08-26T17:41:49Z</updated>
+    <summary type="html"><![CDATA[<p>Fedmsg is a perfect system for automating things. I mostly use it to integrate <a href="https://pagure.io/">Pagure</a> with <a href="http://jenkins.fedorainfracloud.org/">Jenkins</a>, which works rather well.</p>
+<p>One hiccup is that when a pull request is updated (by pushing more commits to the branch or rebasing it), Pagure will not notice that until someone visits the pull request page. At that point a comment with the notice is generated and the message sent.</p>
+<p>My first instinct to automate this was to use a git hook. It's easy to automate hitting each pull request page.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">curl</span> -s https://pagure.io/api/0/pungi/pull-requests <span class="kw">|</span> <span class="kw">\</span>
+    <span class="kw">jq</span> <span class="st">&#39;.requests[] | select(.user.name == &quot;lsedlar&quot;) | .id&#39;</span> <span class="kw">|</span> <span class="kw">\</span>
+    <span class="kw">while</span> <span class="kw">read</span> <span class="ot">PR_ID</span>; <span class="kw">do</span>
+        <span class="kw">echo</span> <span class="st">&quot;https://pagure.io/pungi/pull-request/</span><span class="ot">$PR_ID</span><span class="st">&quot;</span>
+        <span class="kw">curl</span> -s <span class="st">&quot;https://pagure.io/pungi/pull-request/</span><span class="ot">$PR_ID</span><span class="st">&quot;</span> <span class="kw">&gt;</span>/dev/null
+    <span class="kw">done</span></code></pre></div>
+<p>However, there <a href="http://stackoverflow.com/a/9038644/1576064">is no <code>post-push</code> hook</a>, so one would have to run the script manually. That's too much work.</p>
+<h2 id="fedmsg-to-the-rescue">Fedmsg to the rescue</h2>
+<p>How about getting notified about the push from the server? Pagure will send a message announcing a push immediately.</p>
+<p>What we need is a very simple consumer that waits for pushes, finds where the pull requests would likely be going to, tries to find one from this branch and hits the web page.</p>
+<p>If the push is to a fork, we can assume the pull request would be filed against the original repo. If it's not a fork, then the pull request would probably be against the same repo.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">BASE_URL <span class="op">=</span> <span class="st">&#39;https://pagure.io&#39;</span>
+
+
+<span class="kw">class</span> Poker(fedmsg.consumers.FedmsgConsumer):
+    topic <span class="op">=</span> [<span class="st">&#39;io.pagure.prod.pagure.git.receive&#39;</span>]
+    config_key <span class="op">=</span> <span class="st">&#39;poker.enabled&#39;</span>
+
+    <span class="kw">def</span> consume(<span class="va">self</span>, msg):
+        msg <span class="op">=</span> msg[<span class="st">&#39;body&#39;</span>][<span class="st">&#39;msg&#39;</span>]
+        branch <span class="op">=</span> msg[<span class="st">&#39;branch&#39;</span>].split(<span class="st">&#39;/&#39;</span>)[<span class="op">-</span><span class="dv">1</span>]
+        repo <span class="op">=</span> msg[<span class="st">&#39;repo&#39;</span>][<span class="st">&#39;name&#39;</span>]
+        <span class="cf">if</span> msg[<span class="st">&#39;repo&#39;</span>][<span class="st">&#39;parent&#39;</span>]:
+            repo <span class="op">=</span> msg[<span class="st">&#39;repo&#39;</span>][<span class="st">&#39;parent&#39;</span>][<span class="st">&#39;name&#39;</span>]
+
+        url <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%s</span><span class="st">/api/0/</span><span class="sc">%s</span><span class="st">/pull-requests&#39;</span> <span class="op">%</span> (BASE_URL, repo)
+        response <span class="op">=</span> requests.get(url)
+        <span class="cf">if</span> response.status_code <span class="op">!=</span> <span class="dv">200</span>:
+            <span class="va">self</span>.log.warning(<span class="st">&#39;Failed to get </span><span class="sc">%s</span><span class="st"> ...&#39;</span>, url)
+            <span class="cf">return</span>
+
+        <span class="cf">for</span> pr <span class="op">in</span> response.json()[<span class="st">&#39;requests&#39;</span>]:
+            <span class="cf">if</span> pr[<span class="st">&#39;repo_from&#39;</span>][<span class="st">&#39;id&#39;</span>] <span class="op">!=</span> msg[<span class="st">&#39;repo&#39;</span>][<span class="st">&#39;id&#39;</span>]:
+                <span class="cf">continue</span>
+            <span class="cf">if</span> pr[<span class="st">&#39;branch_from&#39;</span>] <span class="op">!=</span> branch:
+                <span class="cf">continue</span>
+            url <span class="op">=</span> <span class="st">&#39;</span><span class="sc">%s</span><span class="st">/</span><span class="sc">%s</span><span class="st">/pull-request/</span><span class="sc">%s</span><span class="st">&#39;</span> <span class="op">%</span> (BASE_URL, repo, pr[<span class="st">&#39;id&#39;</span>])
+            <span class="va">self</span>.log.info(<span class="st">&#39;Poking </span><span class="sc">%s</span><span class="st">&#39;</span>, url)
+            requests.get(url)
+            <span class="cf">return</span></code></pre></div>
+<p>A file with this class should be installed with <code>setup.py</code> somewhere under <code>site-packages</code>. For <code>fedmgs-hub</code> to pick the consumer up, there must be a special section in the <code>setup()</code> function call:</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">entry_points<span class="op">=</span><span class="st">&quot;&quot;&quot;</span>
+<span class="st">[moksha.consumer]</span>
+<span class="st">pokeapagure = poke_a_pagure:Poker</span>
+<span class="st">&quot;&quot;&quot;</span></code></pre></div>
+<p>The name on the left of the equals sign does not really matter. The string on the right should be a package name and a class name of the consumer. In this case the file will be <code>poke_a_pagure/__init__.py</code>.</p>
+<h2 id="how-to-make-it-work">How to make it work</h2>
+<p>This consumer will run as part of <code>fedmsg-hub</code> (provided in similarly named package). All that is needed to get it working is to install the hub and the python package with the class.</p>
+<p>There also needs to be a config file in <code>/etc/fedmsg.d/poke_a_pagure.py</code>. The name is completely arbitrary, nothing depends on it.</p>
+<div class="sourceCode"><pre class="sourceCode python"><code class="sourceCode python">config <span class="op">=</span> {
+    <span class="st">&#39;poker.enabled&#39;</span>: <span class="va">True</span>
+}</code></pre></div>
+<p>Note the matching config key with the consumer above. There can be more configuration, such as custom rules for logging.</p>
+<p>Once that exists, just restart the hub and observe its logs. It will tell you which consumers were loaded.</p>
+<p>It's this easy to write a consumer of messages. Now, would it be easier to fix Pagure to send the message immediately? Maybe. But is working with fedmsg fun? Definitely!</p>]]></summary>
+</entry>
+<entry>
     <title>What's my next badge?</title>
     <link href="https://lubomir.github.io//en/2016-08-20-my-next-badge.html" />
     <id>https://lubomir.github.io//en/2016-08-20-my-next-badge.html</id>
