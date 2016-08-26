@@ -379,7 +379,7 @@ pre code {
   color: inherit;
 }
 
-pre code .dt, pre code .kw, pre code .fu {
+pre code .dt, pre code .kw, pre code .fu, pre code .cf, pre code .op {
   font-weight: bold;
 }
 
@@ -400,6 +400,9 @@ pre code .kw {
 }
 pre code .co {
   color: #888a85;
+}
+pre code .sc {
+  color: #ce5c00;
 }
 td pre {
   margin: 0;
