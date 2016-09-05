@@ -8,8 +8,28 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-08-26T17:41:49Z</updated>
+    <updated>2016-09-05T19:25:37Z</updated>
     <entry>
+    <title>Introducing entr</title>
+    <link href="https://lubomir.github.io//en/2016-09-05-introducing-entr.html" />
+    <id>https://lubomir.github.io//en/2016-09-05-introducing-entr.html</id>
+    <published>2016-09-05T00:00:00Z</published>
+    <updated>2016-09-05T19:25:37Z</updated>
+    <summary type="html"><![CDATA[<p>When writing code, my workflow is usually to make edits and re-run the test suite (that is, if there is one). This is actually a lot of work that I don't want to do.</p>
+<p>Thankfully, it's quite easy to automate. All we need is a utility that would watch files for change and then run the tests.</p>
+<p>On Linux, we can somewhat get by with <em>inotifywait</em>, but it is rather tedious. There must be a better way; and there actually is.</p>
+<p>Well, the future is here and its name is <a href="http://entrproject.org">entr</a>. It runs arbitrary commands when files change. The list of files to monitor is provided on standard input.</p>
+<p>It turned out that I most often want to watch all relevant files in current directory. Therefore, I created a small wrapper that will find all interesting files in current directory and pass them to <code>entr</code>. I call it <code>guard</code>.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="co">#!/bin/sh</span>
+<span class="kw">set</span> <span class="kw">-o</span> pipefail
+<span class="kw">ag</span> -g <span class="st">&#39;&#39;</span> <span class="kw">|</span> <span class="kw">entr</span> <span class="st">&quot;</span><span class="ot">$@</span><span class="st">&quot;</span></code></pre></div>
+<p>Using <code>git ls-files</code> would work almost as well as <a href="https://github.com/ggreer/the_silver_searcher">the silver searcher</a>. Using <code>find</code> would work as well if you're inclined that way.</p>
+<h2 id="go-get-it">Go get it!</h2>
+<p>If you want to try it out and automate your workflow a bit, there is now a Fedora package, currently in waiting in Bodhi to be pushed stable (for <a href="https://bodhi.fedoraproject.org/updates/FEDORA-2016-6daf0bfef2">F23</a>, <a href="https://bodhi.fedoraproject.org/updates/FEDORA-2016-b80a4445c2">F24</a>, <a href="https://bodhi.fedoraproject.org/updates/FEDORA-2016-207ac2f3e3">F25</a> and <a href="https://bodhi.fedoraproject.org/updates/FEDORA-EPEL-2016-0ca521c93f">EPEL 7</a>). Feel free to get it from <code>updates-testing</code> repository.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">sudo</span> dnf install entr --enablerepo=updates-testing</code></pre></div>
+<p>Many thanks to Igor Gnatenko for review and packaging suggestions.</p>]]></summary>
+</entry>
+<entry>
     <title>Using fedmsg to send more fedmsg</title>
     <link href="https://lubomir.github.io//en/2016-08-26-moar-messages.html" />
     <id>https://lubomir.github.io//en/2016-08-26-moar-messages.html</id>

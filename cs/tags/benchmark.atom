@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
     <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
     <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>

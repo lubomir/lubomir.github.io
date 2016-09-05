@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <entry>
     <title>Popisná statistika v R</title>
     <link href="https://lubomir.github.io//cs/2013-04-25-statistika-v-r.html" />
     <id>https://lubomir.github.io//cs/2013-04-25-statistika-v-r.html</id>
     <published>2013-04-25T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Tento text je výcuc z mých poznatků, které jsem nabyl při vypracování projektu do jistého matematického předmětu.</p>
 <h2 id="načítání-dat-a-první-průzkum">Načítání dat a první průzkum</h2>
 <p>V první řadě je potřeba načíst soubor s daty. Za předpokladu, že máme data ve formátu CSV, se nám bude hodit příkaz <code>read.csv</code> (jak nečekané…). Taky by bylo dobré zjistit, jak vlastně data vypadají, tedy jaké jsou názvy atributů a jak vypadá prvních pár záznamů.</p>
@@ -131,7 +131,7 @@ Coefficients:
     <link href="https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html" />
     <id>https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
 <p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
@@ -161,7 +161,7 @@ Coefficients:
     <link href="https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html" />
     <id>https://lubomir.github.io//cs/2012-03-20-derivaci-k-regularnim-vyrazum.html</id>
     <published>2012-03-20T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://www.fi.muni.cz/~sojka/PV030/">PV030</a> se člověk mimo jiné potká s algoritmy pro práci s regulárními výrazy. Jedním z nich je i metoda konverze regulárního výrazu na konečný automat, a ne nedeterministický s <span class="math inline"><em>ϵ</em></span>-kroky. Touto metodou je možné rovnou vyrobit minimální deterministický konečný automat. A jak lépe porozumět algoritmu než si ho zkusit naprogramovat?</p>
 <p>Podrobnější popis je algoritmu je k dispozici <a href="http://www.fi.muni.cz/~sojka/PV030/2012-03-15.pdf">ve slidech</a>, případně ve článku <a href="http://dl.acm.org/citation.cfm?id=321249"><em>Derivatives of Regular Expressions</em></a>, jehož autorem je <em>Janusz A. Brzozowski</em>.</p>
 <figure>
@@ -321,7 +321,7 @@ allMatches re str <span class="fu">=</span> concatMap (uncurry <span class="fu">
     <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
     <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
@@ -539,7 +539,7 @@ Seznam
     <link href="https://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
     <id>https://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<blockquote>
 <p>Tento text vznikl v rámci přemětu VB000 Základy odborného stylu jako esej na téma <em>Bylo nebylo – informatická pohádka</em></p>
 </blockquote>
@@ -627,7 +627,7 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
     <link href="https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
     <id>https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
     <published>2011-04-04T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
@@ -693,7 +693,7 @@ maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv"
     <link href="https://lubomir.github.io//cs/2011-01-24-cpo-a-spojite-funkce.html" />
     <id>https://lubomir.github.io//cs/2011-01-24-cpo-a-spojite-funkce.html</id>
     <published>2011-01-24T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<p>Každý typ se dá charakterizovat jako částečně uspořádaná množina hodnot. Pokud platí, že každý spočetný řetězec má supremum, potom se jedná o <a href="http://en.wikipedia.org/wiki/Complete_partial_order">Complete Partial Order</a>.</p>
 <h2 id="primitivní-typy----příklady">Primitivní typy -- příklady</h2>
 <figure>
@@ -775,7 +775,7 @@ g ⊥ = False</code></pre>
     <link href="https://lubomir.github.io//cs/2011-01-02-poznamky-k-ib107.html" />
     <id>https://lubomir.github.io//cs/2011-01-02-poznamky-k-ib107.html</id>
     <published>2011-01-02T00:00:00Z</published>
-    <updated>2015-06-10T15:43:20Z</updated>
+    <updated>2015-06-10T15:43:34Z</updated>
     <summary type="html"><![CDATA[<h2 id="věta-o-numeraci">Věta o numeraci</h2>
 <blockquote>
 <p>Pro každé <span class="math inline"><em>j</em> ≥ 1</span> existuje vyčíslitelná funkce <span class="math inline"><em>Φ</em> : <em>N</em><sup><em>j</em> + 1</sup> → <em>N</em></span>, která je univerzální pro standardní numeraci j-árních funkcí. Tedy pro každé <span class="math inline"><em>e</em> ∈ <em>N</em></span> a <span class="math inline">(<em>a</em><sub>1</sub>, …<em>a</em><sub><em>j</em></sub>)∈<em>N</em><sup><em>j</em></sup></span> platí <img src="/images/veta-o-numeraci.png" alt="Věta o numeraci" /></p>
