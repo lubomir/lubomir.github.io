@@ -8,8 +8,61 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-09-05T19:25:37Z</updated>
+    <updated>2016-09-25T17:42:47Z</updated>
     <entry>
+    <title>Clickable Pungi logs</title>
+    <link href="https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html" />
+    <id>https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html</id>
+    <published>2016-09-25T00:00:00Z</published>
+    <updated>2016-09-25T17:42:47Z</updated>
+    <summary type="html"><![CDATA[<p>When debugging problems with composes, the logs left behind by all stages of the compose run are tremendously helpful. However, they are rather difficult to read due to the sheer volume. Being exposed to them quite intensively for close to a year helps, but it still is a nasty chore.</p>
+<p>The most accessible way to look at the logs is via a web browser on <a href="https://kojipkgs.fedoraproject.org/compose/rawhide/">kojipkgs</a>. It's just <em>httpd</em> displaying the raw log files on the disk.</p>
+<p>It took me too long to figure out this could be made much more pleasant that copy-pasting stuff from the wall of text.</p>
+<p>How about a user script that would run in <a href="http://www.greasespot.net/">Greasemonkey</a> and allow clicking through to different log files or even Koji tasks?</p>
+<figure>
+<img src="/images/kojipkgs-screenshot.png" alt="Is this not better?" /><figcaption>Is this not better?</figcaption>
+</figure>
+<p>Turns out it's not that difficult.</p>
+<p>Did you know that when Firefox displays a <code>text/plain</code> file, it internally creates an HTML document with all the content in one <code>&lt;pre&gt;</code> tag.</p>
+<p>The whole script essentially just runs a search and replace operation on the whole page. We can have a bunch of functions that take the whole content as text and return it slightly modified.</p>
+<p>First step will make URLs clickable.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">link_urls</span>(str) <span class="op">{</span>
+  <span class="kw">let</span> pat <span class="op">=</span> <span class="ss">/https</span><span class="sc">?</span><span class="ss">:</span><span class="sc">\/\/(</span><span class="ss">www</span><span class="sc">\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&amp;//=]*)</span><span class="ss">/g</span><span class="op">;</span>
+  <span class="cf">return</span> <span class="va">str</span>.<span class="at">replace</span>(pat<span class="op">,</span> <span class="st">&#39;&lt;a href=&quot;$&amp;&quot;&gt;$&amp;&lt;/a&gt;&#39;</span>)<span class="op">;</span>
+<span class="op">}</span></code></pre></div>
+<p>I didn't write the crazy regular expression myself. I got from <a href="http://stackoverflow.com/a/3809435/1576064">Stack Overflow</a>.</p>
+<p>Next step can make paths to other files in the same compose clickable.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">link_local_files</span>(url<span class="op">,</span> pathname<span class="op">,</span> mount<span class="op">,</span> str) <span class="op">{</span>
+  <span class="kw">let</span> pat <span class="op">=</span> <span class="kw">new</span> <span class="at">RegExp</span>(mount <span class="op">+</span> pathname <span class="op">+</span> <span class="st">&#39;(/[^ ,&quot;</span><span class="sc">\n</span><span class="st">]+)&#39;</span><span class="op">,</span> <span class="st">&#39;g&#39;</span>)<span class="op">;</span>
+  <span class="cf">return</span> <span class="va">str</span>.<span class="at">replace</span>(pat<span class="op">,</span> <span class="kw">function</span> (path<span class="op">,</span> file) <span class="op">{</span>
+    <span class="cf">return</span> <span class="st">&#39;&lt;a href=&quot;&#39;</span> <span class="op">+</span> url <span class="op">+</span> file <span class="op">+</span> <span class="st">&#39;&quot;&gt;&#39;</span> <span class="op">+</span> path <span class="op">+</span> <span class="st">&#39;&lt;/a&gt;&#39;</span><span class="op">;</span>
+  <span class="op">}</span>)<span class="op">;</span>
+<span class="op">}</span></code></pre></div>
+<p>The last thing left is not particularly general: linking Koji tasks identifiers.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">link_tasks</span>(taskinfo<span class="op">,</span> str) <span class="op">{</span>
+  <span class="cf">return</span> <span class="va">str</span>.<span class="at">replace</span>(<span class="st">&#39;\d{8,}/m&#39;</span><span class="op">,</span> <span class="st">&#39;&lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$&amp;&quot;&gt;$&amp;&lt;/a&gt;&#39;</span>)
+            .<span class="at">replace</span>(<span class="ss">/</span><span class="sc">(</span><span class="ss">Runroot task failed</span><span class="sc">|</span><span class="ss">&#39;task_id&#39;</span><span class="sc">)</span><span class="ss">: </span><span class="sc">(\d{8,})</span><span class="ss">/g</span><span class="op">,</span>
+                     <span class="st">&#39;$1: &lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$2&quot;&gt;$2&lt;/a&gt;);</span>
+  <span class="op">}</span>
+}</code></pre></div>
+<p>Tying all these steps together and passing in the extra arguments is rather trivial but not very generic.</p>
+<div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="va">window</span>.<span class="at">onload</span> <span class="op">=</span> <span class="kw">function</span> () <span class="op">{</span>
+  <span class="kw">let</span> origin <span class="op">=</span> <span class="va">window</span>.<span class="va">location</span>.<span class="at">origin</span><span class="op">;</span>
+  <span class="kw">let</span> pathname <span class="op">=</span> <span class="va">window</span>.<span class="va">location</span>.<span class="va">pathname</span>.<span class="at">split</span>(<span class="st">&#39;/&#39;</span><span class="op">,</span> <span class="dv">4</span>).<span class="at">join</span>(<span class="st">&#39;/&#39;</span>)<span class="op">;</span>
+  <span class="kw">let</span> url <span class="op">=</span> origin <span class="op">+</span> pathname<span class="op">;</span>
+  <span class="kw">let</span> taskinfo <span class="op">=</span> <span class="st">&#39;https://koji.fedoraproject.org/koji/taskinfo?taskID=&#39;</span><span class="op">;</span>
+  <span class="kw">let</span> mount <span class="op">=</span> <span class="st">&#39;/mnt/koji&#39;</span><span class="op">;</span>
+
+  <span class="kw">var</span> content <span class="op">=</span> <span class="va">document</span>.<span class="at">getElementsByTagName</span>(<span class="st">&#39;pre&#39;</span>)[<span class="dv">0</span>]<span class="op">;</span>
+  <span class="kw">var</span> text <span class="op">=</span> <span class="va">content</span>.<span class="at">innerHTML</span><span class="op">;</span>
+  <span class="va">content</span>.<span class="at">innerHTML</span> <span class="op">=</span> <span class="at">link_local_files</span>(
+    url<span class="op">,</span> pathname<span class="op">,</span> mount<span class="op">,</span>
+    <span class="at">link_tasks</span>(taskinfo<span class="op">,</span> <span class="at">link_urls</span>(text))
+  )<span class="op">;</span>
+<span class="op">}</span></code></pre></div>
+<p>If you find this useful, feel free to grab <a href="/data/clickable-kojipkgs.user.js">the whole script with a header</a>.</p>]]></summary>
+</entry>
+<entry>
     <title>Introducing entr</title>
     <link href="https://lubomir.github.io//en/2016-09-05-introducing-entr.html" />
     <id>https://lubomir.github.io//en/2016-09-05-introducing-entr.html</id>
@@ -495,17 +548,6 @@
 <p><strong>Point 4</strong>: The actual packaging (as in how to install the software) is not really important as long as the module with the consumer can be imported and the egg-info directory gets install into Python site lib.</p>
 <p><strong>Point 5</strong>: I had to restart the hub to have it pick up updates. This is as easy as <code>systemctl restart fedmsg-hub.service</code>.</p>
 <p><strong>Point 6</strong>: I found it helpful to tail the hub logs to see what is happening – <code>journalctl -f -u fedmsg-hub.service</code>. This log also contains traceback when the consumer crashes.</p>]]></summary>
-</entry>
-<entry>
-    <title>Today I Learned: Customizing less</title>
-    <link href="https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html" />
-    <id>https://lubomir.github.io//en/2016-02-18-TIL-customizing-less.html</id>
-    <published>2016-02-18T00:00:00Z</published>
-    <updated>2016-02-18T14:47:05Z</updated>
-    <summary type="html"><![CDATA[<p>I have been using <code>less</code> wrong. For a long time I have had <code>LESS=-R</code> in my <code>.bashrc</code> to make <code>less</code> display colors.</p>
-<p>Ever since I set this, I've had trouble with <code>git</code> paging its output even when it would fit on a single page. This has bothered me, but I did not connect it to the <code>LESS</code> setting.</p>
-<p>It turns out that <code>git</code> is quite sophisticated. When its output is paged via <code>less</code>, it looks if <code>LESS</code> env var is set, and sets it to <code>-FRX</code> if it is not.</p>
-<p>The <code>-F</code> part is the important one. If tells <code>less</code> to not do anything if the output fits on screen.</p>]]></summary>
 </entry>
 
 </feed>
