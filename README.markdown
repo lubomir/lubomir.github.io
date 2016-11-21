@@ -1,5 +1,5 @@
 This repository hosts the source form of my blog, which is available at
-http://lubomir.github.io/.
+https://lubomir.github.io/.
 
 The sources are process by [Hakyll] and then displayed as Github Pages.
 
