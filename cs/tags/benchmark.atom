@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako benchmark</title>
-    <link href="https://lubomir.github.io//cs/tags/benchmark.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//cs/tags/benchmark.atom</id>
+    <link href="https://lubomir.github.io/cs/tags/benchmark.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/cs/tags/benchmark.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
-    <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
-    <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
+    <link href="https://lubomir.github.io/cs/2012-01-24-prochazeni-adresare.html" />
+    <id>https://lubomir.github.io/cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>

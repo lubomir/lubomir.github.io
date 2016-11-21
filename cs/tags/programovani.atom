@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako programování</title>
-    <link href="https://lubomir.github.io//cs/tags/programovani.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//cs/tags/programovani.atom</id>
+    <link href="https://lubomir.github.io/cs/tags/programovani.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/cs/tags/programovani.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <entry>
     <title>Rychlost prohledávání adresáře</title>
-    <link href="https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html" />
-    <id>https://lubomir.github.io//cs/2012-01-24-prochazeni-adresare.html</id>
+    <link href="https://lubomir.github.io/cs/2012-01-24-prochazeni-adresare.html" />
+    <id>https://lubomir.github.io/cs/2012-01-24-prochazeni-adresare.html</id>
     <published>2012-01-24T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Procházení všech souborů v adresáři je velice často se objevující potřeba. Navíc je v takovém případě obvykle potřeba rozlišit, jestli nalezená položka je soubor, adresář nebo ještě něco jiného. Je řada možností, jak tohle provést. Zkusil jsem porovnat, jak moc se časově liší různé varianty programu, který projde všechny položky adresáře a nejdříve vypíše soubory, potom adresáře.</p>
 <h2 id="hřiště">Hřiště</h2>
 <p>Použil jsem tři různé testovací adresáře. Jeden obsahoval jenom soubory, a to třicet tisíc, druhý obsahoval třicet tisíc adresářů a třetí po patnácti tisících od obojího. Počty v třetím případe nejsou naprosto přesné, adresářů tam může být o něco méně. Způsobené je to tím, že názvy jsou generovány skoro náhodně, aby se zajistilo náhodné pořadí.</p>
@@ -229,8 +229,8 @@ Seznam
 </entry>
 <entry>
     <title>Kódování čísel</title>
-    <link href="https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
-    <id>https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
+    <link href="https://lubomir.github.io/cs/2011-06-06-kodovani-cisel.html" />
+    <id>https://lubomir.github.io/cs/2011-06-06-kodovani-cisel.html</id>
     <published>2011-06-06T00:00:00Z</published>
     <updated>2016-06-26T13:24:29Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://is.muni.cz/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>
@@ -297,10 +297,10 @@ decode f s <span class="fu">=</span> <span class="kw">let</span> (n, ss) <span c
 </entry>
 <entry>
     <title>XMonad a okna s pevnou velikostí</title>
-    <link href="https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
-    <id>https://lubomir.github.io//cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
+    <link href="https://lubomir.github.io/cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html" />
+    <id>https://lubomir.github.io/cs/2011-04-04-xmonad-a-okna-s-pevnou-velikosti.html</id>
     <published>2011-04-04T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Už docela dlouho k téměř úplné spokojenosti používám XMonad jako správce oken. Sice má své mouchy, ale přednosti to dostatečně vyvažují. Navíc se i ty mouchy dají odstranit.</p>
 <p>Poslední věc, na kterou jsem narazil a která mě donutila upravit <code>xmonad.hs</code> bylo ne zrovna přátelské chování k oknům, která si nastavují nějakou požadovanou velikost. XMonad tyto rady totiž totálně ignoruje. Ve většině případů je to docela žádoucí chování, jediná výjimka jsou okna, u kterých nemá moc smysl měnit velikost. V mém případě šlo hlavně o <a href="http://www.frozen-bubble.org/">Frozen Bubble</a> a <a href="http://www.dosbox.com/">dosbox</a>.</p>
 <p>Jedna možnost řešení by bylo vyjmenovat dotyčné aplikace a přímo oknům nastavit režim floating. To se mi ale nelíbilo, protože by to nebylo ani pohodlné, ani spolehlivé, a často bych musel měnit konfiguraci.</p>
@@ -342,8 +342,8 @@ maxHeight <span class="fu">=</span> (<span class="fu">!!</span> <span class="dv"
 </entry>
 <entry>
     <title>UnitTest v C++</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-unittest.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-unittest.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-unittest.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-unittest.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2016-06-26T13:24:29Z</updated>
     <summary type="html"><![CDATA[<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
@@ -404,10 +404,10 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 </entry>
 <entry>
     <title>Testování binárky</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-testovani-binarky.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-testovani-binarky.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
 <h2 id="formát-testů">Formát testů</h2>
 <p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
@@ -435,10 +435,10 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 </entry>
 <entry>
     <title>Inicializační funkce NCurses</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-ncurses.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-ncurses.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-ncurses.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-ncurses.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
 <h2 id="inicializační-funkce">4.1 Inicializační funkce</h2>
 <ol type="1">
@@ -454,10 +454,10 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 </entry>
 <entry>
     <title>Jak se projevuje 'const'</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-const.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-const.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-const.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-const.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Toto je testovací kód, který se pochopitelně nezkompiluje, a i kdyby, nic rozumného dělat nebude. Stejně jako <code>strcpy</code> se chová i <code>free</code>.</p>
 <div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="ot">#include &lt;stdio.h&gt;</span>
 <span class="ot">#include &lt;stdlib.h&gt;</span>

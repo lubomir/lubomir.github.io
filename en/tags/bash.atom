@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged bash</title>
-    <link href="https://lubomir.github.io//en/tags/bash.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/bash.atom</id>
+    <link href="https://lubomir.github.io/en/tags/bash.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/bash.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-05-04T17:11:49Z</updated>
     <entry>
     <title>Git hooks for required sign-off</title>
-    <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
-    <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
+    <link href="https://lubomir.github.io/en/2016-05-04-signoff-hooks.html" />
+    <id>https://lubomir.github.io/en/2016-05-04-signoff-hooks.html</id>
     <published>2016-05-04T00:00:00Z</published>
     <updated>2016-05-04T17:11:49Z</updated>
     <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
@@ -97,8 +97,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Packaging bash-completion files</title>
-    <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
-    <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
+    <link href="https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html" />
+    <id>https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html</id>
     <published>2016-03-14T00:00:00Z</published>
     <updated>2016-03-14T18:51:31Z</updated>
     <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>

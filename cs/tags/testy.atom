@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako testy</title>
-    <link href="https://lubomir.github.io//cs/tags/testy.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//cs/tags/testy.atom</id>
+    <link href="https://lubomir.github.io/cs/tags/testy.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/cs/tags/testy.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-06-26T13:24:29Z</updated>
     <entry>
     <title>UnitTest v C++</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-unittest.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-unittest.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-unittest.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-unittest.html</id>
     <published>2010-12-19T00:00:00Z</published>
     <updated>2016-06-26T13:24:29Z</updated>
     <summary type="html"><![CDATA[<p>Unit testy jsou užitečná věc, pokud je třeba testovat jednotlivé funkce, třídy nebo metody. Většinou využívá nějakou knihovnu, což má oproti psaní testovacích kódů ručně výhodu v tom, že knihovna minimalizuje potřebu psát zbytečný kód okolo a rovnou poskytuje metody pro testování a případně i měření výkonu.</p>
@@ -73,10 +73,10 @@ TEST_FIXTURE(LongList, SwapTwoDistinctIntervals) {
 </entry>
 <entry>
     <title>Testování binárky</title>
-    <link href="https://lubomir.github.io//cs/2010-12-19-testovani-binarky.html" />
-    <id>https://lubomir.github.io//cs/2010-12-19-testovani-binarky.html</id>
+    <link href="https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html" />
+    <id>https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
 <h2 id="formát-testů">Formát testů</h2>
 <p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>

@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako různé</title>
-    <link href="https://lubomir.github.io//cs/tags/ruzne.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//cs/tags/ruzne.atom</id>
+    <link href="https://lubomir.github.io/cs/tags/ruzne.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/cs/tags/ruzne.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <entry>
     <title>Zpracování PDF</title>
-    <link href="https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html" />
-    <id>https://lubomir.github.io//cs/2013-04-02-zpracovani-pdf.html</id>
+    <link href="https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html" />
+    <id>https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
 <p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
@@ -41,10 +41,10 @@
 </entry>
 <entry>
     <title>O princezně, která ztrácela pamět</title>
-    <link href="https://lubomir.github.io//cs/2011-11-10-o-princezne.html" />
-    <id>https://lubomir.github.io//cs/2011-11-10-o-princezne.html</id>
+    <link href="https://lubomir.github.io/cs/2011-11-10-o-princezne.html" />
+    <id>https://lubomir.github.io/cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<blockquote>
 <p>Tento text vznikl v rámci přemětu VB000 Základy odborného stylu jako esej na téma <em>Bylo nebylo – informatická pohádka</em></p>
 </blockquote>

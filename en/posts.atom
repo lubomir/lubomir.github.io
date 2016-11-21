@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar</title>
-    <link href="https://lubomir.github.io//en/posts.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/posts.atom</id>
+    <link href="https://lubomir.github.io/en/posts.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/posts.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-09-25T17:42:47Z</updated>
+    <updated>2016-11-21T14:52:04Z</updated>
     <entry>
     <title>Clickable Pungi logs</title>
-    <link href="https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html" />
-    <id>https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html</id>
+    <link href="https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html" />
+    <id>https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html</id>
     <published>2016-09-25T00:00:00Z</published>
-    <updated>2016-09-25T17:42:47Z</updated>
+    <updated>2016-11-21T14:52:04Z</updated>
     <summary type="html"><![CDATA[<p>When debugging problems with composes, the logs left behind by all stages of the compose run are tremendously helpful. However, they are rather difficult to read due to the sheer volume. Being exposed to them quite intensively for close to a year helps, but it still is a nasty chore.</p>
 <p>The most accessible way to look at the logs is via a web browser on <a href="https://kojipkgs.fedoraproject.org/compose/rawhide/">kojipkgs</a>. It's just <em>httpd</em> displaying the raw log files on the disk.</p>
 <p>It took me too long to figure out this could be made much more pleasant that copy-pasting stuff from the wall of text.</p>
@@ -42,7 +42,7 @@
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">link_tasks</span>(taskinfo<span class="op">,</span> str) <span class="op">{</span>
   <span class="cf">return</span> <span class="va">str</span>.<span class="at">replace</span>(<span class="st">&#39;\d{8,}/m&#39;</span><span class="op">,</span> <span class="st">&#39;&lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$&amp;&quot;&gt;$&amp;&lt;/a&gt;&#39;</span>)
             .<span class="at">replace</span>(<span class="ss">/</span><span class="sc">(</span><span class="ss">Runroot task failed</span><span class="sc">|</span><span class="ss">&#39;task_id&#39;</span><span class="sc">)</span><span class="ss">: </span><span class="sc">(\d{8,})</span><span class="ss">/g</span><span class="op">,</span>
-                     <span class="st">&#39;$1: &lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$2&quot;&gt;$2&lt;/a&gt;);</span>
+                     <span class="st">&#39;$1: &lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$2&quot;&gt;$2&lt;/a&gt;&#39;</span>)<span class="op">;</span>
   <span class="op">}</span>
 }</code></pre></div>
 <p>Tying all these steps together and passing in the extra arguments is rather trivial but not very generic.</p>
@@ -64,8 +64,8 @@
 </entry>
 <entry>
     <title>Introducing entr</title>
-    <link href="https://lubomir.github.io//en/2016-09-05-introducing-entr.html" />
-    <id>https://lubomir.github.io//en/2016-09-05-introducing-entr.html</id>
+    <link href="https://lubomir.github.io/en/2016-09-05-introducing-entr.html" />
+    <id>https://lubomir.github.io/en/2016-09-05-introducing-entr.html</id>
     <published>2016-09-05T00:00:00Z</published>
     <updated>2016-09-05T19:25:37Z</updated>
     <summary type="html"><![CDATA[<p>When writing code, my workflow is usually to make edits and re-run the test suite (that is, if there is one). This is actually a lot of work that I don't want to do.</p>
@@ -84,8 +84,8 @@
 </entry>
 <entry>
     <title>Using fedmsg to send more fedmsg</title>
-    <link href="https://lubomir.github.io//en/2016-08-26-moar-messages.html" />
-    <id>https://lubomir.github.io//en/2016-08-26-moar-messages.html</id>
+    <link href="https://lubomir.github.io/en/2016-08-26-moar-messages.html" />
+    <id>https://lubomir.github.io/en/2016-08-26-moar-messages.html</id>
     <published>2016-08-26T00:00:00Z</published>
     <updated>2016-08-26T17:41:49Z</updated>
     <summary type="html"><![CDATA[<p>Fedmsg is a perfect system for automating things. I mostly use it to integrate <a href="https://pagure.io/">Pagure</a> with <a href="http://jenkins.fedorainfracloud.org/">Jenkins</a>, which works rather well.</p>
@@ -149,8 +149,8 @@
 </entry>
 <entry>
     <title>What's my next badge?</title>
-    <link href="https://lubomir.github.io//en/2016-08-20-my-next-badge.html" />
-    <id>https://lubomir.github.io//en/2016-08-20-my-next-badge.html</id>
+    <link href="https://lubomir.github.io/en/2016-08-20-my-next-badge.html" />
+    <id>https://lubomir.github.io/en/2016-08-20-my-next-badge.html</id>
     <published>2016-08-20T00:00:00Z</published>
     <updated>2016-08-20T12:12:11Z</updated>
     <summary type="html"><![CDATA[<p>I love <a href="http://badges.fedoraproject.org/">Fedora Badges</a>. I'm not saying all I do is to get more badges, but it's a great motivator. One thing that somewhat miss a guidance on what options I have, what should I do to get another badge, how much activity will it need.</p>
@@ -319,8 +319,8 @@
 </entry>
 <entry>
     <title>Git hooks for required sign-off</title>
-    <link href="https://lubomir.github.io//en/2016-05-04-signoff-hooks.html" />
-    <id>https://lubomir.github.io//en/2016-05-04-signoff-hooks.html</id>
+    <link href="https://lubomir.github.io/en/2016-05-04-signoff-hooks.html" />
+    <id>https://lubomir.github.io/en/2016-05-04-signoff-hooks.html</id>
     <published>2016-05-04T00:00:00Z</published>
     <updated>2016-05-04T17:11:49Z</updated>
     <summary type="html"><![CDATA[<p>There are a couple projects out there (<a href="https://pagure.io/rpkg">rpkg</a>, <a href="https://pagure.io/pungi">pungi</a> etc.) that require each commit to have a signed-off-by line. <a href="https://pagure.io/">Pagure</a> even has a setting that will make it impossible to merge commits without it.</p>
@@ -405,8 +405,8 @@
 </entry>
 <entry>
     <title>Slightly Richer Man's CI</title>
-    <link href="https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html" />
-    <id>https://lubomir.github.io//en/2016-04-26-slightly-richer-man-ci.html</id>
+    <link href="https://lubomir.github.io/en/2016-04-26-slightly-richer-man-ci.html" />
+    <id>https://lubomir.github.io/en/2016-04-26-slightly-richer-man-ci.html</id>
     <published>2016-04-26T00:00:00Z</published>
     <updated>2016-04-27T10:13:24Z</updated>
     <summary type="html"><![CDATA[<p>Not so long ago I have written about <a href="/en/2016-03-08-poor-man-ci.html">my attempts to bring CI to Pagure</a>. It was pointed out to me that a couple assumptions I've made are actually incorrect.</p>
@@ -449,8 +449,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Exploring Git history</title>
-    <link href="https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html" />
-    <id>https://lubomir.github.io//en/2016-04-20-TIL-exploring-git-history.html</id>
+    <link href="https://lubomir.github.io/en/2016-04-20-TIL-exploring-git-history.html" />
+    <id>https://lubomir.github.io/en/2016-04-20-TIL-exploring-git-history.html</id>
     <published>2016-04-20T00:00:00Z</published>
     <updated>2016-04-20T16:53:26Z</updated>
     <summary type="html"><![CDATA[<p>For a long time my most favourite way of looking at Git history has been this long command.</p>
@@ -462,8 +462,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Overlapping pull requests in Pagure</title>
-    <link href="https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html" />
-    <id>https://lubomir.github.io//en/2016-04-03-TIL-overlapping-pull-requests.html</id>
+    <link href="https://lubomir.github.io/en/2016-04-03-TIL-overlapping-pull-requests.html" />
+    <id>https://lubomir.github.io/en/2016-04-03-TIL-overlapping-pull-requests.html</id>
     <published>2016-04-03T00:00:00Z</published>
     <updated>2016-04-03T17:13:29Z</updated>
     <summary type="html"><![CDATA[<p>The other day I was wondering what happens when two pull requests in <a href="https://pagure.io/">Pagure</a> share some commits. So I tested it out and here are the results.</p>
@@ -483,8 +483,8 @@
 </entry>
 <entry>
     <title>Today I Learned: Packaging bash-completion files</title>
-    <link href="https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html" />
-    <id>https://lubomir.github.io//en/2016-03-14-TIL-packaging-bash-completion.html</id>
+    <link href="https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html" />
+    <id>https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html</id>
     <published>2016-03-14T00:00:00Z</published>
     <updated>2016-03-14T18:51:31Z</updated>
     <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
@@ -498,8 +498,8 @@
 </entry>
 <entry>
     <title>Poor Man's CI</title>
-    <link href="https://lubomir.github.io//en/2016-03-08-poor-man-ci.html" />
-    <id>https://lubomir.github.io//en/2016-03-08-poor-man-ci.html</id>
+    <link href="https://lubomir.github.io/en/2016-03-08-poor-man-ci.html" />
+    <id>https://lubomir.github.io/en/2016-03-08-poor-man-ci.html</id>
     <published>2016-03-08T00:00:00Z</published>
     <updated>2016-03-08T20:39:11Z</updated>
     <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>

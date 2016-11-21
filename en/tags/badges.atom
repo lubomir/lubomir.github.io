@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged badges</title>
-    <link href="https://lubomir.github.io//en/tags/badges.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/badges.atom</id>
+    <link href="https://lubomir.github.io/en/tags/badges.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/badges.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-08-20T12:12:11Z</updated>
     <entry>
     <title>What's my next badge?</title>
-    <link href="https://lubomir.github.io//en/2016-08-20-my-next-badge.html" />
-    <id>https://lubomir.github.io//en/2016-08-20-my-next-badge.html</id>
+    <link href="https://lubomir.github.io/en/2016-08-20-my-next-badge.html" />
+    <id>https://lubomir.github.io/en/2016-08-20-my-next-badge.html</id>
     <published>2016-08-20T00:00:00Z</published>
     <updated>2016-08-20T12:12:11Z</updated>
     <summary type="html"><![CDATA[<p>I love <a href="http://badges.fedoraproject.org/">Fedora Badges</a>. I'm not saying all I do is to get more badges, but it's a great motivator. One thing that somewhat miss a guidance on what options I have, what should I do to get another badge, how much activity will it need.</p>

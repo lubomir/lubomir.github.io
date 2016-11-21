@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged fedmsg</title>
-    <link href="https://lubomir.github.io//en/tags/fedmsg.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/fedmsg.atom</id>
+    <link href="https://lubomir.github.io/en/tags/fedmsg.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/fedmsg.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-08-26T17:41:49Z</updated>
     <entry>
     <title>Using fedmsg to send more fedmsg</title>
-    <link href="https://lubomir.github.io//en/2016-08-26-moar-messages.html" />
-    <id>https://lubomir.github.io//en/2016-08-26-moar-messages.html</id>
+    <link href="https://lubomir.github.io/en/2016-08-26-moar-messages.html" />
+    <id>https://lubomir.github.io/en/2016-08-26-moar-messages.html</id>
     <published>2016-08-26T00:00:00Z</published>
     <updated>2016-08-26T17:41:49Z</updated>
     <summary type="html"><![CDATA[<p>Fedmsg is a perfect system for automating things. I mostly use it to integrate <a href="https://pagure.io/">Pagure</a> with <a href="http://jenkins.fedorainfracloud.org/">Jenkins</a>, which works rather well.</p>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Příspěvky označené jako kódování</title>
-    <link href="https://lubomir.github.io//cs/tags/kodovani.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//cs/tags/kodovani.atom</id>
+    <link href="https://lubomir.github.io/cs/tags/kodovani.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/cs/tags/kodovani.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-06-26T13:24:29Z</updated>
     <entry>
     <title>Kódování čísel</title>
-    <link href="https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html" />
-    <id>https://lubomir.github.io//cs/2011-06-06-kodovani-cisel.html</id>
+    <link href="https://lubomir.github.io/cs/2011-06-06-kodovani-cisel.html" />
+    <id>https://lubomir.github.io/cs/2011-06-06-kodovani-cisel.html</id>
     <published>2011-06-06T00:00:00Z</published>
     <updated>2016-06-26T13:24:29Z</updated>
     <summary type="html"><![CDATA[<p>V předmětu <a href="http://is.muni.cz/predmety/predmet.pl?id=585364">IB047</a> se dá mimo jiné potkat s problémem, jak co nejúsporněji uložit data do souboru. Jako ideální řešení se ukáže použít nějaké vhodné kódování. A protože nejlépe člověk něco pochopí tak, že si to vyzkouší, napsal jsem si funkce pro kódování i dekódování různými metodami.</p>

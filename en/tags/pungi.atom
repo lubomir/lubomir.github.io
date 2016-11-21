@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged Pungi</title>
-    <link href="https://lubomir.github.io//en/tags/pungi.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/pungi.atom</id>
+    <link href="https://lubomir.github.io/en/tags/pungi.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/pungi.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-09-25T17:42:47Z</updated>
+    <updated>2016-11-21T14:52:04Z</updated>
     <entry>
     <title>Clickable Pungi logs</title>
-    <link href="https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html" />
-    <id>https://lubomir.github.io//en/2016-09-25-clickable-pungi-logs.html</id>
+    <link href="https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html" />
+    <id>https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html</id>
     <published>2016-09-25T00:00:00Z</published>
-    <updated>2016-09-25T17:42:47Z</updated>
+    <updated>2016-11-21T14:52:04Z</updated>
     <summary type="html"><![CDATA[<p>When debugging problems with composes, the logs left behind by all stages of the compose run are tremendously helpful. However, they are rather difficult to read due to the sheer volume. Being exposed to them quite intensively for close to a year helps, but it still is a nasty chore.</p>
 <p>The most accessible way to look at the logs is via a web browser on <a href="https://kojipkgs.fedoraproject.org/compose/rawhide/">kojipkgs</a>. It's just <em>httpd</em> displaying the raw log files on the disk.</p>
 <p>It took me too long to figure out this could be made much more pleasant that copy-pasting stuff from the wall of text.</p>
@@ -42,7 +42,7 @@
 <div class="sourceCode"><pre class="sourceCode javascript"><code class="sourceCode javascript"><span class="kw">function</span> <span class="at">link_tasks</span>(taskinfo<span class="op">,</span> str) <span class="op">{</span>
   <span class="cf">return</span> <span class="va">str</span>.<span class="at">replace</span>(<span class="st">&#39;\d{8,}/m&#39;</span><span class="op">,</span> <span class="st">&#39;&lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$&amp;&quot;&gt;$&amp;&lt;/a&gt;&#39;</span>)
             .<span class="at">replace</span>(<span class="ss">/</span><span class="sc">(</span><span class="ss">Runroot task failed</span><span class="sc">|</span><span class="ss">&#39;task_id&#39;</span><span class="sc">)</span><span class="ss">: </span><span class="sc">(\d{8,})</span><span class="ss">/g</span><span class="op">,</span>
-                     <span class="st">&#39;$1: &lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$2&quot;&gt;$2&lt;/a&gt;);</span>
+                     <span class="st">&#39;$1: &lt;a href=&quot;&#39;</span> <span class="op">+</span> taskinfo <span class="op">+</span> <span class="st">&#39;$2&quot;&gt;$2&lt;/a&gt;&#39;</span>)<span class="op">;</span>
   <span class="op">}</span>
 }</code></pre></div>
 <p>Tying all these steps together and passing in the extra arguments is rather trivial but not very generic.</p>

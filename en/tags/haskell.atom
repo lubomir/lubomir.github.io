@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged Haskell</title>
-    <link href="https://lubomir.github.io//en/tags/haskell.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/haskell.atom</id>
+    <link href="https://lubomir.github.io/en/tags/haskell.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/haskell.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-01-24T12:59:28Z</updated>
     <entry>
     <title>Watching process outputs with Haskell</title>
-    <link href="https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html" />
-    <id>https://lubomir.github.io//en/2016-01-24-watching-process-outputs.html</id>
+    <link href="https://lubomir.github.io/en/2016-01-24-watching-process-outputs.html" />
+    <id>https://lubomir.github.io/en/2016-01-24-watching-process-outputs.html</id>
     <published>2016-01-24T00:00:00Z</published>
     <updated>2016-01-24T12:59:28Z</updated>
     <summary type="html"><![CDATA[<p>When using <em>docker-compose</em>, I really like how the output printed by the running containers gets interleaved in different colors. I wanted something like that, but for arbitrary commands.</p>
@@ -77,10 +77,10 @@ main <span class="fu">=</span> <span class="kw">do</span>
 </entry>
 <entry>
     <title>Simulating an elevator</title>
-    <link href="https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html" />
-    <id>https://lubomir.github.io//en/2014-08-31-simulating-an-elevator.html</id>
+    <link href="https://lubomir.github.io/en/2014-08-31-simulating-an-elevator.html" />
+    <id>https://lubomir.github.io/en/2014-08-31-simulating-an-elevator.html</id>
     <published>2014-08-31T00:00:00Z</published>
-    <updated>2015-06-10T16:07:32Z</updated>
+    <updated>2015-08-01T10:00:17Z</updated>
     <summary type="html"><![CDATA[<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>
 <p>There were two elevators, each equipped with a single button that should tell the elevator to come to your floor. However, if the elevator is currently going somewhere, it will ignore your request. You have to wait for it to stop and press the button again. Should someone press it faster, you are out of luck and have to wait for next try.</p>
 <p>Obviously, the two elevators do not communicate in any way, so in fact you gamble with two elevators at the same time.</p>

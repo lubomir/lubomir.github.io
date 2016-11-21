@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged validation</title>
-    <link href="https://lubomir.github.io//en/tags/validation.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/validation.atom</id>
+    <link href="https://lubomir.github.io/en/tags/validation.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/validation.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-02-12T08:44:34Z</updated>
     <entry>
     <title>Today I Learned: Validating XML</title>
-    <link href="https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html" />
-    <id>https://lubomir.github.io//en/2016-02-12-TIL-validating-xml.html</id>
+    <link href="https://lubomir.github.io/en/2016-02-12-TIL-validating-xml.html" />
+    <id>https://lubomir.github.io/en/2016-02-12-TIL-validating-xml.html</id>
     <published>2016-02-12T00:00:00Z</published>
     <updated>2016-02-12T08:44:34Z</updated>
     <summary type="html"><![CDATA[<p>This is not rocket science nor brain surgery. I just never needed this and found it practical to note this for further reference.</p>

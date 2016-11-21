@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>lsedlar – Posts tagged automation</title>
-    <link href="https://lubomir.github.io//en/tags/automation.atom" rel="self" />
-    <link href="https://lubomir.github.io/" />
-    <id>https://lubomir.github.io//en/tags/automation.atom</id>
+    <link href="https://lubomir.github.io/en/tags/automation.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/automation.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
@@ -11,8 +11,8 @@
     <updated>2016-09-05T19:25:37Z</updated>
     <entry>
     <title>Introducing entr</title>
-    <link href="https://lubomir.github.io//en/2016-09-05-introducing-entr.html" />
-    <id>https://lubomir.github.io//en/2016-09-05-introducing-entr.html</id>
+    <link href="https://lubomir.github.io/en/2016-09-05-introducing-entr.html" />
+    <id>https://lubomir.github.io/en/2016-09-05-introducing-entr.html</id>
     <published>2016-09-05T00:00:00Z</published>
     <updated>2016-09-05T19:25:37Z</updated>
     <summary type="html"><![CDATA[<p>When writing code, my workflow is usually to make edits and re-run the test suite (that is, if there is one). This is actually a lot of work that I don't want to do.</p>
