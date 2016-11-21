@@ -64,7 +64,7 @@ identifiers.
 function link_tasks(taskinfo, str) {
   return str.replace('\d{8,}/m', '<a href="' + taskinfo + '$&">$&</a>')
             .replace(/(Runroot task failed|'task_id'): (\d{8,})/g,
-                     '$1: <a href="' + taskinfo + '$2">$2</a>);
+                     '$1: <a href="' + taskinfo + '$2">$2</a>');
   }
 }
 ```
