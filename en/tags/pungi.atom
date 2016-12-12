@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-11-21T14:52:04Z</updated>
+    <updated>2016-12-12T11:50:41Z</updated>
     <entry>
     <title>Clickable Pungi logs</title>
     <link href="https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html" />
     <id>https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html</id>
     <published>2016-09-25T00:00:00Z</published>
-    <updated>2016-11-21T14:52:04Z</updated>
+    <updated>2016-12-12T11:50:41Z</updated>
     <summary type="html"><![CDATA[<p>When debugging problems with composes, the logs left behind by all stages of the compose run are tremendously helpful. However, they are rather difficult to read due to the sheer volume. Being exposed to them quite intensively for close to a year helps, but it still is a nasty chore.</p>
 <p>The most accessible way to look at the logs is via a web browser on <a href="https://kojipkgs.fedoraproject.org/compose/rawhide/">kojipkgs</a>. It's just <em>httpd</em> displaying the raw log files on the disk.</p>
 <p>It took me too long to figure out this could be made much more pleasant that copy-pasting stuff from the wall of text.</p>

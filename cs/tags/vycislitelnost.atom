@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-08-01T10:00:17Z</updated>
+    <updated>2016-01-06T19:47:03Z</updated>
     <entry>
     <title>CPO a spojité funkce</title>
     <link href="https://lubomir.github.io/cs/2011-01-24-cpo-a-spojite-funkce.html" />
     <id>https://lubomir.github.io/cs/2011-01-24-cpo-a-spojite-funkce.html</id>
     <published>2011-01-24T00:00:00Z</published>
-    <updated>2015-08-01T10:00:17Z</updated>
+    <updated>2016-01-06T19:47:03Z</updated>
     <summary type="html"><![CDATA[<p>Každý typ se dá charakterizovat jako částečně uspořádaná množina hodnot. Pokud platí, že každý spočetný řetězec má supremum, potom se jedná o <a href="http://en.wikipedia.org/wiki/Complete_partial_order">Complete Partial Order</a>.</p>
 <h2 id="primitivní-typy----příklady">Primitivní typy -- příklady</h2>
 <figure>
@@ -96,7 +96,7 @@ g ⊥ = False</code></pre>
     <link href="https://lubomir.github.io/cs/2011-01-02-poznamky-k-ib107.html" />
     <id>https://lubomir.github.io/cs/2011-01-02-poznamky-k-ib107.html</id>
     <published>2011-01-02T00:00:00Z</published>
-    <updated>2015-08-01T10:00:17Z</updated>
+    <updated>2016-01-06T19:47:03Z</updated>
     <summary type="html"><![CDATA[<h2 id="věta-o-numeraci">Věta o numeraci</h2>
 <blockquote>
 <p>Pro každé <span class="math inline"><em>j</em> ≥ 1</span> existuje vyčíslitelná funkce <span class="math inline"><em>Φ</em> : <em>N</em><sup><em>j</em> + 1</sup> → <em>N</em></span>, která je univerzální pro standardní numeraci j-árních funkcí. Tedy pro každé <span class="math inline"><em>e</em> ∈ <em>N</em></span> a <span class="math inline">(<em>a</em><sub>1</sub>, …<em>a</em><sub><em>j</em></sub>)∈<em>N</em><sup><em>j</em></sup></span> platí <img src="/images/veta-o-numeraci.png" alt="Věta o numeraci" /></p>

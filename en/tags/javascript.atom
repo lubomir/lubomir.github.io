@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <title>lsedlar – Posts tagged logs</title>
-    <link href="https://lubomir.github.io/en/tags/logs.atom" rel="self" />
+    <title>lsedlar – Posts tagged JavaScript</title>
+    <link href="https://lubomir.github.io/en/tags/javascript.atom" rel="self" />
     <link href="https://lubomir.github.io" />
-    <id>https://lubomir.github.io/en/tags/logs.atom</id>
+    <id>https://lubomir.github.io/en/tags/javascript.atom</id>
     <author>
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>

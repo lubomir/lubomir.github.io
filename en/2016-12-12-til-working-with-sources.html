@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:400,700&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
+    <link rel="alternate" type="application/rss+xml" href="../en/posts.atom">
+    <link rel="icon" type="image/vnd.microsoft.icon" href="../favicon.ico">
+    <title>Today I Learned: Handling source tarballs</title>
+  </head>
+
+  <body id="top">
+
+    <div class="container">
+      <h1>Today I Learned: Handling source tarballs</h1>
+
+<div class="row metainfo">
+    <div class="col-md-4">
+        <a href="../">back to main page</a>
+    </div>
+    <div class="col-md-4">
+        <strong>December 12, 2016</strong>
+    </div>
+
+    <div class="col-md-4">
+        <span>Tagged as: <a href="../en/tags/fedora.html">Fedora</a>, <a href="../en/tags/koji.html">Koji</a>, <a href="../en/tags/process.html">process</a>.</span>
+    </div>
+</div>
+
+<div class="post">
+    <article>
+        <p>Fedora packages are generally built from tarballs provided by upstream developers. What's actually happening to these tarballs and how do they move around?</p>
+<h2 id="how-are-sources-uploaded">How are sources uploaded?</h2>
+<p>When a new tarball is supposed to be used, the packager will upload it to lookaside cache (because storing big binary files directly in git is bad). This is done with <code>fedpkg upload</code> or <code>fedpkg new-sources</code>. These commands make a <code>POST</code> request to a CGI script running on the dist-git server. This requests includes the name of the file, a checksum and the actual file contents.</p>
+<p>Up until today (Dec 12) MD5 hash has been used. Now it's SHA512.</p>
+<p>There are actually two requests each time an upload is requested: the first one is to check if a file with the same name and hash has been uploaded already. If it is, there's no point doing it again.</p>
+<h2 id="how-does-fedpkg-download-them">How does <a href="https://pagure.io/fedpkg">fedpkg</a> download them?</h2>
+<p>Downloading back to development machine is done by <code>fedpkg sources</code>. It reads the <code>sources</code> file in the git repository and requests the files from lookaside cache. The URL for the files contains both filename and the hash.</p>
+<p>Once the file is downloaded, the hash is verified to make sure we got the file we asked for.</p>
+<h2 id="how-does-koji-download-them">How does Koji download them?</h2>
+<p>When a build is submitted to Koji, an SCM URL has to be specified. It needs to point to commit you want to build. Koji will not allow you to build from arbitrary locations though. There is a whitelist of allowed systems.</p>
+<p>Once the spec and list of sources are downloaded, the actual source code needs to be retrieved as well. Unless configuration specifies otherwise, Koji would run <code>make sources</code>. For Fedora dist-git, the command is unsurprisingly configured to be <code>fedpkg sources</code>.</p>
+<p>However, since this command needs to run the buildroot and <code>fedpkg</code> has a relatively big dependency footprint, the <code>fedpkg</code> command in buildroots is provided by <a href="https://pagure.io/fedpkg-minimal">fedpkg-minimal</a> package. This package contains a single executable shell script that parses the <code>sources</code> file, downloads everything and verifies the hashes.</p>
+    </article>
+
+    <h2 class="comments-header">Comments</h2>
+
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function () {
+            this.page.url = "https://lubomir.github.io//en/2016-12-12-til-working-with-sources.html";
+            this.page.identifier = "/en/2016-12-12-til-working-with-sources.html";
+        };
+        (function() {
+            var d = document, s = d.createElement('script');
+            s.src = '//indexoflsedlar.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+</div>
+
+    </div><!-- .container -->
+
+    <footer class="container">
+        <ul class="nav nav-pills">
+          <li><a href="../">Home</a></li>
+          <li><a href="#top">Back to top</a></li>
+          <li><a href="mailto:lubomir.sedlar@gmail.com">Contact me</a></li>
+          <li class="last"><a href="../cookies.html">Cookies</a></li>
+          <li class="license"><a href="http://creativecommons.org/licenses/by/4.0/">
+            <img src="../images/cc-by.png" alt="CC-BY" title="Licensed under Creative Commons Attribution"></a>
+          </li>
+        </ul>
+    </footer><!-- .container -->
+
+    <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-40665960-1']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+         var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+         ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+         })();
+        window.cookieconsent_options = {"message":"This website uses some cookies.","dismiss":"Got it!","learnMore":"More info","link":"/cookies.html","theme":"dark-floating"};
+     </script>
+     <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/1.0.9/cookieconsent.min.js"></script>
+  </body>
+</html>

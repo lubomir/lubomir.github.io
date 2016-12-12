@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2015-08-01T10:00:17Z</updated>
+    <updated>2016-01-06T19:47:03Z</updated>
     <entry>
     <title>Inicializační funkce NCurses</title>
     <link href="https://lubomir.github.io/cs/2010-12-19-ncurses.html" />
     <id>https://lubomir.github.io/cs/2010-12-19-ncurses.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2015-08-01T10:00:17Z</updated>
+    <updated>2016-01-06T19:47:03Z</updated>
     <summary type="html"><![CDATA[<p>Tato stránka je částečným překladem <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/">tutoriálu NCurses</a>, konkrétně <a href="http://tldp.org/HOWTO/NCURSES-Programming-HOWTO/init.html">této části</a>. Tento text tedy není mým dílem a vztahuje se na něj licence původního návodu.</p>
 <h2 id="inicializační-funkce">4.1 Inicializační funkce</h2>
 <ol type="1">

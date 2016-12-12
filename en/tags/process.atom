@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>lsedlar – Posts tagged process</title>
+    <link href="https://lubomir.github.io/en/tags/process.atom" rel="self" />
+    <link href="https://lubomir.github.io" />
+    <id>https://lubomir.github.io/en/tags/process.atom</id>
+    <author>
+        <name>Lubomír Sedlář</name>
+        <email>lubomir.sedlar@gmail.com</email>
+    </author>
+    <updated>2016-12-12T17:44:21Z</updated>
+    <entry>
+    <title>Today I Learned: Handling source tarballs</title>
+    <link href="https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html" />
+    <id>https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html</id>
+    <published>2016-12-12T00:00:00Z</published>
+    <updated>2016-12-12T17:44:21Z</updated>
+    <summary type="html"><![CDATA[<p>Fedora packages are generally built from tarballs provided by upstream developers. What's actually happening to these tarballs and how do they move around?</p>
+<h2 id="how-are-sources-uploaded">How are sources uploaded?</h2>
+<p>When a new tarball is supposed to be used, the packager will upload it to lookaside cache (because storing big binary files directly in git is bad). This is done with <code>fedpkg upload</code> or <code>fedpkg new-sources</code>. These commands make a <code>POST</code> request to a CGI script running on the dist-git server. This requests includes the name of the file, a checksum and the actual file contents.</p>
+<p>Up until today (Dec 12) MD5 hash has been used. Now it's SHA512.</p>
+<p>There are actually two requests each time an upload is requested: the first one is to check if a file with the same name and hash has been uploaded already. If it is, there's no point doing it again.</p>
+<h2 id="how-does-fedpkg-download-them">How does <a href="https://pagure.io/fedpkg">fedpkg</a> download them?</h2>
+<p>Downloading back to development machine is done by <code>fedpkg sources</code>. It reads the <code>sources</code> file in the git repository and requests the files from lookaside cache. The URL for the files contains both filename and the hash.</p>
+<p>Once the file is downloaded, the hash is verified to make sure we got the file we asked for.</p>
+<h2 id="how-does-koji-download-them">How does Koji download them?</h2>
+<p>When a build is submitted to Koji, an SCM URL has to be specified. It needs to point to commit you want to build. Koji will not allow you to build from arbitrary locations though. There is a whitelist of allowed systems.</p>
+<p>Once the spec and list of sources are downloaded, the actual source code needs to be retrieved as well. Unless configuration specifies otherwise, Koji would run <code>make sources</code>. For Fedora dist-git, the command is unsurprisingly configured to be <code>fedpkg sources</code>.</p>
+<p>However, since this command needs to run the buildroot and <code>fedpkg</code> has a relatively big dependency footprint, the <code>fedpkg</code> command in buildroots is provided by <a href="https://pagure.io/fedpkg-minimal">fedpkg-minimal</a> package. This package contains a single executable shell script that parses the <code>sources</code> file, downloads everything and verifies the hashes.</p>]]></summary>
+</entry>
+
+</feed>

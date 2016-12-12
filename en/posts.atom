@@ -8,13 +8,32 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-11-21T14:52:04Z</updated>
+    <updated>2016-12-12T17:44:21Z</updated>
     <entry>
+    <title>Today I Learned: Handling source tarballs</title>
+    <link href="https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html" />
+    <id>https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html</id>
+    <published>2016-12-12T00:00:00Z</published>
+    <updated>2016-12-12T17:44:21Z</updated>
+    <summary type="html"><![CDATA[<p>Fedora packages are generally built from tarballs provided by upstream developers. What's actually happening to these tarballs and how do they move around?</p>
+<h2 id="how-are-sources-uploaded">How are sources uploaded?</h2>
+<p>When a new tarball is supposed to be used, the packager will upload it to lookaside cache (because storing big binary files directly in git is bad). This is done with <code>fedpkg upload</code> or <code>fedpkg new-sources</code>. These commands make a <code>POST</code> request to a CGI script running on the dist-git server. This requests includes the name of the file, a checksum and the actual file contents.</p>
+<p>Up until today (Dec 12) MD5 hash has been used. Now it's SHA512.</p>
+<p>There are actually two requests each time an upload is requested: the first one is to check if a file with the same name and hash has been uploaded already. If it is, there's no point doing it again.</p>
+<h2 id="how-does-fedpkg-download-them">How does <a href="https://pagure.io/fedpkg">fedpkg</a> download them?</h2>
+<p>Downloading back to development machine is done by <code>fedpkg sources</code>. It reads the <code>sources</code> file in the git repository and requests the files from lookaside cache. The URL for the files contains both filename and the hash.</p>
+<p>Once the file is downloaded, the hash is verified to make sure we got the file we asked for.</p>
+<h2 id="how-does-koji-download-them">How does Koji download them?</h2>
+<p>When a build is submitted to Koji, an SCM URL has to be specified. It needs to point to commit you want to build. Koji will not allow you to build from arbitrary locations though. There is a whitelist of allowed systems.</p>
+<p>Once the spec and list of sources are downloaded, the actual source code needs to be retrieved as well. Unless configuration specifies otherwise, Koji would run <code>make sources</code>. For Fedora dist-git, the command is unsurprisingly configured to be <code>fedpkg sources</code>.</p>
+<p>However, since this command needs to run the buildroot and <code>fedpkg</code> has a relatively big dependency footprint, the <code>fedpkg</code> command in buildroots is provided by <a href="https://pagure.io/fedpkg-minimal">fedpkg-minimal</a> package. This package contains a single executable shell script that parses the <code>sources</code> file, downloads everything and verifies the hashes.</p>]]></summary>
+</entry>
+<entry>
     <title>Clickable Pungi logs</title>
     <link href="https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html" />
     <id>https://lubomir.github.io/en/2016-09-25-clickable-pungi-logs.html</id>
     <published>2016-09-25T00:00:00Z</published>
-    <updated>2016-11-21T14:52:04Z</updated>
+    <updated>2016-12-12T11:50:41Z</updated>
     <summary type="html"><![CDATA[<p>When debugging problems with composes, the logs left behind by all stages of the compose run are tremendously helpful. However, they are rather difficult to read due to the sheer volume. Being exposed to them quite intensively for close to a year helps, but it still is a nasty chore.</p>
 <p>The most accessible way to look at the logs is via a web browser on <a href="https://kojipkgs.fedoraproject.org/compose/rawhide/">kojipkgs</a>. It's just <em>httpd</em> displaying the raw log files on the disk.</p>
 <p>It took me too long to figure out this could be made much more pleasant that copy-pasting stuff from the wall of text.</p>
@@ -495,59 +514,6 @@
 %define compdir &quot;/etc/bash_completion.d&quot;
 %endif</code></pre>
 <p>The real gotcha is that the <code>%files</code> section must install the parent of this directory, otherwise the builds will fail with error about two files on one line.</p>]]></summary>
-</entry>
-<entry>
-    <title>Poor Man's CI</title>
-    <link href="https://lubomir.github.io/en/2016-03-08-poor-man-ci.html" />
-    <id>https://lubomir.github.io/en/2016-03-08-poor-man-ci.html</id>
-    <published>2016-03-08T00:00:00Z</published>
-    <updated>2016-03-08T20:39:11Z</updated>
-    <summary type="html"><![CDATA[<p>I have been using <a href="https://pagure.io/">Pagure</a> quite intensively recently and the one thing I miss the most compared to GitHub is some sort of continuous integration. I just want to see the green check appear on my pull requests.</p>
-<p>There is a not-very-advertised <a href="https://fedoraproject.org/wiki/Jenkins@infra">Jenkins server</a> used for Fedora Infrastructure. The project I'm working on primarily, <a href="https://pagure.io/pungi">Pungi</a>, has a couple unit tests that are run there after every push to <code>master</code> or some other long-lived branch.</p>
-<p>This is a nice start, but leads to problems when new contributors submit their pull requests. Unless someone runs the tests manually, we won't know if they break.</p>
-<p>As it turns out, it is quite possible to roll your own service to integrate the two.</p>
-<h2 id="apply-mutagen-to-jenkins">Apply mutagen to Jenkins</h2>
-<p>Step one on my journey to having CI was to customize the Jenkins job definition to be able to merge pull requests from any repository.</p>
-<p>To be able to do so, I added two parameters. One is for the URL to the remote repository, the other for the branch.</p>
-<figure>
-<img src="/images/poormanci/parameters.png" alt="Jenkins Parameters" /><figcaption>Jenkins Parameters</figcaption>
-</figure>
-<p>These parameters are available as environment variables in the script that runs the tests. This snippet will add the repo with changes to be tested as a remote and merge the proposed branch on top of master.</p>
-<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash"><span class="kw">if [</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="ot">$REPO</span><span class="st">&quot;</span> <span class="ot">-a</span> <span class="ot">-n</span> <span class="st">&quot;</span><span class="ot">$BRANCH</span><span class="st">&quot;</span><span class="kw"> ]</span>; <span class="kw">then</span>
-    <span class="kw">git</span> remote rm proposed <span class="kw">||</span> <span class="kw">true</span>
-    <span class="kw">git</span> remote add proposed <span class="st">&quot;</span><span class="ot">$REPO</span><span class="st">&quot;</span>
-    <span class="kw">git</span> fetch proposed
-    <span class="kw">git</span> checkout origin/master
-    <span class="kw">git</span> merge --no-ff <span class="st">&quot;proposed/</span><span class="ot">$BRANCH</span><span class="st">&quot;</span> -m <span class="st">&quot;Merge PR&quot;</span>
-<span class="kw">fi</span></code></pre></div>
-<p>Last part of the Jenkins change is allowing remotely triggered builds. To do this, it is necessary to set up an authentication token. Triggering a build is then a simple HTTP <code>POST</code> request with a <code>?cause=203&amp;REPO=https://example.com/repo.git&amp;BRANCH=merge-this-plz&amp;token=BEEFCAFE</code>.</p>
-<p>The <code>cause</code> part is used to keep track of the pull request in question. It will come in handy later.</p>
-<p>Since we need to get information about the builds in some way, it is necessary to enable sending messages to Fedmsg as a post-build action.</p>
-<h2 id="supercharge-pagure-configuration">Supercharge Pagure configuration</h2>
-<p>The configuration on Pagure side is not that complicated. All that needs to be done is enable Fedmsg integration and set up an API key. This key needs to be able to post comments to pull requests.</p>
-<h2 id="one-integration-point-to-bind-them-all">One integration point to bind them all</h2>
-<p>The last part is to run a service that will listen to the messaging bus and trigger actions as needed. When it hears about new or changed pull request, it should trigger a build in Jenkins. When a build finishes (and is actually a build that verified a pull request), a comment with details should be posted to proper place.</p>
-<p>I put the code to do exactly this into a <a href="https://pagure.io/poor-man-ci">poor-man-ci</a> repo on Pagure.</p>
-<p>I have deployed this thing on my VPS and so far it seems to be working quite well. Open infrastructure for the win!</p>
-<h2 id="implementation-details">Implementation details</h2>
-<p>The service is based on the <a href="https://github.com/fedora-infra/pdc-updater">pdc-updater</a> model. There is a consumer running as part of <code>fedmsg-hub</code>. It subscribes to three topics: one from Jenkins, one for new pull requests on Pagure and one for comments on existing pull requests.</p>
-<p>As far as I could tell, Pagure does not send a separate message when pull request is updated or rebased. It does however add a comment with this information.</p>
-<p>When a message from Pagure is received, the contents must be examined to determine if a build should be triggered. For new pull requests this is completely straightforward. For the update part we need to check if the last comment is one of the known strings and if the pull request is still open.</p>
-<p>Messages from Jenkins are a lot simpler. In fact they don't contain pretty much anything but the build number. This is where <a href="http://python-jenkins.readthedocs.org/en/latest/">python-jenkins</a> comes into play. It is a library on top of Jenkins API which makes it relatively easy to get more details about the build. The only part I was interested in was the result (this is actually in the message directly) and the note with pull request number.</p>
-<p>Finally the last part is to post a comment to Pagure. This is really trivial, just submit an HTTP <code>POST</code> request.</p>
-<h2 id="deploying">Deploying</h2>
-<p>Implementation wise, the hardest part for me was to package the whole service and get it running. During most of the development I was using the <code>fedmsg.tail_messages()</code> function, which was probably not meant for this use case.</p>
-<p>Ultimately, I just ripped of existing projects, mostly <a href="https://github.com/fedora-infra/pdc-updater">pdc-updater</a> and <a href="https://github.com/fedora-infra/the-new-hotness">the-new-hotness</a>. That helped some, but there are still a couple open questions. For example, I have no idea why the packages do not depend on <code>fedmsg-hub</code> when they clearly need it to run.</p>
-<p>My take away points for developing with Fedmsg are these:</p>
-<p><strong>Point 1</strong>: Your <code>setup.py</code> must specify an entrypoint for <em>moksha</em>.</p>
-<div class="sourceCode"><pre class="sourceCode ini"><code class="sourceCode ini"><span class="kw">[moksha.consumer]</span>
-<span class="dt">integrator </span><span class="ot">=</span><span class="st"> poormanci.consumer:Integrator</span></code></pre></div>
-<p>This will get installed together with egg-info and the hub will somehow pick it up. The name of the key is not important. The value should point to a Python module containing a subclass of the <code>FedmsgConsumer</code>.</p>
-<p><strong>Point 2</strong>: The consumer class should have <code>topic</code> attribute listing all the topics you are interested in, a <code>config_key</code> attribute with the name of the configuration key that controls whether this consumer is enabled and finally a <code>consume</code> method that will be called with the message received.</p>
-<p><strong>Point 3</strong>: The configuration file needs to live in <code>/etc/fedmsg.d</code>. Its name is not important. It must be a Python module that defines a single value <code>config</code> as a dict. It should contain at least the configuration code mentioned above to enable the consumer, but can have arbitrary other stuff. I put the API keys there, for example.</p>
-<p><strong>Point 4</strong>: The actual packaging (as in how to install the software) is not really important as long as the module with the consumer can be imported and the egg-info directory gets install into Python site lib.</p>
-<p><strong>Point 5</strong>: I had to restart the hub to have it pick up updates. This is as easy as <code>systemctl restart fedmsg-hub.service</code>.</p>
-<p><strong>Point 6</strong>: I found it helpful to tail the hub logs to see what is happening – <code>journalctl -f -u fedmsg-hub.service</code>. This log also contains traceback when the consumer crashes.</p>]]></summary>
 </entry>
 
 </feed>
