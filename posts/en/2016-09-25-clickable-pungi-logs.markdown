@@ -1,6 +1,6 @@
 ---
 title: Clickable Pungi logs
-tags: Fedora, Pungi, Java Script, logs
+tags: Fedora, Pungi, JavaScript, logs
 ---
 
 When debugging problems with composes, the logs left behind by all stages of
