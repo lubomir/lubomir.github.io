@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-01-06T19:47:03Z</updated>
+    <updated>2016-01-06T19:52:56Z</updated>
     <entry>
     <title>Simulating an elevator</title>
     <link href="https://lubomir.github.io/en/2014-08-31-simulating-an-elevator.html" />
     <id>https://lubomir.github.io/en/2014-08-31-simulating-an-elevator.html</id>
     <published>2014-08-31T00:00:00Z</published>
-    <updated>2016-01-06T19:47:03Z</updated>
+    <updated>2016-01-06T19:52:56Z</updated>
     <summary type="html"><![CDATA[<p>Recently I lived in a building with twelve floors and a very dumb elevator. Multiple times have I stood in front of an elevator and watched as it went by repeatedly refusing to stop and let me on.</p>
 <p>There were two elevators, each equipped with a single button that should tell the elevator to come to your floor. However, if the elevator is currently going somewhere, it will ignore your request. You have to wait for it to stop and press the button again. Should someone press it faster, you are out of luck and have to wait for next try.</p>
 <p>Obviously, the two elevators do not communicate in any way, so in fact you gamble with two elevators at the same time.</p>

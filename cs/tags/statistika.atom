@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-01-06T19:47:03Z</updated>
+    <updated>2016-01-06T19:52:56Z</updated>
     <entry>
     <title>Popisná statistika v R</title>
     <link href="https://lubomir.github.io/cs/2013-04-25-statistika-v-r.html" />
     <id>https://lubomir.github.io/cs/2013-04-25-statistika-v-r.html</id>
     <published>2013-04-25T00:00:00Z</published>
-    <updated>2016-01-06T19:47:03Z</updated>
+    <updated>2016-01-06T19:52:56Z</updated>
     <summary type="html"><![CDATA[<p>Tento text je výcuc z mých poznatků, které jsem nabyl při vypracování projektu do jistého matematického předmětu.</p>
 <h2 id="načítání-dat-a-první-průzkum">Načítání dat a první průzkum</h2>
 <p>V první řadě je potřeba načíst soubor s daty. Za předpokladu, že máme data ve formátu CSV, se nám bude hodit příkaz <code>read.csv</code> (jak nečekané…). Taky by bylo dobré zjistit, jak vlastně data vypadají, tedy jaké jsou názvy atributů a jak vypadá prvních pár záznamů.</p>

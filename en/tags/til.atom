@@ -8,8 +8,19 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-04-20T16:53:26Z</updated>
+    <updated>2017-02-15T18:36:14Z</updated>
     <entry>
+    <title>Today I Learned: Searching in Vim</title>
+    <link href="https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html" />
+    <id>https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html</id>
+    <published>2017-02-15T00:00:00Z</published>
+    <updated>2017-02-15T18:36:14Z</updated>
+    <summary type="html"><![CDATA[<p>Ok, I lied. Searching in Vim is something I do all the time, so it's not such a new thing. However there is a feature that I only need every once in a while, and always forget how to do it.</p>
+<p>The goal is to highlight something in the code, you can just search for it and if <code>hlsearch</code> is on, it will shine with the light of thousand suns.</p>
+<p>But what if you need some context to match the snippet, but only want to highlight part of the match?</p>
+<p>Search no more. The magic is done by including <code>\zs</code> or <code>\ze</code> in the search pattern. These snippets do not affect what is matched, but they set the start and end of the match respectively.</p>]]></summary>
+</entry>
+<entry>
     <title>Today I Learned: Exploring Git history</title>
     <link href="https://lubomir.github.io/en/2016-04-20-TIL-exploring-git-history.html" />
     <id>https://lubomir.github.io/en/2016-04-20-TIL-exploring-git-history.html</id>

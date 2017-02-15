@@ -8,8 +8,19 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-12-12T17:44:21Z</updated>
+    <updated>2017-02-15T18:36:14Z</updated>
     <entry>
+    <title>Today I Learned: Searching in Vim</title>
+    <link href="https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html" />
+    <id>https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html</id>
+    <published>2017-02-15T00:00:00Z</published>
+    <updated>2017-02-15T18:36:14Z</updated>
+    <summary type="html"><![CDATA[<p>Ok, I lied. Searching in Vim is something I do all the time, so it's not such a new thing. However there is a feature that I only need every once in a while, and always forget how to do it.</p>
+<p>The goal is to highlight something in the code, you can just search for it and if <code>hlsearch</code> is on, it will shine with the light of thousand suns.</p>
+<p>But what if you need some context to match the snippet, but only want to highlight part of the match?</p>
+<p>Search no more. The magic is done by including <code>\zs</code> or <code>\ze</code> in the search pattern. These snippets do not affect what is matched, but they set the start and end of the match respectively.</p>]]></summary>
+</entry>
+<entry>
     <title>Today I Learned: Handling source tarballs</title>
     <link href="https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html" />
     <id>https://lubomir.github.io/en/2016-12-12-til-working-with-sources.html</id>
@@ -499,21 +510,6 @@
 <p>Now I don't know if it was designed like this or its just an outcome of the ways things are implemented, but it seems to behave logically. As far as I know this is not documented, so I would not be surprised to see changes.</p>
 <p>What happens when one pull request is not just a subset of another, but is a diverging history? In the example, think <code>pr1</code> has also an extra commit not shared with <code>pr2</code>.</p>
 <p>No matter which request is merged first, the other will be automatically rebased so that it is only requesting to merge the extra commits. It may or may not create a merge conflict. This really depends on the nature of the actual changes.</p>]]></summary>
-</entry>
-<entry>
-    <title>Today I Learned: Packaging bash-completion files</title>
-    <link href="https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html" />
-    <id>https://lubomir.github.io/en/2016-03-14-TIL-packaging-bash-completion.html</id>
-    <published>2016-03-14T00:00:00Z</published>
-    <updated>2016-03-14T18:51:31Z</updated>
-    <summary type="html"><![CDATA[<p>Today I ran into this kind of problem for the first time: a package I needed to build installed a bash completion file, and the destination for it was determined by <code>pkg-config</code>. Depending on the system, it would most likely end up in <code>/usr/share/bash-completion/completions/</code> or <code>/etc/bash_completion.d/</code>.</p>
-<p>How to write the spec file to handle this dichotomy? Turns out it is not that complicated.</p>
-<p>Drop this at the top of spec file and then use <code>%{compdir}</code> in the <code>%files</code> section. Solved.</p>
-<pre><code>%define compdir %(pkg-config --variable=completionsdir bash-completion)
-%if &quot;%{compdir}&quot; == &quot;&quot;
-%define compdir &quot;/etc/bash_completion.d&quot;
-%endif</code></pre>
-<p>The real gotcha is that the <code>%files</code> section must install the parent of this directory, otherwise the builds will fail with error about two files on one line.</p>]]></summary>
 </entry>
 
 </feed>
