@@ -41,8 +41,7 @@ script: stack exec -- site build
 after_script:
 - cp .travis.yml _site/
 - cd _site
-- export REMOTE=$(git config remote.origin.url | sed 's/.*:\/\///')
-- git remote add github https://${GH_TOKEN}@${REMOTE}
+- git remote add github https://lubomir:${GH_API_TOKEN}@github.com/lubomir/lubomir.github.io.git
 - git add --all
 - git commit -m "Built by Travis (build $TRAVIS_BUILD_NUMBER)"
 - git push -f github master:master | grep -v http
