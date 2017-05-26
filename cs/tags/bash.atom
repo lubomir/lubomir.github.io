@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-01-06T19:56:49Z</updated>
+    <updated>2016-01-06T19:59:09Z</updated>
     <entry>
     <title>Zpracování PDF</title>
     <link href="https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html" />
     <id>https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
-    <updated>2016-01-06T19:56:49Z</updated>
+    <updated>2016-01-06T19:59:09Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
 <p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
@@ -44,7 +44,7 @@
     <link href="https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html" />
     <id>https://lubomir.github.io/cs/2010-12-19-testovani-binarky.html</id>
     <published>2010-12-19T00:00:00Z</published>
-    <updated>2016-01-06T19:56:49Z</updated>
+    <updated>2016-01-06T19:59:09Z</updated>
     <summary type="html"><![CDATA[<p>Pro usnadnění testování úkolů do PB071 a PB161 jsem si napsal jednoduchý skript. Vlastně jenom vezme spustitelný soubor, postupně mu předhazuje definované vstupy a kontroluje, co je na standardním výstupu, chybovém výstupu a s jakým kódem skončil. Volitelně se to celé dá prohánět valgrindem.</p>
 <h2 id="formát-testů">Formát testů</h2>
 <p>Všechny testy se ukládají do speciálního adresáře. Já používám název <code>tests</code>, ale prakticky na tom nezáleží. Každý tests se skládá alespoň ze dvou souborů s názvy třeba <code>01_valid_input.*</code>. Přípona souboru specifikuje, co soubor testuje.</p>
