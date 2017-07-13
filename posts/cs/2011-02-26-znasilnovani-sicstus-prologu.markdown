@@ -64,6 +64,6 @@ souboru:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-[rlwrap]:   http://utopia.knoware.nl/~hlub/rlwrap/
+[rlwrap]:   https://github.com/hanslub42/rlwrap
 [vimfile]:  https://github.com/adimit/prolog.vim
 [filtr]:    /data/prolog_filter

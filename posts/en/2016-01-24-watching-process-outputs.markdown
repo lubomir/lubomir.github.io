@@ -59,7 +59,7 @@ will submit the channel, process number and a string with the command.
 There is a very [helpful tutorial] for `Data.Conduit.Process` which contains an
 example. We can adapt this to our needs.
 
-[helpful tutorial]: https://www.schoolofhaskell.com/user/snoyberg/library-documentation/data-conduit-process
+[helpful tutorial]: https://github.com/snoyberg/conduit/blob/master/PROCESS.md
 
 The biggest hurdle here is that *glibc* will by default line-buffer standard
 output if it goes to interactive terminal, but as soon as we redirect it to a
