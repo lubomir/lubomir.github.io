@@ -55,7 +55,7 @@ colored i d <span class="fu">=</span> <span class="kw">let</span> col <span clas
   <span class="kw">where</span>
     colors <span class="fu">=</span> cycle [<span class="st">&quot;36&quot;</span>, <span class="st">&quot;35&quot;</span>, <span class="st">&quot;32&quot;</span>, <span class="st">&quot;33&quot;</span>, <span class="st">&quot;34&quot;</span>, <span class="st">&quot;31&quot;</span>]</code></pre></div>
 <p>Reading the output of a random program is a bit more involved. As input, we will submit the channel, process number and a string with the command.</p>
-<p>There is a very <a href="https://www.schoolofhaskell.com/user/snoyberg/library-documentation/data-conduit-process">helpful tutorial</a> for <code>Data.Conduit.Process</code> which contains an example. We can adapt this to our needs.</p>
+<p>There is a very <a href="https://github.com/snoyberg/conduit/blob/master/PROCESS.md">helpful tutorial</a> for <code>Data.Conduit.Process</code> which contains an example. We can adapt this to our needs.</p>
 <p>The biggest hurdle here is that <em>glibc</em> will by default line-buffer standard output if it goes to interactive terminal, but as soon as we redirect it to a pipe, it gets fully buffered in 4 KiB blocks.</p>
 <p>This is definitely not what we want. There are a few ways to mitigate this: the easiest is to use <code>stdbuf</code> executable, which modifies the buffering mode. The problem with it is that it does not work for all cases, especially for commands involving piping data between multiple processes.</p>
 <p>Another attempt that I made was to use a pseudoterminal. This approach is however quite complex, and I failed to get it running reliably.</p>

@@ -8,13 +8,13 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2016-01-06T19:59:09Z</updated>
+    <updated>2016-01-06T20:27:17Z</updated>
     <entry>
     <title>Zpracování PDF</title>
     <link href="https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html" />
     <id>https://lubomir.github.io/cs/2013-04-02-zpracovani-pdf.html</id>
     <published>2013-04-02T00:00:00Z</published>
-    <updated>2016-01-06T19:59:09Z</updated>
+    <updated>2016-01-06T20:27:17Z</updated>
     <summary type="html"><![CDATA[<p>Občas se mi dostane do rukou naskenovaná knížka ve formátu PDF, kde jsou vždy dvě stránky původního textu na jedné virtuální stránce. Člověk se potom musí posouvat nejen směrem dolů, ale i do stran a občas nahoru. Hlavně na mobilu nic moc.</p>
 <p>Nakonec jsem našel relativně spolehlivý způsob, jak takový monolit rozporcovat na menší kousky, a abych to nezapomněl, tak si to poznamenám.</p>
 <p>Budeme potřebovat <a href="http://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/">pdftk</a>, <a href="http://www.imagemagick.org/script/index.php">imagemagick</a> a <a href="http://poppler.freedesktop.org/">poppler-utils</a>. V Debianu je všechno nachystané v repozitářích.</p>
@@ -44,7 +44,7 @@
     <link href="https://lubomir.github.io/cs/2011-11-10-o-princezne.html" />
     <id>https://lubomir.github.io/cs/2011-11-10-o-princezne.html</id>
     <published>2011-11-10T00:00:00Z</published>
-    <updated>2016-01-06T19:59:09Z</updated>
+    <updated>2016-01-06T20:27:17Z</updated>
     <summary type="html"><![CDATA[<blockquote>
 <p>Tento text vznikl v rámci přemětu VB000 Základy odborného stylu jako esej na téma <em>Bylo nebylo – informatická pohádka</em></p>
 </blockquote>

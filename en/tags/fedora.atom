@@ -8,8 +8,42 @@
         <name>Lubomír Sedlář</name>
         <email>lubomir.sedlar@gmail.com</email>
     </author>
-    <updated>2017-02-15T18:36:14Z</updated>
+    <updated>2017-07-13T08:28:59Z</updated>
     <entry>
+    <title>A compose what?</title>
+    <link href="https://lubomir.github.io/en/2017-07-12-a-compose-what.html" />
+    <id>https://lubomir.github.io/en/2017-07-12-a-compose-what.html</id>
+    <published>2017-07-12T00:00:00Z</published>
+    <updated>2017-07-13T08:28:59Z</updated>
+    <summary type="html"><![CDATA[<p>Kushal wrote <a href="https://kushaldas.in/posts/story-of-mashing-in-bodhi-fedora-updates-system.html">a nice post about how package updates</a> get into repositories. However he glosses over rawhide by saying it happens automatically. This is true, but I want to elaborate on the mechanism of how it happens..</p>
+<p>A package build for Rawhide is not available in the repositories immediately. It has to wait until a nightly Rawhide compose runs that updates the repo.</p>
+<p>Let's take a dive into what exactly the compose does and is.</p>
+<h2 id="terminology">Terminology</h2>
+<p>A compose is a snapshot of a release with a specific identity (which is determined by the actual release and date when it was created, like <code>Fedora-Rawhide-20170710.n.0</code>). It consists of at least one variant (such as <code>Server</code>, <code>Workstation</code> or <code>Everything</code>). A variant is a subset of the content from a release that is aimed for particular use case.</p>
+<p>Generally a variant in the final compose contains a repo with RPMs and other artefacts like images of various kinds.</p>
+<p>The compose is created by a tool called <a href="https://pagure.io/pungi">Pungi</a>. Current major version 4 is significantly different to previous version in that it integrates with Koji and delegates as much work as possible to it (for better tracking and reproducibility).</p>
+<p>The main input for Pungi is <a href="https://pagure.io/pungi-fedora">a configuration file</a> that can get quite complicated, due to all the extra artifacts like images. I'm only going to focus on the most common use case here.</p>
+<h2 id="getting-the-packages">Getting the packages</h2>
+<p>The process for defining what packages will go into the compose actually consists of two steps. First we need to find out the latest builds in Koji and find appropriately signed copies of the packages on the local file system (we need to have the same volume that Koji uses mounted locally).</p>
+<p>For nightly composes of Rawhide or branched the appropriate <code>f2X</code> tag is used. In milestone composes (where packages with freeze exception or fixes for accepted blockers are supposed to get in), there's a special <code>f2X-compose</code> tag that inherits from <code>f2X</code> and this way other packages can get into the compose.</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="kw">koji</span> list-tag-inheritance f26-compose
+<span class="kw">f26-compose</span> (368)
+  └─<span class="kw">f26</span> (357)</code></pre></div>
+<p>The second step is to determine which packages are supposed to go into each variant. Each <a href="https://pagure.io/pungi-fedora/blob/master/f/variants-fedora.xml">variant defines a list of comps groups</a>. Packages from those groups will be pulled in together with all of their dependencies. This process needs to run once for each architecture on each variant.</p>
+<p>There are of course exceptions here: additional packages not in comps can be pulled in, and also there are <a href="https://docs.pagure.org/pungi/configuration.html#gather-settings">configuration options</a> to customize multilib rules and tweak other things.</p>
+<h2 id="creating-repositories">Creating repositories</h2>
+<p>Once we have the package lists, we can call <code>createrepo_c</code> and create the actual metadata. The list of packages is actually part of the metadata in the final compose. Usually it's a really big file located in <code>compose/metadata/rpms.json</code> (which is way too big to link here, but you can read <a href="http://productmd.readthedocs.io/en/latest/rpms-1.1.html">description of the format</a>).</p>
+<h2 id="building-images">Building images</h2>
+<p>There are multiple different images that can be built as part of the compose. Most work starts by calling <a href="https://github.com/rhinstaller/lorax">lorax</a> to create <code>boot.iso</code> and boot configuration files. This image is directly used as the <em>netinstall</em> media.</p>
+<p>Pungi can then create DVD images that include the repository. In Fedora this is currently only used for <em>Server</em> variant. This is done by basically taking the <code>boot.iso</code> and adding additional stuff to it.</p>
+<p>Spins and Labs are created in Koji using <code>livemedia-creator</code> (a <code>livemedia</code> task). This takes additional input of <a href="https://pagure.io/fedora-kickstarts">a kickstart file</a> defining how that particular image should be created. The packages that are installed are taken from the repos created in the compose.</p>
+<h2 id="how-is-it-triggered">How is it triggered?</h2>
+<p>The nightly compose is started by a cron job that clones the latest configuration, runs the compose, and if it finishes successfully, it syncs the content to mirrors and sends e-mails about changes in packages.</p>
+<p>Branched composes have the same nightly process. Milestone composes are created in a similar way, but are started manually (because they require label via a command line argument).</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>That concludes the high level overview. <a href="https://docs.pagure.org/pungi/">The official documentation</a> will go into a bit more detail once Pungi 4.1.17 is released.</p>]]></summary>
+</entry>
+<entry>
     <title>Today I Learned: Searching in Vim</title>
     <link href="https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html" />
     <id>https://lubomir.github.io/en/2017-02-15-TIL-vim-search.html</id>
@@ -489,27 +523,6 @@
 <p>In situations when there are multiple remotes configured and one of these remotes has a long-running branch I don't really care about the command would not be helpful at all.</p>
 <p>Turns out if I read the man page carefully, I could have avoided the issue by simply using <code>--branches</code> instead of <code>--all</code>. That will only display local branches in the graph.</p>
 <p>The commits that get displayed will still have annotations about remote branches that end at that commit, so the context is still there.</p>]]></summary>
-</entry>
-<entry>
-    <title>Today I Learned: Overlapping pull requests in Pagure</title>
-    <link href="https://lubomir.github.io/en/2016-04-03-TIL-overlapping-pull-requests.html" />
-    <id>https://lubomir.github.io/en/2016-04-03-TIL-overlapping-pull-requests.html</id>
-    <published>2016-04-03T00:00:00Z</published>
-    <updated>2016-04-03T17:13:29Z</updated>
-    <summary type="html"><![CDATA[<p>The other day I was wondering what happens when two pull requests in <a href="https://pagure.io/">Pagure</a> share some commits. So I tested it out and here are the results.</p>
-<p>By sharing commits I mean one pull request is based on another. (In the spirit of <code>git log</code>, newest commits on the top.)</p>
-<pre><code> * d69de04 (pr2) Extra commit
- * 9657821 (pr1) Shared commit
- /
-*  4ec8ad5 (master) Last commit on master</code></pre>
-<p>Assuming both pull requests are to be merged, there are two ways to approach this.</p>
-<ol type="1">
-<li><p>Merge <code>pr1</code> first. The merge happens as usual, and <code>pr2</code> will get a notification comment saying it was rebased. Merging <code>pr2</code> now can still use fast-forward strategy.</p></li>
-<li><p>Merge <code>pr2</code> first. Again, there is no problem merging, and in this situation Pagure will say that there are no changes on <code>pr1</code> to be merged, so you can just close this pull request and be done with it.</p></li>
-</ol>
-<p>Now I don't know if it was designed like this or its just an outcome of the ways things are implemented, but it seems to behave logically. As far as I know this is not documented, so I would not be surprised to see changes.</p>
-<p>What happens when one pull request is not just a subset of another, but is a diverging history? In the example, think <code>pr1</code> has also an extra commit not shared with <code>pr2</code>.</p>
-<p>No matter which request is merged first, the other will be automatically rebased so that it is only requesting to merge the extra commits. It may or may not create a merge conflict. This really depends on the nature of the actual changes.</p>]]></summary>
 </entry>
 
 </feed>
