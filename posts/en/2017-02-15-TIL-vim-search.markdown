@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Searching in Vim
+title: "Today I Learned: Searching in Vim"
 tags: Fedora, vim, TIL
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Validating XML
+title: "Today I Learned: Validating XML"
 tags: TIL, XML, validation
 ---
 

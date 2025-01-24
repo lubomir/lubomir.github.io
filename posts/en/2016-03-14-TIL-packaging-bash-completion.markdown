@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Packaging bash-completion files
+title: "Today I Learned: Packaging bash-completion files"
 tags: TIL, Fedora, bash
 ---
 

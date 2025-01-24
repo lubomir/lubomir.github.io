@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Exploring Git history
+title: "Today I Learned: Exploring Git history"
 tags: TIL, git, Fedora
 ---
 

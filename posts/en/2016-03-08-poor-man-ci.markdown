@@ -1,6 +1,6 @@
 ---
 title: Poor Man's CI
-tags: Fedora, Pagure, Fedmsg, Jenkins, CI, testing
+tags: Fedora, Pagure, fedmsg, Jenkins, CI, testing
 ---
 
 I have been using [Pagure] quite intensively recently and the one thing I miss

@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Overlapping pull requests in Pagure
+title: "Today I Learned: Overlapping pull requests in Pagure"
 tags: TIL, Fedora, Pagure
 ---
 

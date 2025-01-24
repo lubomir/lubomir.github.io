@@ -19,3 +19,4 @@ executable site
                      , filepath
                      , containers
                      , hakyll-filestore
+                     , text

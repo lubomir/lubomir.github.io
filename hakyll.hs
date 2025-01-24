@@ -5,11 +5,11 @@ import Data.Char (toLower)
 import Data.Monoid
 import Prelude
 import System.FilePath
-import qualified Data.Set as S
 
 import Hakyll
 import Hakyll.FileStore.Git.Context
 import Text.Pandoc
+import Text.Pandoc.Highlighting (pygments)
 import Czech
 
 data BlogConfig = BlogConfig { langPrefix :: String
@@ -191,9 +191,8 @@ defaultCompiler bc = loadAndApplyTemplate "templates/default.html" (mkContext bc
 myCompiler :: Compiler (Item String)
 myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransform
   where
-    myWriterOptions = def { writerHtml5 = True
-                          , writerHighlight = True
-                          , writerExtensions = S.fromList [Ext_definition_lists]
+    myWriterOptions = def { writerHighlightStyle = Just pygments
+                          , writerExtensions = enableExtension Ext_definition_lists pandocExtensions
                           }
 
 postCtx :: BlogConfig -> Tags -> Context String

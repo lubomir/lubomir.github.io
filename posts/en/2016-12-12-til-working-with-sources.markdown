@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Handling source tarballs
+title: "Today I Learned: Handling source tarballs"
 tags: Fedora, Koji, process
 ---
 

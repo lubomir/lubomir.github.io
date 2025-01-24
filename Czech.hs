@@ -5,8 +5,8 @@ module Czech ( stripDiacritics
              ) where
 
 import Hakyll (dateFieldWith, Context(..))
-import Data.Char (toLower)
 import Data.Maybe (fromMaybe)
+import Data.Text (Text, toLower)
 import Data.Time.Format
 import Text.Pandoc (Pandoc(..), Inline(..), topDown)
 
@@ -47,16 +47,16 @@ cs = TimeLocale { wDays = [ ("pondělí", "po"), ("úterý", "út"), ("středa",
                 , knownTimeZones = []
                 }
 
-conjuctions :: [String]
+conjuctions :: [Text]
 conjuctions = ["a", "i", "k", "o", "s", "u", "v", "z"]
 
-nbsp :: String
+nbsp :: Text
 nbsp = " "
 
 pass1 :: [Inline] -> [Inline]
 pass1 [] = []
 pass1 (Str s : Space : xs)
-    | map toLower s `elem` conjuctions = Str s : Str nbsp : pass1 xs
+    | toLower s `elem` conjuctions = Str s : Str nbsp : pass1 xs
     | otherwise = Str s : pass1 (Space : xs)
 pass1 (x:xs) = x : pass1 xs
 

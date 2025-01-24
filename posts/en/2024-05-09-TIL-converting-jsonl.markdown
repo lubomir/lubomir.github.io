@@ -1,5 +1,5 @@
 ---
-title: Today I Learned: Converting between JSONL and JSON
+title: "Today I Learned: Converting between JSONL and JSON"
 tags: json, json, jq, TIL
 ---
 
