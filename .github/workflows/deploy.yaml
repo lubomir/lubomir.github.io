@@ -36,8 +36,10 @@ jobs:
         uses: haskell-actions/setup@v2
         with:
           enable-stack: true
-      - name: Build site
+      - name: Build site builder
         run: stack build
+      - name: Build actual site
+        run: stack exec site build
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
