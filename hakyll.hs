@@ -9,7 +9,6 @@ import System.FilePath
 import Hakyll
 import Hakyll.FileStore.Git.Context
 import Text.Pandoc
-import Text.Pandoc.Highlighting (pygments)
 import Czech
 
 data BlogConfig = BlogConfig { langPrefix :: String
@@ -189,11 +188,9 @@ defaultCompiler bc = loadAndApplyTemplate "templates/default.html" (mkContext bc
     >=> relativizeUrls
 
 myCompiler :: Compiler (Item String)
-myCompiler = pandocCompilerWithTransform def myWriterOptions czechPandocTransform
+myCompiler = pandocCompilerWithTransform defaultHakyllReaderOptions myWriterOptions czechPandocTransform
   where
-    myWriterOptions = def { writerHighlightStyle = Just pygments
-                          , writerExtensions = enableExtension Ext_definition_lists pandocExtensions
-                          }
+    myWriterOptions = defaultHakyllWriterOptions { writerExtensions = enableExtension Ext_definition_lists pandocExtensions }
 
 postCtx :: BlogConfig -> Tags -> Context String
 postCtx bc tags = mconcat
